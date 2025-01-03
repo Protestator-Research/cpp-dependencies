@@ -864,7 +864,6 @@ jobs:
 
   build-gperf:
     runs-on: ubuntu-latest
-    needs: build-flex
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -887,7 +886,6 @@ jobs:
 
   build-gperf-macos:
     runs-on: macos-latest
-    needs: build-flex-mac
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -909,7 +907,6 @@ jobs:
 
   build-icu:
     runs-on: ubuntu-latest
-    needs: build-flex
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -932,7 +929,6 @@ jobs:
 
   build-icu-macos:
     runs-on: macos-latest
-    needs: build-flex-mac
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -954,7 +950,6 @@ jobs:
 
   build-libbacktrace:
     runs-on: ubuntu-latest
-    needs: build-flex
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -977,7 +972,6 @@ jobs:
 
   build-libbacktrace-macos:
     runs-on: macos-latest
-    needs: build-flex-mac
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -999,7 +993,6 @@ jobs:
 
   build-libelf:
     runs-on: ubuntu-latest
-    needs: build-flex
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1022,7 +1015,6 @@ jobs:
 
   build-libelf-macos:
     runs-on: macos-latest
-    needs: build-flex-mac
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
