@@ -288,3 +288,87 @@ jobs:
       run: conan create ./meson/all --name=meson --version=1.4.0 --build-require -s build_type=Debug
     - name: deploy
       run: conan upload "*" -r cps-artifactory -c
+
+  build-pkgconv:
+    runs-on: ubuntu-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+    steps:
+    - uses: actions/checkout@v4
+    - name: prepare runner
+      run: | 
+        brew install conan
+        conan profile detect
+        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+        conan remote remove conancenter
+    - name: build_release
+      run: conan create ./pkgconf/all --name=pkgconf --version=2.2.0 --build-require --build missing
+    - name: build debug
+      run: conan create ./pkgconf/all --name=pkgconf --version=2.2.0 --build-require --build missing -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r cps-artifactory -c
+
+  build-pkgconv-macos:
+    runs-on: macos-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+    steps:
+    - uses: actions/checkout@v4
+    - name: prepare runner
+      run: | 
+        brew install conan
+        conan profile detect
+        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+        conan remote remove conancenter
+    - name: build_release
+      run: conan create ./pkgconf/all --name=pkgconf --version=2.2.0 --build-require --build missing
+    - name: build debug
+      run: conan create ./pkgconf/all --name=pkgconf --version=2.2.0 --build-require --build missing -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r cps-artifactory -c
+
+  build-xorg:
+    runs-on: ubuntu-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+    steps:
+    - uses: actions/checkout@v4
+    - name: prepare runner
+      run: | 
+        brew install conan
+        conan profile detect
+        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+        conan remote remove conancenter
+    - name: build_release
+      run: conan create ./xorg/all --name=xorg --version=system
+    - name: build debug
+      run: conan create ./xorg/all --name=xorg --version=system -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r cps-artifactory -c
+  
+  build-xkeyboard-config:
+    runs-on: ubuntu-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+    steps:
+    - uses: actions/checkout@v4
+    - name: prepare runner
+      run: | 
+        brew install conan
+        conan profile detect
+        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+        conan remote remove conancenter
+    - name: build_release
+      run: conan create ./xkeyboard-config/all --name=xkeyboard-config --version=system
+    - name: build debug
+      run: conan create ./xkeyboard-config/all --name=xkeyboard-config --version=system -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r cps-artifactory -c
