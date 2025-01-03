@@ -264,7 +264,7 @@ jobs:
     - name: build_release
       run: conan create ./meson/all --name=meson --version=1.4.0 --build-require
     - name: build debug
-      run: conan create ./meson/all --name=meson --version=1.4.0 --build-require-s build_type=Debug
+      run: conan create ./meson/all --name=meson --version=1.4.0 --build-require -s build_type=Debug
     - name: deploy
       run: conan upload "*" -r cps-artifactory -c
 
