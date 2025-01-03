@@ -41,14 +41,6 @@ build-m4:
     - conan create ./m4/all --name=m4 --version=1.4.19 --build-require -s build_type=Debug
     - conan upload "*" -r cps-artifactory -c
 
-# build-m4-mac:
-#   stage: build_tools
-#   script:
-#     - conan create ./m4/all --name=m4 --version=1.4.19 --build-require
-#     - conan create ./m4/all --name=m4 --version=1.4.19 --build-require -s build_type=Debug
-#     - conan upload "*" -r cps-artifactory -c
-#   tags:
-#     - macos
 
 # build-msys2:
 #   stage: build_tools

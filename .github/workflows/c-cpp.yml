@@ -509,6 +509,29 @@ jobs:
     - name: deploy
       run: conan upload "*" -r cps-artifactory -c
 
+  build-linux-headers-generic:
+    runs-on: ubuntu-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+    steps:
+    - uses: actions/checkout@v4
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev cmake ninja-build
+        sudo pip install --upgrade conan
+        conan profile detect
+        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+        conan remote remove conancenter
+        pip3 install --force-reinstall ninja
+    - name: build_release
+      run: conan create ./linux-headers-generic/all --name=linux-headers-generic --version=6.5.9
+    - name: build debug
+      run: conan create ./linux-headers-generic/all --name=linux-headers-generic --version=6.5.9 -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r cps-artifactory -c
+
   build-antlr-runtime:
     runs-on: ubuntu-latest
     env: # Or as an environment variable
@@ -910,15 +933,7 @@ jobs:
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-    steps:
-    - uses: actions/checkout@v4
-    - name: prepare runner
-      run: | 
-        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev
-        sudo pip install --upgrade conan
-        conan profile detect
-        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
-        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+    steps:icups-artifactory cps-gitlab-runner
         conan remote remove conancenter
     - name: build_release
       run: conan create ./icu/all --name=icu --version=74.2
@@ -1031,5 +1046,890 @@ jobs:
       run: conan create ./libelf/all --name=libelf --version=0.8.13
     - name: build debug
       run: conan create ./libelf/all --name=libelf --version=0.8.13 -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r cps-artifactory -c
+
+  build-libpng:
+    runs-on: ubuntu-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+    steps:
+    - uses: actions/checkout@v4
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev
+        sudo pip install --upgrade conan
+        conan profile detect
+        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+        conan remote remove conancenter
+    - name: build_release
+      run: conan create ./libpng/all --name=libpng --version=1.6.42
+    - name: build debug
+      run: conan create ./libpng/all --name=libpng --version=1.6.42 -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r cps-artifactory -c
+
+  build-libpng-macos:
+    runs-on: macos-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+    steps:
+    - uses: actions/checkout@v4
+    - name: prepare runner
+      run: | 
+        brew install conan
+        conan profile detect
+        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+        conan remote remove conancenter
+    - name: build_release
+      run: conan create ./libpng/all --name=libpng --version=1.6.42
+    - name: build debug
+      run: conan create ./libpng/all --name=libpng --version=1.6.42 -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r cps-artifactory -c
+
+  build-libffi:
+    runs-on: ubuntu-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+    steps:
+    - uses: actions/checkout@v4
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev
+        sudo pip install --upgrade conan
+        conan profile detect
+        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+        conan remote remove conancenter
+    - name: build_release
+      run: conan create ./libffi/all --name=libffi --version=3.4.4
+    - name: build debug
+      run: conan create ./libffi/all --name=libffi --version=3.4.4 -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r cps-artifactory -c
+
+  build-libffi-macos:
+    runs-on: macos-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+    steps:
+    - uses: actions/checkout@v4
+    - name: prepare runner
+      run: | 
+        brew install conan
+        conan profile detect
+        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+        conan remote remove conancenter
+    - name: build_release
+      run: conan create ./libffi/all --name=libffi --version=3.4.4
+    - name: build debug
+      run: conan create ./libffi/all --name=libffi --version=3.4.4 -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r cps-artifactory -c
+
+  build-libiconv:
+    runs-on: ubuntu-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+    steps:
+    - uses: actions/checkout@v4
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev
+        sudo pip install --upgrade conan
+        conan profile detect
+        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+        conan remote remove conancenter
+    - name: build_release
+      run: conan create ./libiconv/all --name=libiconv --version=1.17
+    - name: build debug
+      run: conan create ./libiconv/all --name=libiconv --version=1.17 -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r cps-artifactory -c
+
+  build-libiconv-macos:
+    runs-on: macos-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+    steps:
+    - uses: actions/checkout@v4
+    - name: prepare runner
+      run: | 
+        brew install conan
+        conan profile detect
+        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+        conan remote remove conancenter
+    - name: build_release
+      run: conan create ./libiconv/all --name=libiconv --version=1.17
+    - name: build debug
+      run: conan create ./libiconv/all --name=libiconv --version=1.17 -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r cps-artifactory -c
+
+  build-libmount:
+    runs-on: ubuntu-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+    steps:
+    - uses: actions/checkout@v4
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev
+        sudo pip install --upgrade conan
+        conan profile detect
+        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+        conan remote remove conancenter
+    - name: build_release
+      run: conan create ./libmount/all --name=libmount --version=2.39
+    - name: build debug
+      run: conan create ./libmount/all --name=libmount --version=2.39 -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r cps-artifactory -c
+
+  build-libmount-macos:
+    runs-on: macos-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+    steps:
+    - uses: actions/checkout@v4
+    - name: prepare runner
+      run: | 
+        brew install conan
+        conan profile detect
+        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+        conan remote remove conancenter
+    - name: build_release
+      run: conan create ./libmount/all --name=libmount --version=2.39
+    - name: build debug
+      run: conan create ./libmount/all --name=libmount --version=2.39 -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r cps-artifactory -c
+
+  build-md4c:
+    runs-on: ubuntu-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+    steps:
+    - uses: actions/checkout@v4
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev
+        sudo pip install --upgrade conan
+        conan profile detect
+        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+        conan remote remove conancenter
+    - name: build_release
+      run: conan create ./md4c/all --name=md4c --version=0.4.8
+    - name: build debug
+      run: conan create ./md4c/all --name=md4c --version=0.4.8 -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r cps-artifactory -c
+
+  build-md4c-macos:
+    runs-on: macos-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+    steps:
+    - uses: actions/checkout@v4
+    - name: prepare runner
+      run: | 
+        brew install conan
+        conan profile detect
+        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+        conan remote remove conancenter
+    - name: build_release
+      run: conan create ./md4c/all --name=md4c --version=0.4.8
+    - name: build debug
+      run: conan create ./md4c/all --name=md4c --version=0.4.8 -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r cps-artifactory -c
+
+  build-nlohmann_json:
+    runs-on: ubuntu-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+    steps:
+    - uses: actions/checkout@v4
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev
+        sudo pip install --upgrade conan
+        conan profile detect
+        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+        conan remote remove conancenter
+    - name: build_release
+      run: conan create ./nlohmann_json/all --name=nlohmann_json --version=3.11.3
+    - name: build debug
+      run: conan create ./nlohmann_json/all --name=nlohmann_json --version=3.11.3 -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r cps-artifactory -c
+
+  build-nlohmann_json-macos:
+    runs-on: macos-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+    steps:
+    - uses: actions/checkout@v4
+    - name: prepare runner
+      run: | 
+        brew install conan
+        conan profile detect
+        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+        conan remote remove conancenter
+    - name: build_release
+      run: conan create ./nlohmann_json/all --name=nlohmann_json --version=3.11.3
+    - name: build debug
+      run: conan create ./nlohmann_json/all --name=nlohmann_json --version=3.11.3 -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r cps-artifactory -c
+
+  build-sqlite3:
+    runs-on: ubuntu-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+    steps:
+    - uses: actions/checkout@v4
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev
+        sudo pip install --upgrade conan
+        conan profile detect
+        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+        conan remote remove conancenter
+    - name: build_release
+      run: conan create ./sqlite3/all --name=sqlite3 --version=3.45.0
+    - name: build debug
+      run: conan create ./sqlite3/all --name=sqlite3 --version=3.45.0 -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r cps-artifactory -c
+
+  build-sqlite3-macos:
+    runs-on: macos-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+    steps:
+    - uses: actions/checkout@v4
+    - name: prepare runner
+      run: | 
+        brew install conan
+        conan profile detect
+        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+        conan remote remove conancenter
+    - name: build_release
+      run: conan create ./sqlite3/all --name=sqlite3 --version=3.45.0
+    - name: build debug
+      run: conan create ./sqlite3/all --name=sqlite3 --version=3.45.0 -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r cps-artifactory -c
+  
+  build-libtool:
+    runs-on: ubuntu-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+    steps:
+    - uses: actions/checkout@v4
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev
+        sudo pip install --upgrade conan
+        conan profile detect
+        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+        conan remote remove conancenter
+    - name: build_release
+      run: conan create ./libtool/all --name=libtool --version=2.4.7
+    - name: build debug
+      run: conan create ./libtool/all --name=libtool --version=2.4.7 -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r cps-artifactory -c
+
+  build-libtool-macos:
+    runs-on: macos-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.Abuild-libiconvY_TOKEN cps-artifactory cps-gitlab-runner
+        conan remote remove conancenter
+    - name: build_release
+      run: conan create ./libtool/all --name=libtool --version=2.4.7
+    - name: build debug
+      run: conan create ./libtool/all --name=libtool --version=2.4.7 -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r cps-artifactory -c
+  
+  build-nspr:
+    runs-on: ubuntu-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+    steps:
+    - uses: actions/checkout@v4
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev
+        sudo pip install --upgrade conan
+        conan profile detect
+        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+        conan remote remove conancenter
+    - name: build_release
+      run: conan create ./nspr/all --name=nspr --version=4.35
+    - name: build debug
+      run: conan create ./nspr/all --name=nspr --version=4.35 -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r cps-artifactory -c
+
+  build-nspr-macos:
+    runs-on: macos-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+    steps:
+    - uses: actions/checkout@v4
+    - name: prepare runner
+      run: | 
+        brew install conan
+        conan profile detect
+        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+        conan remote remove conancenter
+    - name: build_release
+      run: conan create ./nspr/all --name=nspr --version=4.35
+    - name: build debug
+      run: conan create ./nspr/all --name=nspr --version=4.35 -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r cps-artifactory -c
+
+  build-util-linux-libuuid:
+    runs-on: ubuntu-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+    steps:
+    - uses: actions/checkout@v4
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev
+        sudo pip install --upgrade conan
+        conan profile detect
+        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+        conan remote remove conancenter
+    - name: build_release
+      run: conan create ./util-linux-libuuid/all --name=util-linux-libuuid --version=2.39.2
+    - name: build debug
+      run: conan create ./util-linux-libuuid/all --name=util-linux-libuuid --version=2.39.2 -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r cps-artifactory -c
+
+  build-pcre2:
+    runs-on: ubuntu-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+    needs: [build-zlib, build-bzip2]
+    steps:
+    - uses: actions/checkout@v4
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev
+        sudo pip install --upgrade conan
+        conan profile detect
+        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+        conan remote remove conancenter
+    - name: build_release
+      run: conan create ./pcre2/all --name=pcre2 --version=10.42
+    - name: build debug
+      run: conan create ./pcre2/all --name=pcre2 --version=10.42 -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r cps-artifactory -c
+
+  build-nss:
+    runs-on: ubuntu-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+    needs: [build-zlib, build-nspr, build-sqlite3]
+    steps:
+    - uses: actions/checkout@v4
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev
+        sudo pip install --upgrade conan
+        conan profile detect
+        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+        conan remote remove conancenter
+    - name: build_release
+      run: conan create ./nss/all --name=nss --version=3.93
+    - name: build debug
+      run: conan create ./nss/all --name=nss --version=3.93 -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r cps-artifactory -c
+
+  build-openssl:
+    runs-on: ubuntu-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+    needs: [build-zlib]
+    steps:
+    - uses: actions/checkout@v4
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev
+        sudo pip install --upgrade conan
+        conan profile detect
+        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+        conan remote remove conancenter
+    - name: build_release
+      run: conan create ./openssl/3.x.x --name=openssl --version=3.3.2
+    - name: build debug
+      run: conan create ./openssl/3.x.x --name=openssl --version=3.3.2 -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r cps-artifactory -c
+
+  build-odbc:
+    runs-on: ubuntu-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+    needs: [build-libtool, build-libiconv]
+    steps:
+    - uses: actions/checkout@v4
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev
+        sudo pip install --upgrade conan
+        conan profile detect
+        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+        conan remote remove conancenter
+    - name: build_release
+      run: conan create ./odbc/all --name=odbc --version=2.3.11
+    - name: build debug
+      run: conan create ./odbc/all --name=odbc --version=2.3.11 -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r cps-artifactory -c
+
+  build-libxml2:
+    runs-on: ubuntu-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+    needs: [build-zlib, build-libiconv, build-icu]
+    steps:
+    - uses: actions/checkout@v4
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev
+        sudo pip install --upgrade conan
+        conan profile detect
+        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+        conan remote remove conancenter
+    - name: build_release
+      run: conan create ./libxml2/all --name=libxml2 --version=2.12.7
+    - name: build debug
+      run: conan create ./libxml2/all --name=libxml2 --version=2.12.7 -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r cps-artifactory -c
+  
+  build-freetype:
+    runs-on: ubuntu-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+    needs: [build-zlib, build-libiconv, build-bzip2, build-brotli]
+    steps:
+    - uses: actions/checkout@v4
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev
+        sudo pip install --upgrade conan
+        conan profile detect
+        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+        conan remote remove conancenter
+    - name: build_release
+      run: conan create ./freetype/meson --name=freetype --version=2.13.2
+    - name: build debug
+      run: conan create ./freetype/meson --name=freetype --version=2.13.2 -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r cps-artifactory -c
+
+
+  build-fontconfig:
+    runs-on: ubuntu-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+    needs: [build-freetype, build-expat, build-util-linux-libuuid]
+    steps:
+    - uses: actions/checkout@v4freetype
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev
+        sudo pip install --upgrade conan
+        conan profile detect
+        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+        conan remote remove conancenter
+    - name: build_release
+      run: conan create ./fontconfig/all --name=fontconfig --version=2.15.0
+    - name: build debug
+      run: conan create ./fontconfig/all --name=fontconfig --version=2.15.0 -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r cps-artifactory -c
+  
+  build-wayland:
+    runs-on: ubuntu-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+    needs: [build-libffi, build-libxml2, build-expat]
+    steps:
+    - uses: actions/checkout@v4freetype
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev
+        sudo pip install --upgrade conan
+        conan profile detect
+        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+        conan remote remove conancenter
+    - name: build_release
+      run: conan create ./wayland/all --name=wayland --version=1.22.0
+    - name: build debug
+      run: conan create ./wayland/all --name=wayland --version=1.22.0 -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r cps-artifactory -c
+
+build-wayland-protocols:
+    runs-on: ubuntu-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+    needs: [build-meson]
+    steps:
+    - uses: actions/checkout@v4freetype
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev
+        sudo pip install --upgrade conan
+        conan profile detect
+        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+        conan remote remove conancenter
+    - name: build_release
+      run: conan create ./wayland-protocols/all --name=wayland-protocols --version=1.33 --build-require
+    - name: build debug
+      run: conan create ./wayland-protocols/all --name=wayland-protocols --version=1.33 --build-require -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r cps-artifactory -c
+
+  build-boost:
+    runs-on: ubuntu-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+    needs: [build-zlib, build-bzip2, build-libbacktrace, build-icu, build-libiconv]
+    steps:
+    - uses: actions/checkout@v4
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev
+        sudo pip install --upgrade conan
+        conan profile detect
+        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+        conan remote remove conancenter
+    - name: build_release
+      run: conan create ./boost/all --name=boost --version=1.84.0
+    - name: build debug
+      run: conan create ./boost/all --name=boost --version=1.84.0 -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r cps-artifactory -c
+
+  build-redboltz-mqtt_cpp:
+    runs-on: ubuntu-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+    needs: build-boost
+    steps:
+    - uses: actions/checkout@v4
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev
+        sudo pip install --upgrade conan
+        conan profile detect
+        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+        conan remote remove conancenter
+    - name: build_release
+      run: conan create ./redboltz-mqtt_cpp/all --name=redboltz-mqtt_cpp --version=13.2.1
+    - name: build debug
+      run: conan create ./redboltz-mqtt_cpp/all --name=redboltz-mqtt_cpp --version=13.2.1 -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r cps-artifactory -c
+
+  build-async_mqtt:
+    runs-on: ubuntu-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+    needs: build-boost
+    steps:
+    - uses: actions/checkout@v4
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev
+        sudo pip install --upgrade conan
+        conan profile detect
+        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+        conan remote remove conancenter
+    - name: build_release
+      run: conan create ./async_mqtt/all --name=async-mqtt --version=8.0.1
+    - name: build debug
+      run: conan create ./async_mqtt/all --name=async-mqtt --version=8.0.1 -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r cps-artifactory -c
+
+  build-libpq:
+    runs-on: ubuntu-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+    needs: build-openssl
+    steps:
+    - uses: actions/checkout@v4
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev
+        sudo pip install --upgrade conan
+        conan profile detect
+        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+        conan remote remove conancenter
+    - name: build_release
+      run: conan create ./libpq/all --name=libpq --version=15.4
+    - name: build debug
+      run: conan create ./libpq/all --name=libpq --version=15.4 -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r cps-artifactory -c
+
+  build-libcurl:
+    runs-on: ubuntu-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+    needs: [build-openssl, build-zlib, build-brotli]
+    steps:
+    - uses: actions/checkout@v4
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev
+        sudo pip install --upgrade conan
+        conan profile detect
+        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+        conan remote remove conancenter
+    - name: build_release
+      run: conan create ./libcurl/all --name=libcurl --version=8.4.0
+    - name: build debug
+      run: conan create ./libcurl/all --name=libcurl --version=8.4.0 -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r cps-artifactory -c
+
+  build-date:
+    runs-on: ubuntu-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+    needs: build-libcurl
+    steps:
+    - uses: actions/checkout@v4
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev
+        sudo pip install --upgrade conan
+        conan profile detect
+        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+        conan remote remove conancenter
+    - name: build_release
+      run: conan create ./date/all --name=date --version=3.0.1
+    - name: build debug
+      run: conan create ./date/all --name=date --version=3.0.1 -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r cps-artifactory -c
+
+  build-libselinux:
+    runs-on: ubuntu-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+    needs: build-pcre2
+    steps:
+    - uses: actions/checkout@v4
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev
+        sudo pip install --upgrade conan
+        conan profile detect
+        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+        conan remote remove conancenter
+    - name: build_release
+      run: conan create ./libselinux/all --name=libselinux --version=3.6
+    - name: build debug
+      run: conan create ./libselinux/all --name=libselinux --version=3.6 -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r cps-artifactory -c
+
+  build-glib:
+    runs-on: ubuntu-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+    needs: [build-zlib, build-libffi, build-pcre2, build-libelf, build-libmount, build-libselinux, build-libiconv]
+    steps:
+    - uses: actions/checkout@v4
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev
+        sudo pip install --upgrade conan
+        conan profile detect
+        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+        conan remote remove conancenter
+    - name: build_release
+      run: conan create ./glib/all --name=glib --version=2.78.3
+    - name: build debug
+      run: conan create ./glib/all --name=glib --version=2.78.3 -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r cps-artifactory -c
+
+  build-xkbcommon:
+    runs-on: ubuntu-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+    needs: [build-xkeyboard-config, build-xorg, build-libxml2, build-wayland]
+    steps:
+    - uses: actions/checkout@v4
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev
+        sudo pip install --upgrade conan
+        conan profile detect
+        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+        conan remote remove conancenter
+    - name: build_release
+      run: conan create ./xkbcommon/all --name=xkbcommon --version=1.5.0
+    - name: build debug
+      run: conan create ./xkbcommon/all --name=xkbcommon --version=1.5.0-s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r cps-artifactory -c
+
+  build-gtest:
+    runs-on: ubuntu-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+    needs: build-glib
+    steps:
+    - uses: actions/checkout@v4
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev
+        sudo pip install --upgrade conan
+        conan profile detect
+        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+        conan remote remove conancenter
+    - name: build_release
+      run: conan create ./gtest/all --name=gtest --version=1.14.0
+    - name: build debug
+      run: conan create ./gtest/all --name=gtest --version=1.14.0 -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r cps-artifactory -c
+
+  build-harfbuzz:
+    runs-on: ubuntu-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+    needs: [build-freetype, build-icu, build-glib]
+    steps:
+    - uses: actions/checkout@v4
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev
+        sudo pip install --upgrade conan
+        conan profile detect
+        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+        conan remote remove conancenter
+    - name: build_release
+      run: conan create ./harfbuzz/all --name=harfbuzz --version=8.3.0
+    - name: build debug
+      run: conan create ./harfbuzz/all --name=harfbuzz --version=8.3.0 -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r cps-artifactory -c
+
+
+  build-qt:
+    runs-on: ubuntu-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+    needs: [build-zlib, build-openssl, build-pcre2, build-glib, build-double-conversion, build-freetype, build-fontconfig, build-icu, build-harfbuzz, build-libpng, build-libpq, build-odbc, build-wayland, build-nss]
+    steps:
+    - uses: actions/checkout@v4
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev
+        sudo pip install --upgrade conan
+        conan profile detect
+        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+        conan remote remove conancenter
+    - name: build_release
+      run: conan create ./qt/6.x.x --name=qt --version=6.7.3
+    - name: build debug
+      run: conan create ./qt/6.x.x --name=qt --version=6.7.3 -s build_type=Debug
     - name: deploy
       run: conan upload "*" -r cps-artifactory -c
