@@ -1,0 +1,7 @@
+sources:
+  "9.0.0":
+    url: "https://github.com/redboltz/async_mqtt/archive/refs/tags/9.0.0.tar.gz"
+    sha256: "11A55519F4BF5A8F085B77EAC7068DF2467E16E02FA7A1A764923F684D251BDF"
+  "8.0.1":
+    url: "https://github.com/redboltz/async_mqtt/archive/refs/tags/8.0.1.tar.gz"
+    sha256: "4ff75137ccc4f706acf609f0594eeafd4214ad5bb0552757dfc951bdef19c785"
