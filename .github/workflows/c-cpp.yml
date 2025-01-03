@@ -281,6 +281,7 @@ jobs:
         conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
         conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
         conan remote remove conancenter
+        pip3 install --force-reinstall ninja
     - name: build_release
       run: conan create ./meson/all --name=meson --version=1.4.0 --build-require
     - name: build debug
