@@ -1383,7 +1383,16 @@ jobs:
   build-libtool-macos:
     runs-on: macos-latest
     env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.Abuild-libiconvY_TOKEN cps-artifactory cps-gitlab-runner
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+    steps:
+    - uses: actions/checkout@v4
+    - name: prepare runner
+      run: | 
+        brew install conan
+        conan profile detect
+        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
         conan remote remove conancenter
     - name: build_release
       run: conan create ./libtool/all --name=libtool --version=2.4.7
@@ -1665,7 +1674,7 @@ build-wayland-protocols:
     - name: deploy
       run: conan upload "*" -r cps-artifactory -c
 
-  build-boost:
+build-boost:
     runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
@@ -1688,7 +1697,7 @@ build-wayland-protocols:
     - name: deploy
       run: conan upload "*" -r cps-artifactory -c
 
-  build-redboltz-mqtt_cpp:
+build-redboltz-mqtt_cpp:
     runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
@@ -1711,7 +1720,7 @@ build-wayland-protocols:
     - name: deploy
       run: conan upload "*" -r cps-artifactory -c
 
-  build-async_mqtt:
+build-async_mqtt:
     runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
@@ -1734,7 +1743,7 @@ build-wayland-protocols:
     - name: deploy
       run: conan upload "*" -r cps-artifactory -c
 
-  build-libpq:
+build-libpq:
     runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
