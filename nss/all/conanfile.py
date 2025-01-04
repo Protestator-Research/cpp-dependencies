@@ -5,7 +5,7 @@ from conan.tools.scm import Version
 from conan.tools.files import apply_conandata_patches, get, chdir, rename, rm
 from conan.tools.build import cross_building
 from conan.tools.env import Environment
-from conan.tools.microsoft import unix_path, VCVars, is_msvc
+from conan.tools.microsoft import unix_path, VCVars
 import os
 import glob
 
@@ -33,7 +33,7 @@ class NSSConan(ConanFile):
 
     def build_requirements(self):
         env = Environment()
-        if is_msvc: #and not env.contains("CONAN_BASH_PATH"):
+        if self.compiler == "msvc": #and not env.contains("CONAN_BASH_PATH"):
             self.build_requires("msys2/cci.latest")
         if self.settings.os == "Windows":
             self.build_requires("mozilla-build/3.3")
@@ -44,10 +44,10 @@ class NSSConan(ConanFile):
         self.options["nspr/*"].shared = True
         self.options["sqlite3/*"].shared = True
 
-        if self.options.shared and not is_msvc:
+        if self.options.shared and not self.compiler == "msvc":
             del self.options.fPIC
         
-        if not is_msvc:
+        if not self.compiler == "msvc":
             del self.settings.compiler.libcxx
 
         del self.settings.compiler.cppstd
@@ -104,7 +104,7 @@ class NSSConan(ConanFile):
         args.append("OS_ARCH=%s" % os_map.get(str(self.settings.os), "UNSUPPORTED_OS"))
         if self.settings.build_type != "Debug":
             args.append("BUILD_OPT=1")
-        if is_msvc:
+        if self.compiler == "msvc":
             args.append("NSPR31_LIB_PREFIX=$(NULL)")
 
         args.append("USE_SYSTEM_ZLIB=1")
@@ -168,7 +168,7 @@ class NSSConan(ConanFile):
     def build(self):
         apply_conandata_patches(self)
         with chdir(self, os.path.join(self._source_subfolder, "nss")):
-                if is_msvc:
+                if self.compiler == "msvc":
                     self.run("make %s" % " ".join(self._make_args))
 
     def package(self):
