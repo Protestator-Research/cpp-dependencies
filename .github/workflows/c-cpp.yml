@@ -1651,7 +1651,7 @@ jobs:
     - name: deploy
       run: conan upload "*" -r cps-artifactory -c
 
-build-wayland-protocols:
+  build-wayland-protocols:
     runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
@@ -1674,7 +1674,7 @@ build-wayland-protocols:
     - name: deploy
       run: conan upload "*" -r cps-artifactory -c
 
-build-boost:
+  build-boost:
     runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
@@ -1697,7 +1697,7 @@ build-boost:
     - name: deploy
       run: conan upload "*" -r cps-artifactory -c
 
-build-redboltz-mqtt_cpp:
+  build-redboltz-mqtt_cpp:
     runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
@@ -1720,7 +1720,7 @@ build-redboltz-mqtt_cpp:
     - name: deploy
       run: conan upload "*" -r cps-artifactory -c
 
-build-async_mqtt:
+  build-async_mqtt:
     runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
@@ -1743,7 +1743,7 @@ build-async_mqtt:
     - name: deploy
       run: conan upload "*" -r cps-artifactory -c
 
-build-libpq:
+  build-libpq:
     runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
