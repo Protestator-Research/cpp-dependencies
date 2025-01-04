@@ -6,6 +6,7 @@ from conan.tools.files import apply_conandata_patches, get, chdir, rename, rm
 from conan.tools.build import cross_building
 from conan.tools.env import Environment
 from conan.tools.microsoft import unix_path, VCVars
+from conan.tools.files import copy
 import os
 import glob
 
@@ -91,7 +92,7 @@ class NSSConan(ConanFile):
         if self.settings.compiler == "gcc":
             args.append("XCFLAGS=-Wno-array-parameter")
         args.append("NSPR_INCLUDE_DIR=%s" % self.dependencies["nspr"].cpp_info.includedirs[1])
-        args.append("NSPR_LIB_DIR=%s" % self.dependencies["nspr"].cpp_info.includedirs[0])
+        args.append("NSPR_LIB_DIR=%s" % self.dependencies["nspr"].cpp_info.libdirs[0])
 
         os_map = {
             "Linux": "Linux",
@@ -172,10 +173,10 @@ class NSSConan(ConanFile):
                     self.run("make %s" % " ".join(self._make_args))
 
     def package(self):
-        self.copy("COPYING", src = os.path.join(self._source_subfolder, "nss"), dst = "licenses")
+        copy("COPYING", src = os.path.join(self._source_subfolder, "nss"), dst = "licenses")
         with chdir(self, os.path.join(self._source_subfolder, "nss")):
             self.run("make install %s" % " ".join(self._make_args))
-        self.copy("*",
+        copy("*",
                   src=os.path.join(self._source_subfolder, "dist", "public", "nss"),
                   dst="include")
         for d in os.listdir(os.path.join(self._source_subfolder, "dist")):
@@ -184,7 +185,7 @@ class NSSConan(ConanFile):
             f = os.path.join(self._source_subfolder, "dist", d)
             if not os.path.isdir(f):
                 continue
-            self.copy("*", src = f)
+            copy("*", src = f)
 
         for dll_file in glob.glob(os.path.join(self.package_folder, "lib", "*.dll")):
             rename(self, dll_file, os.path.join(self.package_folder, "bin", os.path.basename(dll_file)))
