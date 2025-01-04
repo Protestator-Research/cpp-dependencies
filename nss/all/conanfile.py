@@ -173,10 +173,10 @@ class NSSConan(ConanFile):
                     self.run("make %s" % " ".join(self._make_args))
 
     def package(self):
-        copy("COPYING", src = os.path.join(self._source_subfolder, "nss"), dst = "licenses")
+        copy("COPYING", pattern="*", src = os.path.join(self._source_subfolder, "nss"), dst = "licenses")
         with chdir(self, os.path.join(self._source_subfolder, "nss")):
             self.run("make install %s" % " ".join(self._make_args))
-        copy("*",
+        copy("*", pattern="*",
                   src=os.path.join(self._source_subfolder, "dist", "public", "nss"),
                   dst="include")
         for d in os.listdir(os.path.join(self._source_subfolder, "dist")):
