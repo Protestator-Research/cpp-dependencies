@@ -933,7 +933,7 @@ jobs:
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-    steps
+    steps:
     - uses: actions/checkout@v4
     - name: prepare runner
       run: | 
