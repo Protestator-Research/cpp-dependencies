@@ -33,7 +33,7 @@ class NsprConan(ConanFile):
         "win32_target": ["winnt", "win95"],
     }
     default_options = {
-        "shared": False,
+        "shared": True,
         "fPIC": True,
         "with_mozilla": True,
         "win32_target": "winnt",

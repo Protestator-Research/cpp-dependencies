@@ -65,7 +65,7 @@ class LibpqConan(ConanFile):
 
     def requirements(self):
         if self.options.with_openssl:
-            self.requires("openssl/3.2.2")
+            self.requires("openssl/3.3.2")
 
     def build_requirements(self):
         if is_msvc(self):

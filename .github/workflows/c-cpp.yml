@@ -1656,7 +1656,7 @@ jobs:
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-    needs: [build-meson]
+    needs: [build-meson, build-libxml2]
     steps:
     - uses: actions/checkout@v4
     - name: prepare runner
