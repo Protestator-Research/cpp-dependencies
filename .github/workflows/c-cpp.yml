@@ -52,26 +52,26 @@ jobs:
     - name: deploy
       run: conan upload "*" -r cps-artifactory -c
 
-  build-cmake-macos:
-    runs-on: macos-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-    steps:
-    - uses: actions/checkout@v4
-    - name: prepare runner
-      run: | 
-        brew install conan
-        conan profile detect
-        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
-        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
-        conan remote remove conancenter
-    - name: build_release
-      run: conan create ./cmake/binary --name=cmake --version=3.30.0 --build-require
-    - name: build debug
-      run: conan create ./cmake/binary --name=cmake --version=3.30.0 --build-require -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r cps-artifactory -c
+#  build-cmake-macos:
+#    runs-on: macos-latest
+#    env: # Or as an environment variable
+#      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+#      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+#    steps:
+#    - uses: actions/checkout@v4
+#    - name: prepare runner
+#      run: | 
+#        brew install conan
+#        conan profile detect
+#        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+#        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+#        conan remote remove conancenter
+#    - name: build_release
+#      run: conan create ./cmake/binary --name=cmake --version=3.30.0 --build-require
+#    - name: build debug
+#      run: conan create ./cmake/binary --name=cmake --version=3.30.0 --build-require -s build_type=Debug
+#    - name: deploy
+#      run: conan upload "*" -r cps-artifactory -c
   
   build-autoconf:
     runs-on: ubuntu-latest
@@ -95,26 +95,26 @@ jobs:
     - name: deploy
       run: conan upload "*" -r cps-artifactory -c
 
-  build-autconf-macos:
-    runs-on: macos-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-    steps:
-    - uses: actions/checkout@v4
-    - name: prepare runner
-      run: | 
-        brew install conan
-        conan profile detect
-        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
-        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
-        conan remote remove conancenter
-    - name: build_release
-      run: conan create ./autoconf/all --name=autoconf --version=2.71 --build-require
-    - name: build debug
-      run: conan create ./autoconf/all --name=autoconf --version=2.71 --build-require -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r cps-artifactory -c
+#  build-autconf-macos:
+#    runs-on: macos-latest
+#    env: # Or as an environment variable
+#      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+#      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+#    steps:
+#    - uses: actions/checkout@v4
+#    - name: prepare runner
+#      run: | 
+#        brew install conan
+#        conan profile detect
+#        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+#        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+#        conan remote remove conancenter
+#    - name: build_release
+#      run: conan create ./autoconf/all --name=autoconf --version=2.71 --build-require
+#    - name: build debug
+#      run: conan create ./autoconf/all --name=autoconf --version=2.71 --build-require -s build_type=Debug
+#    - name: deploy
+#      run: conan upload "*" -r cps-artifactory -c
   
   build-automake:
     runs-on: ubuntu-latest
@@ -138,26 +138,26 @@ jobs:
     - name: deploy
       run: conan upload "*" -r cps-artifactory -c
 
-  build-automake-macos:
-    runs-on: macos-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-    steps:
-    - uses: actions/checkout@v4
-    - name: prepare runner
-      run: | 
-        brew install conan
-        conan profile detect
-        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
-        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
-        conan remote remove conancenter
-    - name: build_release
-      run: conan create ./automake/all --name=automake --version=1.16.5 --build-require
-    - name: build debug
-      run: conan create ./automake/all --name=automake --version=1.16.5 --build-require -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r cps-artifactory -c
+#  build-automake-macos:
+#    runs-on: macos-latest
+#    env: # Or as an environment variable
+#      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+#      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+#    steps:
+#    - uses: actions/checkout@v4
+#    - name: prepare runner
+#      run: | 
+#        brew install conan
+#        conan profile detect
+#        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+#        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+#        conan remote remove conancenter
+#    - name: build_release
+#      run: conan create ./automake/all --name=automake --version=1.16.5 --build-require
+#    - name: build debug
+#      run: conan create ./automake/all --name=automake --version=1.16.5 --build-require -s build_type=Debug
+#    - name: deploy
+#      run: conan upload "*" -r cps-artifactory -c
   
   build-ninja:
     runs-on: ubuntu-latest
@@ -181,26 +181,26 @@ jobs:
     - name: deploy
       run: conan upload "*" -r cps-artifactory -c
 
-  build-ninja-macos:
-    runs-on: macos-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-    steps:
-    - uses: actions/checkout@v4
-    - name: prepare runner
-      run: | 
-        brew install conan
-        conan profile detect
-        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
-        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
-        conan remote remove conancenter
-    - name: build_release
-      run: conan create ./ninja/all --name=ninja --version=1.12.1 --build-require
-    - name: build debug
-      run: conan create ./ninja/all --name=ninja --version=1.12.1 --build-require -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r cps-artifactory -c
+#  build-ninja-macos:
+#    runs-on: macos-latest
+#    env: # Or as an environment variable
+#      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+#      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+#    steps:
+#    - uses: actions/checkout@v4
+#    - name: prepare runner
+#      run: | 
+#        brew install conan
+#        conan profile detect
+#        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+#        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+#        conan remote remove conancenter
+#    - name: build_release
+#      run: conan create ./ninja/all --name=ninja --version=1.12.1 --build-require
+#    - name: build debug
+#      run: conan create ./ninja/all --name=ninja --version=1.12.1 --build-require -s build_type=Debug
+#    - name: deploy
+#      run: conan upload "*" -r cps-artifactory -c
 
   build-meson:
     runs-on: ubuntu-latest
@@ -225,26 +225,26 @@ jobs:
     - name: deploy
       run: conan upload "*" -r cps-artifactory -c
 
-  build-meson-macos:
-    runs-on: macos-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-    steps:
-    - uses: actions/checkout@v4
-    - name: prepare runner
-      run: | 
-        brew install conan
-        conan profile detect
-        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
-        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
-        conan remote remove conancenter
-    - name: build_release
-      run: conan create ./meson/all --name=meson --version=1.4.0 --build-require
-    - name: build debug
-      run: conan create ./meson/all --name=meson --version=1.4.0 --build-require -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r cps-artifactory -c
+#  build-meson-macos:
+#    runs-on: macos-latest
+#    env: # Or as an environment variable
+#      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+#      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+#    steps:
+#    - uses: actions/checkout@v4
+#    - name: prepare runner
+#      run: | 
+#        brew install conan
+#        conan profile detect
+#        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+#        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+#        conan remote remove conancenter
+#    - name: build_release
+#      run: conan create ./meson/all --name=meson --version=1.4.0 --build-require
+#    - name: build debug
+#      run: conan create ./meson/all --name=meson --version=1.4.0 --build-require -s build_type=Debug
+#    - name: deploy
+#      run: conan upload "*" -r cps-artifactory -c
 
   build-pkgconv:
     runs-on: ubuntu-latest
@@ -268,26 +268,26 @@ jobs:
     - name: deploy
       run: conan upload "*" -r cps-artifactory -c
 
-  build-pkgconv-macos:
-    runs-on: macos-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-    steps:
-    - uses: actions/checkout@v4
-    - name: prepare runner
-      run: | 
-        brew install conan
-        conan profile detect
-        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
-        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
-        conan remote remove conancenter
-    - name: build_release
-      run: conan create ./pkgconf/all --name=pkgconf --version=2.2.0 --build-require --build missing
-    - name: build debug
-      run: conan create ./pkgconf/all --name=pkgconf --version=2.2.0 --build-require --build missing -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r cps-artifactory -c
+#  build-pkgconv-macos:
+#    runs-on: macos-latest
+#    env: # Or as an environment variable
+#      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+#      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+#    steps:
+#    - uses: actions/checkout@v4
+#    - name: prepare runner
+#      run: | 
+#        brew install conan
+#        conan profile detect
+#        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+#        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+#        conan remote remove conancenter
+#    - name: build_release
+#      run: conan create ./pkgconf/all --name=pkgconf --version=2.2.0 --build-require --build missing
+#    - name: build debug
+#      run: conan create ./pkgconf/all --name=pkgconf --version=2.2.0 --build-require --build missing -s build_type=Debug
+#    - name: deploy
+#      run: conan upload "*" -r cps-artifactory -c
 
   build-xorg:
     runs-on: ubuntu-latest
@@ -356,26 +356,26 @@ jobs:
     - name: deploy
       run: conan upload "*" -r cps-artifactory -c
 
-  build-gnu-config-macos:
-    runs-on: macos-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-    steps:
-    - uses: actions/checkout@v4
-    - name: prepare runner
-      run: | 
-        brew install conan
-        conan profile detect
-        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
-        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
-        conan remote remove conancenter
-    - name: build_release
-      run: conan create ./gnu-config/all --name=gnu-config --version=cci.20210814
-    - name: build debug
-      run: conan create ./gnu-config/all --name=gnu-config --version=cci.20210814 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r cps-artifactory -c
+#  build-gnu-config-macos:
+#    runs-on: macos-latest
+#    env: # Or as an environment variable
+#      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+#      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+#    steps:
+#    - uses: actions/checkout@v4
+#    - name: prepare runner
+#      run: | 
+#        brew install conan
+#        conan profile detect
+#        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+#        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+#        conan remote remove conancenter
+#    - name: build_release
+#      run: conan create ./gnu-config/all --name=gnu-config --version=cci.20210814
+#    - name: build debug
+#      run: conan create ./gnu-config/all --name=gnu-config --version=cci.20210814 -s build_type=Debug
+#    - name: deploy
+#      run: conan upload "*" -r cps-artifactory -c
 
   build-opengl:
     runs-on: ubuntu-latest
@@ -400,26 +400,26 @@ jobs:
     - name: deploy
       run: conan upload "*" -r cps-artifactory -c
 
-  build-opengl-mac:
-    runs-on: macos-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-    steps:
-    - uses: actions/checkout@v4
-    - name: prepare runner
-      run: | 
-        brew install conan
-        conan profile detect
-        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
-        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
-        conan remote remove conancenter
-    - name: build_release
-      run: conan create ./opengl/all --name=opengl --version=system
-    - name: build debug
-      run: conan create ./opengl/all --name=opengl --version=system -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r cps-artifactory -c
+#  build-opengl-mac:
+#    runs-on: macos-latest
+#    env: # Or as an environment variable
+#      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+#      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+#    steps:
+#    - uses: actions/checkout@v4
+#    - name: prepare runner
+#      run: | 
+#        brew install conan
+#        conan profile detect
+#        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+#        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+#        conan remote remove conancenter
+#    - name: build_release
+#      run: conan create ./opengl/all --name=opengl --version=system
+#    - name: build debug
+#      run: conan create ./opengl/all --name=opengl --version=system -s build_type=Debug
+#    - name: deploy
+#      run: conan upload "*" -r cps-artifactory -c
 
   build-b2:
     runs-on: ubuntu-latest
@@ -444,26 +444,26 @@ jobs:
     - name: deploy
       run: conan upload "*" -r cps-artifactory -c
 
-  build-b2-mac:
-    runs-on: macos-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-    steps:
-    - uses: actions/checkout@v4
-    - name: prepare runner
-      run: | 
-        brew install conan
-        conan profile detect
-        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
-        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
-        conan remote remove conancenter
-    - name: build_release
-      run: conan create ./b2/portable --name=b2 --version=5.2.1
-    - name: build debug
-      run: conan create ./b2/portable --name=b2 --version=5.2.1 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r cps-artifactory -c
+#  build-b2-mac:
+#    runs-on: macos-latest
+#    env: # Or as an environment variable
+#      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+#      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+#    steps:
+#    - uses: actions/checkout@v4
+#    - name: prepare runner
+#      run: | 
+#        brew install conan
+#        conan profile detect
+#        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+#        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+#        conan remote remove conancenter
+#    - name: build_release
+#      run: conan create ./b2/portable --name=b2 --version=5.2.1
+#    - name: build debug
+#      run: conan create ./b2/portable --name=b2 --version=5.2.1 -s build_type=Debug
+#    - name: deploy
+#      run: conan upload "*" -r cps-artifactory -c
 
   build-nasm:
     runs-on: ubuntu-latest
@@ -488,26 +488,26 @@ jobs:
     - name: deploy
       run: conan upload "*" -r cps-artifactory -c
 
-  build-nasm-mac:
-    runs-on: macos-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-    steps:
-    - uses: actions/checkout@v4
-    - name: prepare runner
-      run: | 
-        brew install conan
-        conan profile detect
-        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
-        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
-        conan remote remove conancenter
-    - name: build_release
-      run: conan create ./nasm/all --name=nasm --version=2.16.01
-    - name: build debug
-      run: conan create ./nasm/all --name=nasm --version=2.16.01 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r cps-artifactory -c
+#  build-nasm-mac:
+#    runs-on: macos-latest
+#    env: # Or as an environment variable
+#      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+#      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+#    steps:
+#    - uses: actions/checkout@v4
+#    - name: prepare runner
+#      run: | 
+#        brew install conan
+#        conan profile detect
+#        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+#        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+#        conan remote remove conancenter
+#    - name: build_release
+#      run: conan create ./nasm/all --name=nasm --version=2.16.01
+#    - name: build debug
+#      run: conan create ./nasm/all --name=nasm --version=2.16.01 -s build_type=Debug
+#    - name: deploy
+#      run: conan upload "*" -r cps-artifactory -c
 
   build-linux-headers-generic:
     runs-on: ubuntu-latest
@@ -555,26 +555,26 @@ jobs:
     - name: deploy
       run: conan upload "*" -r cps-artifactory -c
 
-  build-antlr-runtime-mac:
-    runs-on: macos-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-    steps:
-    - uses: actions/checkout@v4
-    - name: prepare runner
-      run: | 
-        brew install conan
-        conan profile detect
-        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
-        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
-        conan remote remove conancenter
-    - name: build_release
-      run: conan create ./antlr4-cppruntime/all --name=antlr4-cppruntime --version=4.13.1
-    - name: build debug
-      run: conan create ./antlr4-cppruntime/all --name=antlr4-cppruntime --version=4.13.1 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r cps-artifactory -c
+#  build-antlr-runtime-mac:
+#    runs-on: macos-latest
+#    env: # Or as an environment variable
+#      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+#      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+#    steps:
+#    - uses: actions/checkout@v4
+#    - name: prepare runner
+#      run: | 
+#        brew install conan
+#        conan profile detect
+#        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+#        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+#        conan remote remove conancenter
+#    - name: build_release
+#      run: conan create ./antlr4-cppruntime/all --name=antlr4-cppruntime --version=4.13.1
+#    - name: build debug
+#      run: conan create ./antlr4-cppruntime/all --name=antlr4-cppruntime --version=4.13.1 -s build_type=Debug
+#    - name: deploy
+#      run: conan upload "*" -r cps-artifactory -c
 
   build-zlib:
     runs-on: ubuntu-latest
@@ -599,26 +599,26 @@ jobs:
     - name: deploy
       run: conan upload "*" -r cps-artifactory -c
 
-  build-zlib-mac:
-    runs-on: macos-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-    steps:
-    - uses: actions/checkout@v4
-    - name: prepare runner
-      run: | 
-        brew install conan
-        conan profile detect
-        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
-        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
-        conan remote remove conancenter
-    - name: build_release
-      run: conan create ./zlib/all --name=zlib --version=1.3.1
-    - name: build debug
-      run: conan create ./zlib/all --name=zlib --version=1.3.1 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r cps-artifactory -c
+#  build-zlib-mac:
+#    runs-on: macos-latest
+#    env: # Or as an environment variable
+#      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+#      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+#    steps:
+#    - uses: actions/checkout@v4
+#    - name: prepare runner
+#      run: | 
+#        brew install conan
+#        conan profile detect
+#        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+#        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+#        conan remote remove conancenter
+#    - name: build_release
+#      run: conan create ./zlib/all --name=zlib --version=1.3.1
+#    - name: build debug
+#      run: conan create ./zlib/all --name=zlib --version=1.3.1 -s build_type=Debug
+#    - name: deploy
+#      run: conan upload "*" -r cps-artifactory -c
 
   build-bzip2:
     runs-on: ubuntu-latest
@@ -643,26 +643,26 @@ jobs:
     - name: deploy
       run: conan upload "*" -r cps-artifactory -c
 
-  build-bzip2-mac:
-    runs-on: macos-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-    steps:
-    - uses: actions/checkout@v4
-    - name: prepare runner
-      run: | 
-        brew install conan
-        conan profile detect
-        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
-        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
-        conan remote remove conancenter
-    - name: build_release
-      run: conan create ./bzip2/all --name=bzip2 --version=1.0.8
-    - name: build debug
-      run: conan create ./bzip2/all --name=bzip2 --version=1.0.8 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r cps-artifactory -c
+#  build-bzip2-mac:
+#    runs-on: macos-latest
+#    env: # Or as an environment variable
+#      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+#      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+#    steps:
+#    - uses: actions/checkout@v4
+#    - name: prepare runner
+#      run: | 
+#        brew install conan
+#        conan profile detect
+#        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+#        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+#        conan remote remove conancenter
+#    - name: build_release
+#      run: conan create ./bzip2/all --name=bzip2 --version=1.0.8
+#    - name: build debug
+#      run: conan create ./bzip2/all --name=bzip2 --version=1.0.8 -s build_type=Debug
+#    - name: deploy
+#      run: conan upload "*" -r cps-artifactory -c
 
   build-brotli:
     runs-on: ubuntu-latest
@@ -687,26 +687,26 @@ jobs:
     - name: deploy
       run: conan upload "*" -r cps-artifactory -c
 
-  build-brotli-mac:
-    runs-on: macos-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-    steps:
-    - uses: actions/checkout@v4
-    - name: prepare runner
-      run: | 
-        brew install conan
-        conan profile detect
-        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
-        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
-        conan remote remove conancenter
-    - name: build_release
-      run: conan create ./brotli/all --name=brotli --version=1.1.0
-    - name: build debug
-      run: conan create ./brotli/all --name=brotli --version=1.1.0 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r cps-artifactory -c
+#  build-brotli-mac:
+#    runs-on: macos-latest
+#    env: # Or as an environment variable
+#      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+#      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+#    steps:
+#    - uses: actions/checkout@v4
+#    - name: prepare runner
+#      run: | 
+#        brew install conan
+#        conan profile detect
+#        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+#        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+#        conan remote remove conancenter
+#    - name: build_release
+#      run: conan create ./brotli/all --name=brotli --version=1.1.0
+#    - name: build debug
+#      run: conan create ./brotli/all --name=brotli --version=1.1.0 -s build_type=Debug
+#    - name: deploy
+#      run: conan upload "*" -r cps-artifactory -c
 
   build-double-conversion:
     runs-on: ubuntu-latest
@@ -731,26 +731,26 @@ jobs:
     - name: deploy
       run: conan upload "*" -r cps-artifactory -c
 
-  build-double-conversion-mac:
-    runs-on: macos-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-    steps:
-    - uses: actions/checkout@v4
-    - name: prepare runner
-      run: | 
-        brew install conan
-        conan profile detect
-        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
-        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
-        conan remote remove conancenter
-    - name: build_release
-      run: conan create ./double-conversion/all --name=double-conversion --version=3.3.0
-    - name: build debug
-      run: conan create ./double-conversion/all --name=double-conversion --version=3.3.0 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r cps-artifactory -c
+#  build-double-conversion-mac:
+#    runs-on: macos-latest
+#    env: # Or as an environment variable
+#      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+#      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+#    steps:
+#    - uses: actions/checkout@v4
+#    - name: prepare runner
+#      run: | 
+#        brew install conan
+#        conan profile detect
+#        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+#        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+#        conan remote remove conancenter
+#    - name: build_release
+#      run: conan create ./double-conversion/all --name=double-conversion --version=3.3.0
+#    - name: build debug
+#      run: conan create ./double-conversion/all --name=double-conversion --version=3.3.0 -s build_type=Debug
+#    - name: deploy
+#      run: conan upload "*" -r cps-artifactory -c
 
   build-expat:
     runs-on: ubuntu-latest
@@ -775,26 +775,26 @@ jobs:
     - name: deploy
       run: conan upload "*" -r cps-artifactory -c
 
-  build-expat-mac:
-    runs-on: macos-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-    steps:
-    - uses: actions/checkout@v4
-    - name: prepare runner
-      run: | 
-        brew install conan
-        conan profile detect
-        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
-        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
-        conan remote remove conancenter
-    - name: build_release
-      run: conan create ./expat/all --name=expat --version=2.6.2
-    - name: build debug
-      run: conan create ./expat/all --name=expat --version=2.6.2 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r cps-artifactory -c
+#  build-expat-mac:
+#    runs-on: macos-latest
+#    env: # Or as an environment variable
+#      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+#      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+#    steps:
+#    - uses: actions/checkout@v4
+#    - name: prepare runner
+#      run: | 
+#        brew install conan
+#        conan profile detect
+#        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+#        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+#        conan remote remove conancenter
+#    - name: build_release
+#      run: conan create ./expat/all --name=expat --version=2.6.2
+#    - name: build debug
+#      run: conan create ./expat/all --name=expat --version=2.6.2 -s build_type=Debug
+#    - name: deploy
+#      run: conan upload "*" -r cps-artifactory -c
 
   build-flex:
     runs-on: ubuntu-latest
@@ -819,26 +819,26 @@ jobs:
     - name: deploy
       run: conan upload "*" -r cps-artifactory -c
 
-  build-flex-mac:
-    runs-on: macos-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-    steps:
-    - uses: actions/checkout@v4
-    - name: prepare runner
-      run: | 
-        brew install conan
-        conan profile detect
-        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
-        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
-        conan remote remove conancenter
-    - name: build_release
-      run: conan create ./flex/all --name=flex --version=2.6.4 --build missing
-    - name: build debug
-      run: conan create ./flex/all --name=flex --version=2.6.4 --build missing -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r cps-artifactory -c
+#  build-flex-mac:
+#    runs-on: macos-latest
+#    env: # Or as an environment variable
+#      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+#      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+#    steps:
+#    - uses: actions/checkout@v4
+#    - name: prepare runner
+#      run: | 
+#        brew install conan
+#        conan profile detect
+#        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+#        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+#        conan remote remove conancenter
+#    - name: build_release
+#      run: conan create ./flex/all --name=flex --version=2.6.4 --build missing
+#    - name: build debug
+#      run: conan create ./flex/all --name=flex --version=2.6.4 --build missing -s build_type=Debug
+#    - name: deploy
+#      run: conan upload "*" -r cps-artifactory -c
   
   build-bison:
     runs-on: ubuntu-latest
@@ -863,27 +863,27 @@ jobs:
     - name: deploy
       run: conan upload "*" -r cps-artifactory -c
 
-  build-bison-macos:
-    runs-on: macos-latest
-    needs: build-flex-mac
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-    steps:
-    - uses: actions/checkout@v4
-    - name: prepare runner
-      run: | 
-        brew install conan
-        conan profile detect
-        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
-        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
-        conan remote remove conancenter
-    - name: build_release
-      run: conan create ./bison/all --name=bison --version=3.8.2 --build-require
-    - name: build debug
-      run: conan create ./bison/all --name=bison --version=3.8.2 --build-require -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r cps-artifactory -c
+#  build-bison-macos:
+#    runs-on: macos-latest
+#    needs: build-flex-mac
+#    env: # Or as an environment variable
+#      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+#      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+#    steps:
+#    - uses: actions/checkout@v4
+#    - name: prepare runner
+#      run: | 
+#        brew install conan
+#        conan profile detect
+#        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+#        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+#        conan remote remove conancenter
+#    - name: build_release
+#      run: conan create ./bison/all --name=bison --version=3.8.2 --build-require
+#    - name: build debug
+#      run: conan create ./bison/all --name=bison --version=3.8.2 --build-require -s build_type=Debug
+#    - name: deploy
+#      run: conan upload "*" -r cps-artifactory -c
 
   build-gperf:
     runs-on: ubuntu-latest
@@ -907,26 +907,26 @@ jobs:
     - name: deploy
       run: conan upload "*" -r cps-artifactory -c
 
-  build-gperf-macos:
-    runs-on: macos-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-    steps:
-    - uses: actions/checkout@v4
-    - name: prepare runner
-      run: | 
-        brew install conan
-        conan profile detect
-        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
-        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
-        conan remote remove conancenter
-    - name: build_release
-      run: conan create ./gperf/all --name=gperf --version=3.1 --build-require
-    - name: build debug
-      run: conan create ./gperf/all --name=gperf --version=3.1 --build-require -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r cps-artifactory -c
+#  build-gperf-macos:
+#    runs-on: macos-latest
+#    env: # Or as an environment variable
+#      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+#      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+#    steps:
+#    - uses: actions/checkout@v4
+#    - name: prepare runner
+#      run: | 
+#        brew install conan
+#        conan profile detect
+#        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+#        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+#        conan remote remove conancenter
+#    - name: build_release
+#      run: conan create ./gperf/all --name=gperf --version=3.1 --build-require
+#    - name: build debug
+#      run: conan create ./gperf/all --name=gperf --version=3.1 --build-require -s build_type=Debug
+#    - name: deploy
+#      run: conan upload "*" -r cps-artifactory -c
 
   build-icu:
     runs-on: ubuntu-latest
@@ -950,26 +950,26 @@ jobs:
     - name: deploy
       run: conan upload "*" -r cps-artifactory -c
 
-  build-icu-macos:
-    runs-on: macos-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-    steps:
-    - uses: actions/checkout@v4
-    - name: prepare runner
-      run: | 
-        brew install conan
-        conan profile detect
-        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
-        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
-        conan remote remove conancenter
-    - name: build_release
-      run: conan create ./icu/all --name=icu --version=74.2
-    - name: build debug
-      run: conan create ./icu/all --name=icu --version=74.2 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r cps-artifactory -c
+#  build-icu-macos:
+#    runs-on: macos-latest
+#    env: # Or as an environment variable
+#      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+#      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+#    steps:
+#    - uses: actions/checkout@v4
+#    - name: prepare runner
+#      run: | 
+#        brew install conan
+#        conan profile detect
+#        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+#        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+#        conan remote remove conancenter
+#    - name: build_release
+#      run: conan create ./icu/all --name=icu --version=74.2
+#    - name: build debug
+#      run: conan create ./icu/all --name=icu --version=74.2 -s build_type=Debug
+#    - name: deploy
+#      run: conan upload "*" -r cps-artifactory -c
 
   build-libbacktrace:
     runs-on: ubuntu-latest
@@ -993,26 +993,26 @@ jobs:
     - name: deploy
       run: conan upload "*" -r cps-artifactory -c
 
-  build-libbacktrace-macos:
-    runs-on: macos-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-    steps:
-    - uses: actions/checkout@v4
-    - name: prepare runner
-      run: | 
-        brew install conan
-        conan profile detect
-        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
-        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
-        conan remote remove conancenter
-    - name: build_release
-      run: conan create ./libbacktrace/all --name=libbacktrace --version=cci.20210118
-    - name: build debug
-      run: conan create ./libbacktrace/all --name=libbacktrace --version=cci.20210118 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r cps-artifactory -c
+#  build-libbacktrace-macos:
+#    runs-on: macos-latest
+#    env: # Or as an environment variable
+#      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+#      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+#    steps:
+#    - uses: actions/checkout@v4
+#    - name: prepare runner
+#      run: | 
+#        brew install conan
+#        conan profile detect
+#        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+#        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+#        conan remote remove conancenter
+#    - name: build_release
+#      run: conan create ./libbacktrace/all --name=libbacktrace --version=cci.20210118
+#    - name: build debug
+#      run: conan create ./libbacktrace/all --name=libbacktrace --version=cci.20210118 -s build_type=Debug
+#    - name: deploy
+#      run: conan upload "*" -r cps-artifactory -c
 
   build-libelf:
     runs-on: ubuntu-latest
@@ -1036,26 +1036,26 @@ jobs:
     - name: deploy
       run: conan upload "*" -r cps-artifactory -c
 
-  build-libelf-macos:
-    runs-on: macos-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-    steps:
-    - uses: actions/checkout@v4
-    - name: prepare runner
-      run: | 
-        brew install conan
-        conan profile detect
-        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
-        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
-        conan remote remove conancenter
-    - name: build_release
-      run: conan create ./libelf/all --name=libelf --version=0.8.13
-    - name: build debug
-      run: conan create ./libelf/all --name=libelf --version=0.8.13 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r cps-artifactory -c
+#  build-libelf-macos:
+#    runs-on: macos-latest
+#    env: # Or as an environment variable
+#      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+#      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+#    steps:
+#    - uses: actions/checkout@v4
+#    - name: prepare runner
+#      run: | 
+#        brew install conan
+#        conan profile detect
+#        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+#        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+#        conan remote remove conancenter
+#    - name: build_release
+#      run: conan create ./libelf/all --name=libelf --version=0.8.13
+#    - name: build debug
+#      run: conan create ./libelf/all --name=libelf --version=0.8.13 -s build_type=Debug
+#    - name: deploy
+#      run: conan upload "*" -r cps-artifactory -c
 
   build-libpng:
     runs-on: ubuntu-latest
@@ -1079,26 +1079,26 @@ jobs:
     - name: deploy
       run: conan upload "*" -r cps-artifactory -c
 
-  build-libpng-macos:
-    runs-on: macos-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-    steps:
-    - uses: actions/checkout@v4
-    - name: prepare runner
-      run: | 
-        brew install conan
-        conan profile detect
-        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
-        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
-        conan remote remove conancenter
-    - name: build_release
-      run: conan create ./libpng/all --name=libpng --version=1.6.42
-    - name: build debug
-      run: conan create ./libpng/all --name=libpng --version=1.6.42 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r cps-artifactory -c
+#  build-libpng-macos:
+#    runs-on: macos-latest
+#    env: # Or as an environment variable
+#      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+#      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+#    steps:
+#    - uses: actions/checkout@v4
+#    - name: prepare runner
+#      run: | 
+#        brew install conan
+#        conan profile detect
+#        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+#        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+#        conan remote remove conancenter
+#    - name: build_release
+#      run: conan create ./libpng/all --name=libpng --version=1.6.42
+#    - name: build debug
+#      run: conan create ./libpng/all --name=libpng --version=1.6.42 -s build_type=Debug
+#    - name: deploy
+#      run: conan upload "*" -r cps-artifactory -c
 
   build-libffi:
     runs-on: ubuntu-latest
@@ -1122,26 +1122,26 @@ jobs:
     - name: deploy
       run: conan upload "*" -r cps-artifactory -c
 
-  build-libffi-macos:
-    runs-on: macos-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-    steps:
-    - uses: actions/checkout@v4
-    - name: prepare runner
-      run: | 
-        brew install conan
-        conan profile detect
-        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
-        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
-        conan remote remove conancenter
-    - name: build_release
-      run: conan create ./libffi/all --name=libffi --version=3.4.4
-    - name: build debug
-      run: conan create ./libffi/all --name=libffi --version=3.4.4 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r cps-artifactory -c
+#  build-libffi-macos:
+#    runs-on: macos-latest
+#    env: # Or as an environment variable
+#      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+#      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+#    steps:
+#    - uses: actions/checkout@v4
+#    - name: prepare runner
+#      run: | 
+#        brew install conan
+#        conan profile detect
+#        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+#        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+#        conan remote remove conancenter
+#    - name: build_release
+#      run: conan create ./libffi/all --name=libffi --version=3.4.4
+#    - name: build debug
+#      run: conan create ./libffi/all --name=libffi --version=3.4.4 -s build_type=Debug
+#    - name: deploy
+#      run: conan upload "*" -r cps-artifactory -c
 
   build-libiconv:
     runs-on: ubuntu-latest
@@ -1165,26 +1165,26 @@ jobs:
     - name: deploy
       run: conan upload "*" -r cps-artifactory -c
 
-  build-libiconv-macos:
-    runs-on: macos-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-    steps:
-    - uses: actions/checkout@v4
-    - name: prepare runner
-      run: | 
-        brew install conan
-        conan profile detect
-        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
-        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
-        conan remote remove conancenter
-    - name: build_release
-      run: conan create ./libiconv/all --name=libiconv --version=1.17
-    - name: build debug
-      run: conan create ./libiconv/all --name=libiconv --version=1.17 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r cps-artifactory -c
+#  build-libiconv-macos:
+#    runs-on: macos-latest
+#    env: # Or as an environment variable
+#      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+#      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+#    steps:
+#    - uses: actions/checkout@v4
+#    - name: prepare runner
+#      run: | 
+#        brew install conan
+#        conan profile detect
+#        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+#        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+#        conan remote remove conancenter
+#    - name: build_release
+#      run: conan create ./libiconv/all --name=libiconv --version=1.17
+#    - name: build debug
+#      run: conan create ./libiconv/all --name=libiconv --version=1.17 -s build_type=Debug
+#    - name: deploy
+#      run: conan upload "*" -r cps-artifactory -c
 
   build-libmount:
     runs-on: ubuntu-latest
@@ -1208,26 +1208,26 @@ jobs:
     - name: deploy
       run: conan upload "*" -r cps-artifactory -c
 
-  build-libmount-macos:
-    runs-on: macos-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-    steps:
-    - uses: actions/checkout@v4
-    - name: prepare runner
-      run: | 
-        brew install conan
-        conan profile detect
-        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
-        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
-        conan remote remove conancenter
-    - name: build_release
-      run: conan create ./libmount/all --name=libmount --version=2.39
-    - name: build debug
-      run: conan create ./libmount/all --name=libmount --version=2.39 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r cps-artifactory -c
+#  build-libmount-macos:
+#    runs-on: macos-latest
+#    env: # Or as an environment variable
+#      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+#      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+#    steps:
+#    - uses: actions/checkout@v4
+#    - name: prepare runner
+#      run: | 
+#        brew install conan
+#        conan profile detect
+#        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+#        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+#        conan remote remove conancenter
+#    - name: build_release
+#      run: conan create ./libmount/all --name=libmount --version=2.39
+#    - name: build debug
+#      run: conan create ./libmount/all --name=libmount --version=2.39 -s build_type=Debug
+#    - name: deploy
+#      run: conan upload "*" -r cps-artifactory -c
 
   build-md4c:
     runs-on: ubuntu-latest
@@ -1251,26 +1251,26 @@ jobs:
     - name: deploy
       run: conan upload "*" -r cps-artifactory -c
 
-  build-md4c-macos:
-    runs-on: macos-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-    steps:
-    - uses: actions/checkout@v4
-    - name: prepare runner
-      run: | 
-        brew install conan
-        conan profile detect
-        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
-        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
-        conan remote remove conancenter
-    - name: build_release
-      run: conan create ./md4c/all --name=md4c --version=0.4.8
-    - name: build debug
-      run: conan create ./md4c/all --name=md4c --version=0.4.8 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r cps-artifactory -c
+#  build-md4c-macos:
+#    runs-on: macos-latest
+#    env: # Or as an environment variable
+#      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+#      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+#    steps:
+#    - uses: actions/checkout@v4
+#    - name: prepare runner
+#      run: | 
+#        brew install conan
+#        conan profile detect
+#        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+#        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+#        conan remote remove conancenter
+#    - name: build_release
+#      run: conan create ./md4c/all --name=md4c --version=0.4.8
+#    - name: build debug
+#      run: conan create ./md4c/all --name=md4c --version=0.4.8 -s build_type=Debug
+#    - name: deploy
+#      run: conan upload "*" -r cps-artifactory -c
 
   build-nlohmann_json:
     runs-on: ubuntu-latest
@@ -1294,26 +1294,26 @@ jobs:
     - name: deploy
       run: conan upload "*" -r cps-artifactory -c
 
-  build-nlohmann_json-macos:
-    runs-on: macos-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-    steps:
-    - uses: actions/checkout@v4
-    - name: prepare runner
-      run: | 
-        brew install conan
-        conan profile detect
-        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
-        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
-        conan remote remove conancenter
-    - name: build_release
-      run: conan create ./nlohmann_json/all --name=nlohmann_json --version=3.11.3
-    - name: build debug
-      run: conan create ./nlohmann_json/all --name=nlohmann_json --version=3.11.3 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r cps-artifactory -c
+#  build-nlohmann_json-macos:
+#    runs-on: macos-latest
+#    env: # Or as an environment variable
+#      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+#      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+#    steps:
+#    - uses: actions/checkout@v4
+#    - name: prepare runner
+#      run: | 
+#        brew install conan
+#        conan profile detect
+#        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+#        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+#        conan remote remove conancenter
+#    - name: build_release
+#      run: conan create ./nlohmann_json/all --name=nlohmann_json --version=3.11.3
+#    - name: build debug
+#      run: conan create ./nlohmann_json/all --name=nlohmann_json --version=3.11.3 -s build_type=Debug
+#    - name: deploy
+#      run: conan upload "*" -r cps-artifactory -c
 
   build-sqlite3:
     runs-on: ubuntu-latest
@@ -1337,26 +1337,26 @@ jobs:
     - name: deploy
       run: conan upload "*" -r cps-artifactory -c
 
-  build-sqlite3-macos:
-    runs-on: macos-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-    steps:
-    - uses: actions/checkout@v4
-    - name: prepare runner
-      run: | 
-        brew install conan
-        conan profile detect
-        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
-        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
-        conan remote remove conancenter
-    - name: build_release
-      run: conan create ./sqlite3/all --name=sqlite3 --version=3.45.0
-    - name: build debug
-      run: conan create ./sqlite3/all --name=sqlite3 --version=3.45.0 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r cps-artifactory -c
+#  build-sqlite3-macos:
+#    runs-on: macos-latest
+#    env: # Or as an environment variable
+#      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+#      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+#    steps:
+#    - uses: actions/checkout@v4
+#    - name: prepare runner
+#      run: | 
+#        brew install conan
+#        conan profile detect
+#        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+#        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+#        conan remote remove conancenter
+#    - name: build_release
+#      run: conan create ./sqlite3/all --name=sqlite3 --version=3.45.0
+#    - name: build debug
+#      run: conan create ./sqlite3/all --name=sqlite3 --version=3.45.0 -s build_type=Debug
+#    - name: deploy
+#      run: conan upload "*" -r cps-artifactory -c
   
   build-libtool:
     runs-on: ubuntu-latest
@@ -1380,26 +1380,26 @@ jobs:
     - name: deploy
       run: conan upload "*" -r cps-artifactory -c
 
-  build-libtool-macos:
-    runs-on: macos-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-    steps:
-    - uses: actions/checkout@v4
-    - name: prepare runner
-      run: | 
-        brew install conan
-        conan profile detect
-        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
-        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
-        conan remote remove conancenter
-    - name: build_release
-      run: conan create ./libtool/all --name=libtool --version=2.4.7
-    - name: build debug
-      run: conan create ./libtool/all --name=libtool --version=2.4.7 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r cps-artifactory -c
+#  build-libtool-macos:
+#    runs-on: macos-latest
+#    env: # Or as an environment variable
+#      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+#      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+#    steps:
+#    - uses: actions/checkout@v4
+#    - name: prepare runner
+#      run: | 
+#        brew install conan
+#        conan profile detect
+#        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+#        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+#        conan remote remove conancenter
+#    - name: build_release
+#      run: conan create ./libtool/all --name=libtool --version=2.4.7
+#    - name: build debug
+#      run: conan create ./libtool/all --name=libtool --version=2.4.7 -s build_type=Debug
+#    - name: deploy
+#      run: conan upload "*" -r cps-artifactory -c
   
   build-nspr:
     runs-on: ubuntu-latest
@@ -1423,26 +1423,26 @@ jobs:
     - name: deploy
       run: conan upload "*" -r cps-artifactory -c
 
-  build-nspr-macos:
-    runs-on: macos-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-    steps:
-    - uses: actions/checkout@v4
-    - name: prepare runner
-      run: | 
-        brew install conan
-        conan profile detect
-        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
-        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
-        conan remote remove conancenter
-    - name: build_release
-      run: conan create ./nspr/all --name=nspr --version=4.35
-    - name: build debug
-      run: conan create ./nspr/all --name=nspr --version=4.35 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r cps-artifactory -c
+#  build-nspr-macos:
+#    runs-on: macos-latest
+#    env: # Or as an environment variable
+#      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+#      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+#    steps:
+#    - uses: actions/checkout@v4
+#    - name: prepare runner
+#      run: | 
+#        brew install conan
+#        conan profile detect
+#        conan remote add cps-artifactory http://v2202410237013289389.luckysrv.de:8081/artifactory/api/conan/conan
+#        conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
+#        conan remote remove conancenter
+#    - name: build_release
+#      run: conan create ./nspr/all --name=nspr --version=4.35
+#    - name: build debug
+#      run: conan create ./nspr/all --name=nspr --version=4.35 -s build_type=Debug
+#    - name: deploy
+#      run: conan upload "*" -r cps-artifactory -c
 
   build-util-linux-libuuid:
     runs-on: ubuntu-latest
