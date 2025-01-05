@@ -1,7 +1,9 @@
+#include <nss/nss.h>
+#include <nss/nssutil.h>
+#include <nss/smime.h>
+#include <nss/ssl.h>
 #include "nss.h"
-#include "nssutil.h"
-#include "smime.h"
-#include "ssl.h"
+#include <nss.h>
 #include <stdio.h>
 
 int main() {

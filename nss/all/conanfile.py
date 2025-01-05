@@ -169,32 +169,34 @@ class NSSConan(ConanFile):
     def build(self):
         apply_conandata_patches(self)
         with chdir(self, os.path.join(self._source_subfolder, "nss")):
-                if self.settings.compiler == "msvc":
-                    self.run("make %s" % " ".join(self._make_args))
+            self.run("make %s" % " ".join(self._make_args))
 
     def package(self):
-        copy("COPYING", pattern="*", src = os.path.join(self._source_subfolder, "nss"), dst = "licenses")
+        copy(self, 'COPYING', src = os.path.join(self._source_subfolder, 'nss'), dst = os.path.join(self.package_folder,'licenses'))
+
         with chdir(self, os.path.join(self._source_subfolder, "nss")):
             self.run("make install %s" % " ".join(self._make_args))
-        copy("*", pattern="*",
-                  src=os.path.join(self._source_subfolder, "dist", "public", "nss"),
-                  dst="include")
+        
+        copy(self, "*", src=os.path.join(self._source_subfolder, "dist", "public", "nss"),
+                  dst=os.path.join(self.package_folder,"include"))
+        
         for d in os.listdir(os.path.join(self._source_subfolder, "dist")):
             if d in ["private","public"]:
                 continue
             f = os.path.join(self._source_subfolder, "dist", d)
             if not os.path.isdir(f):
                 continue
-            copy("*", src = f)
+            copy(self, "*", src = os.path.join(f,"lib"), dst=os.path.join(self.package_folder,'lib'))
+            copy(self, "*", src = os.path.join(f, "bin"), dst=os.path.join(self.package_folder,'bin'))
 
         for dll_file in glob.glob(os.path.join(self.package_folder, "lib", "*.dll")):
             rename(self, dll_file, os.path.join(self.package_folder, "bin", os.path.basename(dll_file)))
 
-        if self.options.shared:
-            rm(self, "*.a", os.path.join(self.package_folder, "lib"))
-        else:
-            rm(self, "*.so", os.path.join(self.package_folder, "lib"))
-            rm(self, "*.dll", os.path.join(self.package_folder, "bin"))
+        #if self.options.shared:
+        #    rm(self, "*.a", os.path.join(self.package_folder, "lib"))
+        #else:
+        #    rm(self, "*.so", os.path.join(self.package_folder, "lib"))
+        #    rm(self, "*.dll", os.path.join(self.package_folder, "bin"))
 
 
 
