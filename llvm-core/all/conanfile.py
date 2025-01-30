@@ -153,7 +153,7 @@ class LLVMCoreConan(ConanFile):
         if self.options.with_zlib:
             self.requires("zlib/1.3.1")
         if self.options.with_xml2:
-            self.requires("libxml2/[>=2.12.5 <3]")
+            self.requires("libxml2/2.12.7")
         if self.options.with_z3:
             self.requires("z3/4.13.0")
 
