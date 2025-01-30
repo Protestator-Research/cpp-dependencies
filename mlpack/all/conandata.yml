@@ -1,0 +1,10 @@
+sources:
+  "4.4.0":
+    url: "https://github.com/mlpack/mlpack/archive/refs/tags/4.4.0.tar.gz"
+    sha256: "61c604026d05af26c244b0e47024698bbf150dfcc9d77b64057941d7d64d6cf6"
+  "4.3.0":
+    url: "https://github.com/mlpack/mlpack/archive/refs/tags/4.3.0.tar.gz"
+    sha256: "08cd54f711fde66fc3b6c9db89dc26776f9abf1a6256c77cfa3556e2a56f1a3d"
+  "4.5.1":
+    url: "https://github.com/mlpack/mlpack/archive/refs/tags/4.5.1.tar.gz"
+    sha256: "58059b911a78b8bda91eef4cfc6278383b24e71865263c2e0569cf5faa59dda3"
