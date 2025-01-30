@@ -2102,7 +2102,7 @@ jobs:
     - name: build_release
       run: conan create ./armadillo/all --name=armadillo --version=12.6.4
     - name: build debug
-      run: conan create ./armadillo/all --name=armadillo --version=2.21.0 -s build_type=Debug
+      run: conan create ./armadillo/all --name=armadillo --version=12.6.4 -s build_type=Debug
     - name: deploy
       run: conan upload "*" -r cps-artifactory -c
 
