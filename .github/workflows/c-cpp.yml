@@ -9,9 +9,6 @@ on:
 
 jobs:
   build-m4:
-    only:
-      changes:
-        - 
     runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
