@@ -9,6 +9,9 @@ on:
 
 jobs:
   build-m4:
+    only:
+      changes:
+        - 
     runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
@@ -2009,9 +2012,9 @@ jobs:
         conan remote login -p $ARTIFACTORY_TOKEN cps-artifactory cps-gitlab-runner
         conan remote remove conancenter
     - name: build_release
-      run: conan create ./llvm-core/all --name=llvm-core --version=18.1.8
+      run: conan create ./llvm-core/all --name=llvm-core --version=13.0.0
     - name: build debug
-      run: conan create ./llvm-core/all --name=llvm-core --version=18.1.8 -s build_type=Debug
+      run: conan create ./llvm-core/all --name=llvm-core --version=13.0.0 -s build_type=Debug
     - name: deploy
       run: conan upload "*" -r cps-artifactory -c
 
