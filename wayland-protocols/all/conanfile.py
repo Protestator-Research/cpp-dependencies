@@ -18,6 +18,7 @@ class WaylandProtocolsConan(ConanFile):
     homepage = "https://gitlab.freedesktop.org/wayland/wayland-protocols"
     license = "MIT"
     settings = "os", "arch", "compiler", "build_type"
+    short_paths = True
 
     def package_id(self):
         self.info.clear()
@@ -27,7 +28,7 @@ class WaylandProtocolsConan(ConanFile):
             raise ConanInvalidConfiguration(f"{self.ref} only supports Linux")
 
     def build_requirements(self):
-        self.tool_requires("meson/1.4.0")
+        self.tool_requires("meson/1.3.0")
 
     def layout(self):
         basic_layout(self, src_folder="src")

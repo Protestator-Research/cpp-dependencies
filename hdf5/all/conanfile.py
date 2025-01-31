@@ -78,7 +78,7 @@ class Hdf5Conan(ConanFile):
 
     def requirements(self):
         if self.options.with_zlib:
-            self.requires("zlib/1.3.1")
+            self.requires("zlib/[>=1.2.11 <2]")
         if self.options.with_zlibng:
             self.requires("zlib-ng/2.2.2")
         if self.options.szip_support == "with_libaec":
