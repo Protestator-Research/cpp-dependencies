@@ -68,7 +68,7 @@ class LLVMOpenMpConan(ConanFile):
 
     def requirements(self):
         if self.options.build_libomptarget and self._version_major >= 13:
-            self.requires(f"llvm-core/{self.version}")
+            self.requires(f"llvm-core/13.0.0")
 
     def layout(self):
         cmake_layout(self, src_folder="src")
