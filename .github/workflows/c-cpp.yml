@@ -1997,7 +1997,7 @@ jobs:
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-    needs: [build-libffi, build-zlib, build-libxml2, build-z3]
+    needs: [build-libffi, build-zlib, build-libxml2, build-z3, build-editline, build-termcap]
     steps:
     - uses: actions/checkout@v4
     - name: prepare runner
@@ -2196,6 +2196,7 @@ jobs:
       run: conan upload "*" -r cps-artifactory -c
 
   build-ncurses:
+    needs: [build-pcre2]
     runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
@@ -2240,6 +2241,7 @@ jobs:
       run: conan upload "*" -r cps-artifactory -c
 
   build-editline:
+    needs: [build-termcap, build-ncurses]
     runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
