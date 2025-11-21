@@ -16,6 +16,7 @@ required_conan_version = ">=1.53.0"
 
 class LLVMOpenMpConan(ConanFile):
     name = "llvm-openmp"
+    deprecated = "Please use OpenMP as provided by your compiler distribution"
     description = ("The OpenMP (Open Multi-Processing) specification is a standard for a set of compiler directives, "
                    "library routines, and environment variables that can be used to specify shared memory parallelism "
                    "in Fortran and C/C++ programs. This is the LLVM implementation.")
@@ -68,7 +69,7 @@ class LLVMOpenMpConan(ConanFile):
 
     def requirements(self):
         if self.options.build_libomptarget and self._version_major >= 13:
-            self.requires(f"llvm-core/13.0.0")
+            self.requires(f"llvm-core/{self.version}")
 
     def layout(self):
         cmake_layout(self, src_folder="src")
@@ -89,9 +90,9 @@ class LLVMOpenMpConan(ConanFile):
         if is_apple_os(self) and self.settings.arch == "armv8":
             if self._version_major <= 10:
                 raise ConanInvalidConfiguration("ARM v8 not supported")
-            #if self._version_major != 11 and self.settings.build_type == "Debug":
+            if self._version_major != 11 and self.settings.build_type == "Debug":
                 # All versions except for v11 crash with a segfault for the simple test_package.cpp test
-                #raise ConanInvalidConfiguration("Debug mode not supported for ARM v8")
+                raise ConanInvalidConfiguration("Debug mode not supported for ARM v8")
 
     def build_requirements(self):
         if self._version_major >= 17:

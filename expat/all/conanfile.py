@@ -23,7 +23,7 @@ class ExpatConan(ConanFile):
         "large_size": [True, False],
     }
     default_options = {
-        "shared": True,
+        "shared": False,
         "fPIC": True,
         "char_type": "char",
         "large_size": False,

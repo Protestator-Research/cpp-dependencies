@@ -8,7 +8,7 @@ from conan.errors import ConanInvalidConfiguration
 import os
 import textwrap
 
-required_conan_version = ">=1.55.0"
+required_conan_version = ">=2.1"
 
 
 class ArmadilloConan(ConanFile):
@@ -186,7 +186,7 @@ class ArmadilloConan(ConanFile):
         if self.options.use_hdf5 and Version(self.version) < "12":
             # Use the conan dependency if the system lib isn't being used
             # Libraries not required to be propagated transitively when the armadillo run-time wrapper is used
-            self.requires("hdf5/1.14.0", transitive_headers=True, transitive_libs=not self.options.use_wrapper)
+            self.requires("hdf5/1.14.3", transitive_headers=True, transitive_libs=not self.options.use_wrapper)
 
         if self.options.use_blas == "openblas":
             # Libraries not required to be propagated transitively when the armadillo run-time wrapper is used
@@ -240,17 +240,15 @@ class ArmadilloConan(ConanFile):
         tc.variables["BUILD_SHARED_LIBS"] = self.options.shared
         tc.variables["BUILD_SMOKE_TEST"] = False
         tc.variables["CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS"] = True
+        if Version(self.version) < "14.0.0": # pylint: disable=conan-condition-evals-to-constant
+            tc.cache_variables["CMAKE_POLICY_VERSION_MINIMUM"] = "3.5" # CMake 4 support{
         tc.generate()
 
         deps = CMakeDeps(self)
         deps.generate()
 
     def source(self):
-        get(self,
-            **self.conan_data["sources"][self.version],
-            strip_root=True,
-            filename="f{self.name}-{self.version}.tar.xz"
-        )
+        get(self, **self.conan_data["sources"][self.version], strip_root=True)
 
     def build(self):
         apply_conandata_patches(self)
@@ -312,14 +310,6 @@ class ArmadilloConan(ConanFile):
         self.cpp_info.set_property("cmake_target_name", "Armadillo::Armadillo")
         self.cpp_info.set_property("cmake_target_aliases", ["armadillo", "armadillo::armadillo"])
         self.cpp_info.set_property("cmake_build_modules", [self._module_vars_rel_path])
-
-        # Remove when cmake_find_package and pkg_config generators are no
-        # longer supported
-        self.cpp_info.names["pkg_config"] = "armadillo"
-        self.cpp_info.names["cmake_find_package"] = "Armadillo"
-        self.cpp_info.names["cmake_find_package_multi"] = "Armadillo"
-        self.cpp_info.build_modules["cmake_find_package"] = [self._module_vars_rel_path]
-        self.cpp_info.build_modules["cmake_find_package_multi"] = [self._module_vars_rel_path]
 
         if self.options.get_safe("use_extern_rng"):
             self.cpp_info.defines.append("ARMA_USE_EXTERN_RNG")

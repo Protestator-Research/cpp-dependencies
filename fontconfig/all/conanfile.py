@@ -27,7 +27,7 @@ class FontconfigConan(ConanFile):
         "fPIC": [True, False],
     }
     default_options = {
-        "shared": True,
+        "shared": False,
         "fPIC": True,
     }
 
@@ -49,15 +49,13 @@ class FontconfigConan(ConanFile):
 
     def requirements(self):
         self.requires("freetype/2.13.2")
-        self.requires("expat/2.6.2")
-        if self.settings.os == "Linux":
-            self.requires("util-linux-libuuid/2.39.2")
+        self.requires("expat/[>=2.6.2 <3]")
 
     def build_requirements(self):
         self.tool_requires("gperf/3.1")
-        self.tool_requires("meson/1.4.0")
+        self.tool_requires("meson/[>=1.4.0 <2]")
         if not self.conf.get("tools.gnu:pkg_config", default=False, check_type=str):
-            self.tool_requires("pkgconf/2.2.0")
+            self.tool_requires("pkgconf/2.1.0")
 
     def source(self):
         get(self, **self.conan_data["sources"][self.version], strip_root=True)

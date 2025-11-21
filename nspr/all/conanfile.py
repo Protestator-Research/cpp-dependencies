@@ -33,7 +33,7 @@ class NsprConan(ConanFile):
         "win32_target": ["winnt", "win95"],
     }
     default_options = {
-        "shared": True,
+        "shared": False,
         "fPIC": True,
         "with_mozilla": True,
         "win32_target": "winnt",
@@ -105,10 +105,6 @@ class NsprConan(ConanFile):
             ]
         elif self.settings.os == "Windows":
             tc.configure_args.append("--enable-win32-target={}".format(self.options.win32_target))
-        if is_apple_os(self) and self.settings.arch == "armv8":
-            # conan adds `-arch`, which conflicts with nspr's apple silicon support
-            tc.cflags.remove("-arch arm64")
-            tc.cxxflags.remove("-arch arm64")
         tc.generate()
 
         if is_msvc(self):

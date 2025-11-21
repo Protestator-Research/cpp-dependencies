@@ -25,7 +25,7 @@ class OdbcConan(ConanFile):
         "with_libiconv": [True, False],
     }
     default_options = {
-        "shared": True,
+        "shared": False,
         "fPIC": True,
         "with_libiconv": True,
     }

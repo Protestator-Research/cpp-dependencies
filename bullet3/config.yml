@@ -1,0 +1,9 @@
+versions:
+  "3.25":
+    folder: all
+  "3.24":
+    folder: all
+  "3.22a":
+    folder: all
+  "2.89": #remove next time a new version is added
+    folder: all

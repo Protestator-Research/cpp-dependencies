@@ -1,10 +1,7 @@
-cmake_minimum_required(VERSION 3.1)
-project(test_package C)
+cmake_minimum_required(VERSION 3.15)
+project(test_package LANGUAGES C)
 
-find_package(nss)
+find_package(nss REQUIRED CONFIG)
 
 add_executable(${PROJECT_NAME} test_package.c)
-target_include_directories(${PROJECT_NAME} PUBLIC ${nss_INCLUDE_DIRS} ${nspr_INCLUDE_DIRS})
-target_link_libraries(${PROJECT_NAME} nss::nss nspr::nspr)
-
-
+target_link_libraries(${PROJECT_NAME} PRIVATE nss::nss)
