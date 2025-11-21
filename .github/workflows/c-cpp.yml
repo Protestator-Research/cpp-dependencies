@@ -147,9 +147,9 @@ jobs:
         conan remote remove conancenter
         pip3 install --ignore-installed ninja
     - name: build_release
-      run: conan create ./meson/all --name=meson --version=1.4.0 --build-require
+      run: conan create ./meson/all --name=meson --version=1.9.1 --build-require
     - name: build debug
-      run: conan create ./meson/all --name=meson --version=1.4.0 --build-require -s build_type=Debug
+      run: conan create ./meson/all --name=meson --version=1.9.1 --build-require -s build_type=Debug
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
