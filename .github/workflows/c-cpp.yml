@@ -301,11 +301,13 @@ jobs:
         conan remote remove conancenter
         pip3 install --ignore-installed ninja
     - name: build_release
-      run: conan create ./b2/portable --name=b2 --version=5.2.1
+      run: | 
+        conan create ./b2/portable --name=b2 --version=5.3.3
+        conan upload "*" -r protestator-conan -c
     - name: build debug
-      run: conan create ./b2/portable --name=b2 --version=5.2.1 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r protestator-conan -c
+      run: | 
+        conan create ./b2/portable --name=b2 --version=5.3.3 -s build_type=Debug
+        conan upload "*" -r protestator-conan -c
 
   build-nasm:
     runs-on: ubuntu-latest
