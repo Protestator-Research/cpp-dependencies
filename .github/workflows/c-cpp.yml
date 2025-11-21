@@ -376,9 +376,9 @@ jobs:
         conan remote remove conancenter
         pip3 install --ignore-installed ninja
     - name: build_release
-      run: conan create ./antlr4-cppruntime/all --name=antlr4-cppruntime --version=4.13.1
+      run: conan create ./antlr4-cppruntime/all --name=antlr4-cppruntime --version=4.13.2
     - name: build debug
-      run: conan create ./antlr4-cppruntime/all --name=antlr4-cppruntime --version=4.13.1 -s build_type=Debug
+      run: conan create ./antlr4-cppruntime/all --name=antlr4-cppruntime --version=4.13.2 -s build_type=Debug
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
@@ -501,11 +501,13 @@ jobs:
         conan remote remove conancenter
         pip3 install --ignore-installed ninja
     - name: build_release
-      run: conan create ./expat/all --name=expat --version=2.6.2
+      run: |
+        conan create ./expat/all --name=expat --version=2.7.3
+        conan upload "*" -r protestator-conan -c
     - name: build debug
-      run: conan create ./expat/all --name=expat --version=2.6.2 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r protestator-conan -c
+      run: |
+        conan create ./expat/all --name=expat --version=2.7.3 -s build_type=Debug --build missing
+        conan upload "*" -r protestator-conan -c
 
   build-flex:
     runs-on: ubuntu-latest
@@ -599,9 +601,9 @@ jobs:
         conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build_release
-      run: conan create ./icu/all --name=icu --version=74.2
+      run: conan create ./icu/all --name=icu --version=77.1
     - name: build debug
-      run: conan create ./icu/all --name=icu --version=74.2 -s build_type=Debug
+      run: conan create ./icu/all --name=icu --version=77.1 -s build_type=Debug
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
@@ -623,11 +625,13 @@ jobs:
         conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build_release
-      run: conan create ./libbacktrace/all --name=libbacktrace --version=cci.20210118
+      run: | 
+        conan create ./libbacktrace/all --name=libbacktrace --version=cci.20240730
+        conan upload "*" -r protestator-conan -c
     - name: build debug
-      run: conan create ./libbacktrace/all --name=libbacktrace --version=cci.20210118 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r protestator-conan -c
+      run: | 
+        conan create ./libbacktrace/all --name=libbacktrace --version=cci.20240730 -s build_type=Debug --build missing
+        conan upload "*" -r protestator-conan -c
 
   build-libelf:
     runs-on: ubuntu-latest
@@ -652,7 +656,33 @@ jobs:
       run: conan create ./libelf/all --name=libelf --version=0.8.13 -s build_type=Debug
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
-
+    
+  build-elfutils:
+    runs-on: ubuntu-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+      ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
+    steps:
+    - uses: actions/checkout@v4
+    - uses: jfrog/setup-jfrog-cli@v4
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
+    - name: build_release
+      run: | 
+        conan create ./elfutils/all --name=elfutils --version=0.190
+        conan upload "*" -r protestator-conan -c
+    - name: build debug
+      run: |
+        conan create ./elfutils/all --name=elfutils --version=0.190 -s build_type=Debug --build missing
+        conan upload "*" -r protestator-conan -c
+  
   build-libpng:
     runs-on: ubuntu-latest
     env: # Or as an environment variable
@@ -671,11 +701,13 @@ jobs:
         conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build_release
-      run: conan create ./libpng/all --name=libpng --version=1.6.42
+      run: | 
+        conan create ./libpng/all --name=libpng --version=1.6.50
+        conan upload "*" -r protestator-conan -c
     - name: build debug
-      run: conan create ./libpng/all --name=libpng --version=1.6.42 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r protestator-conan -c
+      run: |
+        conan create ./libpng/all --name=libpng --version=1.6.50 -s build_type=Debug
+        conan upload "*" -r protestator-conan -c
 
   build-libffi:
     runs-on: ubuntu-latest
@@ -695,11 +727,13 @@ jobs:
         conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build_release
-      run: conan create ./libffi/all --name=libffi --version=3.4.4
+      run: | 
+        conan create ./libffi/all --name=libffi --version=3.4.8
+        conan upload "*" -r protestator-conan -c
     - name: build debug
-      run: conan create ./libffi/all --name=libffi --version=3.4.4 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r protestator-conan -c
+      run: |
+        conan create ./libffi/all --name=libffi --version=3.4.8 -s build_type=Debug
+        conan upload "*" -r protestator-conan -c
 
   build-libiconv:
     runs-on: ubuntu-latest
@@ -719,11 +753,13 @@ jobs:
         conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build_release
-      run: conan create ./libiconv/all --name=libiconv --version=1.17
+      run: |
+        conan create ./libiconv/all --name=libiconv --version=1.17
+        conan upload "*" -r protestator-conan -c
     - name: build debug
-      run: conan create ./libiconv/all --name=libiconv --version=1.17 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r protestator-conan -c
+      run: |
+        conan create ./libiconv/all --name=libiconv --version=1.17 -s build_type=Debug --build missing
+        conan upload "*" -r protestator-conan -c
 
 
   build-libmount:
@@ -744,11 +780,13 @@ jobs:
         conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build_release
-      run: conan create ./libmount/all --name=libmount --version=2.39
+      run: |
+        conan create ./libmount/all --name=libmount --version=2.40.2
+        conan upload "*" -r protestator-conan -c
     - name: build debug
-      run: conan create ./libmount/all --name=libmount --version=2.39 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r protestator-conan -c
+      run: | 
+        conan create ./libmount/all --name=libmount --version=2.40.2 -s build_type=Debug --build missing
+        conan upload "*" -r protestator-conan -c
 
   build-md4c:
     runs-on: ubuntu-latest
@@ -768,11 +806,13 @@ jobs:
         conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build_release
-      run: conan create ./md4c/all --name=md4c --version=0.4.8
+      run: |
+        conan create ./md4c/all --name=md4c --version=0.5.2
+        conan upload "*" -r protestator-conan -c
     - name: build debug
-      run: conan create ./md4c/all --name=md4c --version=0.4.8 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r protestator-conan -c
+      run: |
+        conan create ./md4c/all --name=md4c --version=0.5.2 -s build_type=Debug
+        conan upload "*" -r protestator-conan -c
 
   build-nlohmann_json:
     runs-on: ubuntu-latest
@@ -792,11 +832,13 @@ jobs:
         conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build_release
-      run: conan create ./nlohmann_json/all --name=nlohmann_json --version=3.11.3
+      run: |
+        conan create ./nlohmann_json/all --name=nlohmann_json --version=3.11.3
+        conan upload "*" -r protestator-conan -c
     - name: build debug
-      run: conan create ./nlohmann_json/all --name=nlohmann_json --version=3.11.3 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r protestator-conan -c
+      run: |
+        conan create ./nlohmann_json/all --name=nlohmann_json --version=3.11.3 -s build_type=Debug --build missing
+        conan upload "*" -r protestator-conan -c
 
   build-sqlite3:
     runs-on: ubuntu-latest
@@ -816,11 +858,13 @@ jobs:
         conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build_release
-      run: conan create ./sqlite3/all --name=sqlite3 --version=3.45.0
+      run: |
+        conan create ./sqlite3/all --name=sqlite3 --version=3.50.4
+        conan upload "*" -r protestator-conan -c
     - name: build debug
-      run: conan create ./sqlite3/all --name=sqlite3 --version=3.45.0 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r protestator-conan -c
+      run: |
+        conan create ./sqlite3/all --name=sqlite3 --version=3.50.4 -s build_type=Debug --build missing
+        conan upload "*" -r protestator-conan -c
 
   build-libtool:
     runs-on: ubuntu-latest
@@ -840,11 +884,13 @@ jobs:
         conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build_release
-      run: conan create ./libtool/all --name=libtool --version=2.4.7
+      run: |
+        conan create ./libtool/all --name=libtool --version=2.4.7
+        conan upload "*" -r protestator-conan -c
     - name: build debug
-      run: conan create ./libtool/all --name=libtool --version=2.4.7 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r protestator-conan -c
+      run: | 
+        conan create ./libtool/all --name=libtool --version=2.4.7 -s build_type=Debug --build missing
+        conan upload "*" -r protestator-conan -c
 
   build-nspr:
     runs-on: ubuntu-latest
@@ -913,11 +959,13 @@ jobs:
         conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build_release
-      run: conan create ./pcre2/all --name=pcre2 --version=10.42
+      run: | 
+        conan create ./pcre2/all --name=pcre2 --version=10.44
+        conan upload "*" -r protestator-conan -c
     - name: build debug
-      run: conan create ./pcre2/all --name=pcre2 --version=10.42 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r protestator-conan -c
+      run: |
+        conan create ./pcre2/all --name=pcre2 --version=10.44 -s build_type=Debug --build missing
+        conan upload "*" -r protestator-conan -c
 
   build-openssl:
     runs-on: ubuntu-latest
@@ -938,11 +986,13 @@ jobs:
         conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build_release
-      run: conan create ./openssl/3.x.x --name=openssl --version=3.3.2
+      run: |
+       conan create ./openssl/3.x.x --name=openssl --version=3.3.2
+       conan upload "*" -r protestator-conan -c
     - name: build debug
-      run: conan create ./openssl/3.x.x --name=openssl --version=3.3.2 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r protestator-conan -c
+      run: |
+        conan create ./openssl/3.x.x --name=openssl --version=3.3.2 -s build_type=Debug --build missing
+        conan upload "*" -r protestator-conan -c
 
   build-odbc:
     runs-on: ubuntu-latest
@@ -988,11 +1038,13 @@ jobs:
         conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build_release
-      run: conan create ./libxml2/all --name=libxml2 --version=2.12.7
+      run: | 
+        conan create ./libxml2/all --name=libxml2 --version=2.15.0
+        conan upload "*" -r protestator-conan -c
     - name: build debug
-      run: conan create ./libxml2/all --name=libxml2 --version=2.12.7 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r protestator-conan -c
+      run: | 
+        conan create ./libxml2/all --name=libxml2 --version=2.15.0 -s build_type=Debug
+        conan upload "*" -r protestator-conan -c
   
   build-freetype:
     runs-on: ubuntu-latest
@@ -1013,11 +1065,13 @@ jobs:
         conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build_release
-      run: conan create ./freetype/meson --name=freetype --version=2.13.2
+      run: |
+        conan create ./freetype/meson --name=freetype --version=2.14.1
+        conan upload "*" -r protestator-conan -c
     - name: build debug
-      run: conan create ./freetype/meson --name=freetype --version=2.13.2 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r protestator-conan -c
+      run: |
+        conan create ./freetype/meson --name=freetype --version=2.14.1 -s build_type=Debug --build missing
+        conan upload "*" -r protestator-conan -c
 
 
   build-fontconfig:
@@ -1064,11 +1118,13 @@ jobs:
         conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build_release
-      run: conan create ./wayland/all --name=wayland --version=1.22.0
+      run: |
+        conan create ./wayland/all --name=wayland --version=1.22.0
+        conan upload "*" -r protestator-conan -c
     - name: build debug
-      run: conan create ./wayland/all --name=wayland --version=1.22.0 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r protestator-conan -c
+      run: | 
+        conan create ./wayland/all --name=wayland --version=1.22.0 -s build_type=Debug
+        conan upload "*" -r protestator-conan -c
 
   build-wayland-protocols:
     runs-on: ubuntu-latest
@@ -1089,11 +1145,14 @@ jobs:
         conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build_release
-      run: conan create ./wayland-protocols/all --name=wayland-protocols --version=1.33 --build-require
+      run: |
+        conan create ./wayland-protocols/all --name=wayland-protocols --version=1.45 --build-require
+        conan upload "*" -r protestator-conan -c
     - name: build debug
-      run: conan create ./wayland-protocols/all --name=wayland-protocols --version=1.33 --build-require -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r protestator-conan -c
+      run: |
+        conan create ./wayland-protocols/all --name=wayland-protocols --version=1.45 --build-require -s build_type=Debug
+        conan upload "*" -r protestator-conan -c
+
 
   build-boost:
     runs-on: ubuntu-latest
@@ -1114,11 +1173,13 @@ jobs:
         conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build_release
-      run: conan create ./boost/all --name=boost --version=1.84.0
+      run: |
+        conan create ./boost/all --name=boost --version=1.89.0
+        conan upload "*" -r protestator-conan -c
     - name: build debug
-      run: conan create ./boost/all --name=boost --version=1.84.0 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r protestator-conan -c
+      run: |
+        conan create ./boost/all --name=boost --version=1.89.0 -s build_type=Debug
+        conan upload "*" -r protestator-conan -c
 
   build-redboltz-mqtt_cpp:
     runs-on: ubuntu-latest
@@ -1189,11 +1250,13 @@ jobs:
         conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build_release
-      run: conan create ./libpq/all --name=libpq --version=15.4
+      run: | 
+        conan create ./libpq/all --name=libpq --version=17.5
+        conan upload "*" -r protestator-conan -c
     - name: build debug
-      run: conan create ./libpq/all --name=libpq --version=15.4 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r protestator-conan -c
+      run: |
+        conan create ./libpq/all --name=libpq --version=17.5 -s build_type=Debug --build missing
+        conan upload "*" -r protestator-conan -c
 
   build-libcurl:
     runs-on: ubuntu-latest
@@ -1214,11 +1277,13 @@ jobs:
         conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build_release
-      run: conan create ./libcurl/all --name=libcurl --version=8.4.0
+      run: | 
+        conan create ./libcurl/all --name=libcurl --version=8.4.0
+        conan upload "*" -r protestator-conan -c
     - name: build debug
-      run: conan create ./libcurl/all --name=libcurl --version=8.4.0 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r protestator-conan -c
+      run: | 
+        conan create ./libcurl/all --name=libcurl --version=8.4.0 -s build_type=Debug --build missing
+        conan upload "*" -r protestator-conan -c
 
   build-date:
     runs-on: ubuntu-latest
@@ -1239,11 +1304,13 @@ jobs:
         conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build_release
-      run: conan create ./date/all --name=date --version=3.0.1
+      run: |
+        conan create ./date/all --name=date --version=3.0.4
+        conan upload "*" -r protestator-conan -c
     - name: build debug
-      run: conan create ./date/all --name=date --version=3.0.1 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r protestator-conan -c
+      run: |
+        conan create ./date/all --name=date --version=3.0.4 -s build_type=Debug
+        conan upload "*" -r protestator-conan -c
 
   build-libselinux:
     runs-on: ubuntu-latest
@@ -1289,11 +1356,13 @@ jobs:
         conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build_release
-      run: conan create ./glib/all --name=glib --version=2.78.3
+      run: | 
+        conan create ./glib/all --name=glib --version=2.85.3
+        conan upload "*" -r protestator-conan -c
     - name: build debug
-      run: conan create ./glib/all --name=glib --version=2.78.3 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r protestator-conan -c
+      run: |
+        conan create ./glib/all --name=glib --version=2.85.3 -s build_type=Debug
+        conan upload "*" -r protestator-conan -c
 
   build-xkbcommon:
     runs-on: ubuntu-latest
@@ -1314,11 +1383,13 @@ jobs:
         conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build_release
-      run: conan create ./xkbcommon/all --name=xkbcommon --version=1.5.0
+      run: |
+        conan create ./xkbcommon/all --name=xkbcommon --version=1.6.0
+        conan upload "*" -r protestator-conan -c
     - name: build debug
-      run: conan create ./xkbcommon/all --name=xkbcommon --version=1.5.0 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r protestator-conan -c
+      run: |
+        conan create ./xkbcommon/all --name=xkbcommon --version=1.6.0 -s build_type=Debug
+        conan upload "*" -r protestator-conan -c
 
   build-gtest:
     runs-on: ubuntu-latest
@@ -1339,11 +1410,13 @@ jobs:
         conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build_release
-      run: conan create ./gtest/all --name=gtest --version=1.14.0
+      run: |
+        conan create ./gtest/all --name=gtest --version=1.17.0
+        conan upload "*" -r protestator-conan -c
     - name: build debug
-      run: conan create ./gtest/all --name=gtest --version=1.14.0 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r protestator-conan -c
+      run: |
+        conan create ./gtest/all --name=gtest --version=1.17.0 -s build_type=Debug
+        conan upload "*" -r protestator-conan -c
 
   build-harfbuzz:
     runs-on: ubuntu-latest
@@ -1364,12 +1437,13 @@ jobs:
         conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build_release
-      run: conan create ./harfbuzz/all --name=harfbuzz --version=8.3.0
+      run: |
+        conan create ./harfbuzz/all --name=harfbuzz --version=11.4.1
+        conan upload "*" -r protestator-conan -c
     - name: build debug
-      run: conan create ./harfbuzz/all --name=harfbuzz --version=8.3.0 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r protestator-conan -c
-
+      run: |
+        conan create ./harfbuzz/all --name=harfbuzz --version=11.4.1 -s build_type=Debug
+        conan upload "*" -r protestator-conan -c
 
   build-qt:
     runs-on: ubuntu-latest
@@ -1390,9 +1464,9 @@ jobs:
         conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build_release
-      run: conan create ./qt/6.x.x --name=qt --version=6.7.3
-    - name: deploy
-      run: conan upload "*" -r protestator-conan -c
+      run: | 
+        conan create ./qt/6.x.x --name=qt --version=6.8.3
+        conan upload "*" -r protestator-conan -c
 
   build-qt-debug:
     runs-on: ubuntu-latest
@@ -1413,319 +1487,321 @@ jobs:
         conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build debug
-      run: conan create ./qt/6.x.x --name=qt --version=6.7.3 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r protestator-conan -c
+      run: |
+        conan create ./qt/6.x.x --name=qt --version=6.8.3 -s build_type=Debug
+        conan upload "*" -r protestator-conan -c
   
-  build-z3:
-    runs-on: ubuntu-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-      ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-    steps:
-    - uses: actions/checkout@v4
-    - uses: jfrog/setup-jfrog-cli@v4
-    - name: prepare runner
-      run: | 
-        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-        sudo pip install --ignore-installed --upgrade conan
-        conan profile detect
-        conan remote add protestator-conan $ARTIFACTORY_URL
-        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-        conan remote remove conancenter
-    - name: build_release
-      run: conan create ./z3/all --name=z3 --version=4.13.0
-    - name: build debug
-      run: conan create ./z3/all --name=z3 --version=4.13.0 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r protestator-conan -c
+  # build-z3:
+  #   runs-on: ubuntu-latest
+  #   env: # Or as an environment variable
+  #     ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+  #     ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+  #     ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
+  #   steps:
+  #   - uses: actions/checkout@v4
+  #   - uses: jfrog/setup-jfrog-cli@v4
+  #   - name: prepare runner
+  #     run: | 
+  #       sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+  #       sudo pip install --ignore-installed --upgrade conan
+  #       conan profile detect
+  #       conan remote add protestator-conan $ARTIFACTORY_URL
+  #       conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+  #       conan remote remove conancenter
+  #   - name: build_release
+  #     run: |
+  #       conan create ./z3/all --name=z3 --version=4.14.1
+  #       conan upload "*" -r protestator-conan -c
+  #   - name: build debug
+  #     run: |
+  #       conan create ./z3/all --name=z3 --version=4.14.1 -s build_type=Debug
+  #       conan upload "*" -r protestator-conan -c
 
-  build-llvm-core:
-    runs-on: ubuntu-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-      ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-    needs: [build-libffi, build-zlib, build-libxml2, build-z3, build-editline, build-termcap]
-    steps:
-    - uses: actions/checkout@v4
-    - uses: jfrog/setup-jfrog-cli@v4
-    - name: prepare runner
-      run: | 
-        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-        sudo pip install --ignore-installed --upgrade conan
-        conan profile detect
-        conan remote add protestator-conan $ARTIFACTORY_URL
-        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-        conan remote remove conancenter
-    - name: build_release
-      run: conan create ./llvm-core/all --name=llvm-core --version=13.0.0
-    - name: deploy
-      run: conan upload "*" -r protestator-conan -c
+  # build-llvm-core:
+  #   runs-on: ubuntu-latest
+  #   env: # Or as an environment variable
+  #     ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+  #     ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+  #     ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
+  #   needs: [build-libffi, build-zlib, build-libxml2, build-z3, build-editline, build-termcap]
+  #   steps:
+  #   - uses: actions/checkout@v4
+  #   - uses: jfrog/setup-jfrog-cli@v4
+  #   - name: prepare runner
+  #     run: | 
+  #       sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+  #       sudo pip install --ignore-installed --upgrade conan
+  #       conan profile detect
+  #       conan remote add protestator-conan $ARTIFACTORY_URL
+  #       conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+  #       conan remote remove conancenter
+  #   - name: build_release
+  #     run: conan create ./llvm-core/all --name=llvm-core --version=13.0.0
+  #   - name: deploy
+  #     run: conan upload "*" -r protestator-conan -c
 
-  build-llvm-openmp:
-    runs-on: ubuntu-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-      ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-    needs: [build-llvm-core]
-    steps:
-    - uses: actions/checkout@v4
-    - uses: jfrog/setup-jfrog-cli@v4
-    - name: prepare runner
-      run: | 
-        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-        sudo pip install --ignore-installed --upgrade conan
-        conan profile detect
-        conan remote add protestator-conan $ARTIFACTORY_URL
-        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-        conan remote remove conancenter
-    - name: build_release
-      run: conan create ./llvm-openmp/all --name=llvm-openmp --version=17.0.6
-    - name: deploy
-      run: conan upload "*" -r protestator-conan -c
+  # build-llvm-openmp:
+  #   runs-on: ubuntu-latest
+  #   env: # Or as an environment variable
+  #     ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+  #     ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+  #     ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
+  #   needs: [build-llvm-core]
+  #   steps:
+  #   - uses: actions/checkout@v4
+  #   - uses: jfrog/setup-jfrog-cli@v4
+  #   - name: prepare runner
+  #     run: | 
+  #       sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+  #       sudo pip install --ignore-installed --upgrade conan
+  #       conan profile detect
+  #       conan remote add protestator-conan $ARTIFACTORY_URL
+  #       conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+  #       conan remote remove conancenter
+  #   - name: build_release
+  #     run: conan create ./llvm-openmp/all --name=llvm-openmp --version=17.0.6
+  #   - name: deploy
+  #     run: conan upload "*" -r protestator-conan -c
 
-  build-stb:
-    runs-on: ubuntu-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-      ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-    steps:
-    - uses: actions/checkout@v4
-    - uses: jfrog/setup-jfrog-cli@v4
-    - name: prepare runner
-      run: | 
-        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-        sudo pip install --ignore-installed --upgrade conan
-        conan profile detect
-        conan remote add protestator-conan $ARTIFACTORY_URL
-        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-        conan remote remove conancenter
-    - name: build_release
-      run: conan create ./stb/all --name=stb --version=cci.20230920
-    - name: build debug
-      run: conan create ./stb/all --name=stb --version=cci.20230920 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r protestator-conan -c
+  # build-stb:
+  #   runs-on: ubuntu-latest
+  #   env: # Or as an environment variable
+  #     ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+  #     ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+  #     ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
+  #   steps:
+  #   - uses: actions/checkout@v4
+  #   - uses: jfrog/setup-jfrog-cli@v4
+  #   - name: prepare runner
+  #     run: | 
+  #       sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+  #       sudo pip install --ignore-installed --upgrade conan
+  #       conan profile detect
+  #       conan remote add protestator-conan $ARTIFACTORY_URL
+  #       conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+  #       conan remote remove conancenter
+  #   - name: build_release
+  #     run: conan create ./stb/all --name=stb --version=cci.20230920
+  #   - name: build debug
+  #     run: conan create ./stb/all --name=stb --version=cci.20230920 -s build_type=Debug
+  #   - name: deploy
+  #     run: conan upload "*" -r protestator-conan -c
 
-  build-ensmallen:
-    runs-on: ubuntu-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-      ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-    needs: [build-armadillo]
-    steps:
-    - uses: actions/checkout@v4
-    - uses: jfrog/setup-jfrog-cli@v4
-    - name: prepare runner
-      run: | 
-        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-        sudo pip install --ignore-installed --upgrade conan
-        conan profile detect
-        conan remote add protestator-conan $ARTIFACTORY_URL
-        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-        conan remote remove conancenter
-    - name: build_release
-      run: conan create ./ensmallen/all --name=ensmallen --version=2.21.0
-    - name: build debug
-      run: conan create ./ensmallen/all --name=ensmallen --version=2.21.0 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r protestator-conan -c
+  # build-ensmallen:
+  #   runs-on: ubuntu-latest
+  #   env: # Or as an environment variable
+  #     ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+  #     ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+  #     ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
+  #   needs: [build-armadillo]
+  #   steps:
+  #   - uses: actions/checkout@v4
+  #   - uses: jfrog/setup-jfrog-cli@v4
+  #   - name: prepare runner
+  #     run: | 
+  #       sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+  #       sudo pip install --ignore-installed --upgrade conan
+  #       conan profile detect
+  #       conan remote add protestator-conan $ARTIFACTORY_URL
+  #       conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+  #       conan remote remove conancenter
+  #   - name: build_release
+  #     run: conan create ./ensmallen/all --name=ensmallen --version=2.21.0
+  #   - name: build debug
+  #     run: conan create ./ensmallen/all --name=ensmallen --version=2.21.0 -s build_type=Debug
+  #   - name: deploy
+  #     run: conan upload "*" -r protestator-conan -c
 
-  build-armadillo:
-    needs: [build-openblas, build-hdf5]
-    runs-on: ubuntu-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-      ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-    steps:
-    - uses: actions/checkout@v4
-    - uses: jfrog/setup-jfrog-cli@v4
-    - name: prepare runner
-      run: | 
-        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-        sudo pip install --ignore-installed --upgrade conan
-        conan profile detect
-        conan remote add protestator-conan $ARTIFACTORY_URL
-        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-        conan remote remove conancenter
-    - name: build_release
-      run: conan create ./armadillo/all --name=armadillo --version=12.6.4
-    - name: build debug
-      run: conan create ./armadillo/all --name=armadillo --version=12.6.4 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r protestator-conan -c
+  # build-armadillo:
+  #   needs: [build-openblas, build-hdf5]
+  #   runs-on: ubuntu-latest
+  #   env: # Or as an environment variable
+  #     ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+  #     ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+  #     ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
+  #   steps:
+  #   - uses: actions/checkout@v4
+  #   - uses: jfrog/setup-jfrog-cli@v4
+  #   - name: prepare runner
+  #     run: | 
+  #       sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+  #       sudo pip install --ignore-installed --upgrade conan
+  #       conan profile detect
+  #       conan remote add protestator-conan $ARTIFACTORY_URL
+  #       conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+  #       conan remote remove conancenter
+  #   - name: build_release
+  #     run: conan create ./armadillo/all --name=armadillo --version=12.6.4
+  #   - name: build debug
+  #     run: conan create ./armadillo/all --name=armadillo --version=12.6.4 -s build_type=Debug
+  #   - name: deploy
+  #     run: conan upload "*" -r protestator-conan -c
 
-  build-cereal:
-    runs-on: ubuntu-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-      ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-    steps:
-    - uses: actions/checkout@v4
-    - uses: jfrog/setup-jfrog-cli@v4
-    - name: prepare runner
-      run: | 
-        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-        sudo pip install --ignore-installed --upgrade conan
-        conan profile detect
-        conan remote add protestator-conan $ARTIFACTORY_URL
-        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-        conan remote remove conancenter
-    - name: build_release
-      run: conan create ./cereal/all --name=cereal --version=1.3.2
-    - name: build debug
-      run: conan create ./cereal/all --name=cereal --version=1.3.2 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r protestator-conan -c
+  # build-cereal:
+  #   runs-on: ubuntu-latest
+  #   env: # Or as an environment variable
+  #     ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+  #     ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+  #     ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
+  #   steps:
+  #   - uses: actions/checkout@v4
+  #   - uses: jfrog/setup-jfrog-cli@v4
+  #   - name: prepare runner
+  #     run: | 
+  #       sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+  #       sudo pip install --ignore-installed --upgrade conan
+  #       conan profile detect
+  #       conan remote add protestator-conan $ARTIFACTORY_URL
+  #       conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+  #       conan remote remove conancenter
+  #   - name: build_release
+  #     run: conan create ./cereal/all --name=cereal --version=1.3.2
+  #   - name: build debug
+  #     run: conan create ./cereal/all --name=cereal --version=1.3.2 -s build_type=Debug
+  #   - name: deploy
+  #     run: conan upload "*" -r protestator-conan -c
   
-  build-mlpack:
-    runs-on: ubuntu-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-      ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-    needs: [build-cereal, build-armadillo, build-ensmallen, build-stb, build-llvm-openmp]
-    steps:
-    - uses: actions/checkout@v4
-    - uses: jfrog/setup-jfrog-cli@v4
-    - name: prepare runner
-      run: | 
-        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-        sudo pip install --ignore-installed --upgrade conan
-        conan profile detect
-        conan remote add protestator-conan $ARTIFACTORY_URL
-        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-        conan remote remove conancenter
-    - name: build_release
-      run: conan create ./mlpack/all --name=mlpack --version=4.5.1
-    - name: deploy
-      run: conan upload "*" -r protestator-conan -c
+  # build-mlpack:
+  #   runs-on: ubuntu-latest
+  #   env: # Or as an environment variable
+  #     ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+  #     ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+  #     ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
+  #   needs: [build-cereal, build-armadillo, build-ensmallen, build-stb, build-llvm-openmp]
+  #   steps:
+  #   - uses: actions/checkout@v4
+  #   - uses: jfrog/setup-jfrog-cli@v4
+  #   - name: prepare runner
+  #     run: | 
+  #       sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+  #       sudo pip install --ignore-installed --upgrade conan
+  #       conan profile detect
+  #       conan remote add protestator-conan $ARTIFACTORY_URL
+  #       conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+  #       conan remote remove conancenter
+  #   - name: build_release
+  #     run: conan create ./mlpack/all --name=mlpack --version=4.5.1
+  #   - name: deploy
+  #     run: conan upload "*" -r protestator-conan -c
   
-  build-openblas:
-    runs-on: ubuntu-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-      ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-    steps:
-    - uses: actions/checkout@v4
-    - uses: jfrog/setup-jfrog-cli@v4
-    - name: prepare runner
-      run: | 
-        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-        sudo pip install --ignore-installed --upgrade conan
-        conan profile detect
-        conan remote add protestator-conan $ARTIFACTORY_URL
-        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-        conan remote remove conancenter
-    - name: build_release
-      run: conan create ./openblas/all --name=openblas --version=0.3.25
-    - name: build debug
-      run: conan create ./openblas/all --name=openblas --version=0.3.25 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r protestator-conan -c
+  # build-openblas:
+  #   runs-on: ubuntu-latest
+  #   env: # Or as an environment variable
+  #     ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+  #     ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+  #     ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
+  #   steps:
+  #   - uses: actions/checkout@v4
+  #   - uses: jfrog/setup-jfrog-cli@v4
+  #   - name: prepare runner
+  #     run: | 
+  #       sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+  #       sudo pip install --ignore-installed --upgrade conan
+  #       conan profile detect
+  #       conan remote add protestator-conan $ARTIFACTORY_URL
+  #       conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+  #       conan remote remove conancenter
+  #   - name: build_release
+  #     run: conan create ./openblas/all --name=openblas --version=0.3.25
+  #   - name: build debug
+  #     run: conan create ./openblas/all --name=openblas --version=0.3.25 -s build_type=Debug
+  #   - name: deploy
+  #     run: conan upload "*" -r protestator-conan -c
 
-  build-hdf5:
-    runs-on: ubuntu-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-      ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-    steps:
-    - uses: actions/checkout@v4
-    - uses: jfrog/setup-jfrog-cli@v4
-    - name: prepare runner
-      run: | 
-        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-        sudo pip install --ignore-installed --upgrade conan
-        conan profile detect
-        conan remote add protestator-conan $ARTIFACTORY_URL
-        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-        conan remote remove conancenter
-    - name: build_release
-      run: conan create ./hdf5/all --name=hdf5 --version=1.14.0
-    - name: build debug
-      run: conan create ./hdf5/all --name=hdf5 --version=1.14.0 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r protestator-conan -c
+  # build-hdf5:
+  #   runs-on: ubuntu-latest
+  #   env: # Or as an environment variable
+  #     ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+  #     ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+  #     ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
+  #   steps:
+  #   - uses: actions/checkout@v4
+  #   - uses: jfrog/setup-jfrog-cli@v4
+  #   - name: prepare runner
+  #     run: | 
+  #       sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+  #       sudo pip install --ignore-installed --upgrade conan
+  #       conan profile detect
+  #       conan remote add protestator-conan $ARTIFACTORY_URL
+  #       conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+  #       conan remote remove conancenter
+  #   - name: build_release
+  #     run: conan create ./hdf5/all --name=hdf5 --version=1.14.0
+  #   - name: build debug
+  #     run: conan create ./hdf5/all --name=hdf5 --version=1.14.0 -s build_type=Debug
+  #   - name: deploy
+  #     run: conan upload "*" -r protestator-conan -c
 
-  build-ncurses:
-    needs: [build-pcre2]
-    runs-on: ubuntu-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-      ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-    steps:
-    - uses: actions/checkout@v4
-    - uses: jfrog/setup-jfrog-cli@v4
-    - name: prepare runner
-      run: | 
-        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev
-        sudo pip install --ignore-installed --upgrade conan
-        conan profile detect
-        conan remote add protestator-conan $ARTIFACTORY_URL
-        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-        conan remote remove conancenter
-    - name: build_release
-      run: conan create ./ncurses/all --name=ncurses --version=6.4
-    - name: build debug
-      run: conan create ./ncurses/all --name=ncurses --version=6.4 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r protestator-conan -c
+  # build-ncurses:
+  #   needs: [build-pcre2]
+  #   runs-on: ubuntu-latest
+  #   env: # Or as an environment variable
+  #     ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+  #     ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+  #     ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
+  #   steps:
+  #   - uses: actions/checkout@v4
+  #   - uses: jfrog/setup-jfrog-cli@v4
+  #   - name: prepare runner
+  #     run: | 
+  #       sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev
+  #       sudo pip install --ignore-installed --upgrade conan
+  #       conan profile detect
+  #       conan remote add protestator-conan $ARTIFACTORY_URL
+  #       conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+  #       conan remote remove conancenter
+  #   - name: build_release
+  #     run: conan create ./ncurses/all --name=ncurses --version=6.4
+  #   - name: build debug
+  #     run: conan create ./ncurses/all --name=ncurses --version=6.4 -s build_type=Debug
+  #   - name: deploy
+  #     run: conan upload "*" -r protestator-conan -c
 
-  build-termcap:
-    runs-on: ubuntu-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-      ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-    steps:
-    - uses: actions/checkout@v4
-    - uses: jfrog/setup-jfrog-cli@v4
-    - name: prepare runner
-      run: | 
-        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev
-        sudo pip install --ignore-installed --upgrade conan
-        conan profile detect
-        conan remote add protestator-conan $ARTIFACTORY_URL
-        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-        conan remote remove conancenter
-    - name: build_release
-      run: conan create ./termcap/all --name=termcap --version=1.3.1
-    - name: build debug
-      run: conan create ./termcap/all --name=termcap --version=1.3.1 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r protestator-conan -c
+  # build-termcap:
+  #   runs-on: ubuntu-latest
+  #   env: # Or as an environment variable
+  #     ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+  #     ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+  #     ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
+  #   steps:
+  #   - uses: actions/checkout@v4
+  #   - uses: jfrog/setup-jfrog-cli@v4
+  #   - name: prepare runner
+  #     run: | 
+  #       sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev
+  #       sudo pip install --ignore-installed --upgrade conan
+  #       conan profile detect
+  #       conan remote add protestator-conan $ARTIFACTORY_URL
+  #       conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+  #       conan remote remove conancenter
+  #   - name: build_release
+  #     run: conan create ./termcap/all --name=termcap --version=1.3.1
+  #   - name: build debug
+  #     run: conan create ./termcap/all --name=termcap --version=1.3.1 -s build_type=Debug
+  #   - name: deploy
+  #     run: conan upload "*" -r protestator-conan -c
 
-  build-editline:
-    needs: [build-termcap, build-ncurses]
-    runs-on: ubuntu-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-      ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-    steps:
-    - uses: actions/checkout@v4
-    - uses: jfrog/setup-jfrog-cli@v4
-    - name: prepare runner
-      run: | 
-        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev
-        sudo pip install --ignore-installed --upgrade conan
-        conan profile detect
-        conan remote add protestator-conan $ARTIFACTORY_URL
-        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-        conan remote remove conancenter
-    - name: build_release
-      run: conan create ./editline/all --name=editline --version=3.1
-    - name: build debug
-      run: conan create ./editline/all --name=editline --version=3.1 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r protestator-conan -c
+  # build-editline:
+  #   needs: [build-termcap, build-ncurses]
+  #   runs-on: ubuntu-latest
+  #   env: # Or as an environment variable
+  #     ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+  #     ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+  #     ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
+  #   steps:
+  #   - uses: actions/checkout@v4
+  #   - uses: jfrog/setup-jfrog-cli@v4
+  #   - name: prepare runner
+  #     run: | 
+  #       sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev
+  #       sudo pip install --ignore-installed --upgrade conan
+  #       conan profile detect
+  #       conan remote add protestator-conan $ARTIFACTORY_URL
+  #       conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+  #       conan remote remove conancenter
+  #   - name: build_release
+  #     run: conan create ./editline/all --name=editline --version=3.1
+  #   - name: build debug
+  #     run: conan create ./editline/all --name=editline --version=3.1 -s build_type=Debug
+  #   - name: deploy
+  #     run: conan upload "*" -r protestator-conan -c
