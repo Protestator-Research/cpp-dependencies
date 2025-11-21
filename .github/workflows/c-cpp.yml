@@ -122,9 +122,9 @@ jobs:
         conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build_release
-      run: conan create ./ninja/all --name=ninja --version=1.12.1 --build-require
+      run: conan create ./ninja/all --name=ninja --version=1.13.1 --build-require
     - name: build debug
-      run: conan create ./ninja/all --name=ninja --version=1.12.1 --build-require -s build_type=Debug
+      run: conan create ./ninja/all --name=ninja --version=1.13.1 --build-require -s build_type=Debug
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
