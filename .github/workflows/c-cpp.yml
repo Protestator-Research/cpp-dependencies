@@ -153,7 +153,7 @@ jobs:
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
-  build-pkgconv:
+  build-pkgconf:
     runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
@@ -171,9 +171,9 @@ jobs:
         conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build_release
-      run: conan create ./pkgconf/all --name=pkgconf --version=2.2.0 --build-require --build missing
+      run: conan create ./pkgconf/all --name=pkgconf --version=2.5.1 --build-require --build missing
     - name: build debug
-      run: conan create ./pkgconf/all --name=pkgconf --version=2.2.0 --build-require --build missing -s build_type=Debug
+      run: conan create ./pkgconf/all --name=pkgconf --version=2.5.1 --build-require --build missing -s build_type=Debug
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
