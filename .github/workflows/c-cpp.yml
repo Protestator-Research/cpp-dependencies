@@ -1332,11 +1332,11 @@ jobs:
         conan remote remove conancenter
     - name: build_release
       run: | 
-        conan create ./libpq/all --name=libpq --version=17.5
+        conan create ./libpq/meson --name=libpq --version=17.5
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./libpq/all --name=libpq --version=17.5 -s build_type=Debug --build missing
+        conan create ./libpq/meson --name=libpq --version=17.5 -s build_type=Debug --build missing
         conan upload "*" -r protestator-conan -c
 
   build-libcurl:
