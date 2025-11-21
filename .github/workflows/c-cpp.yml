@@ -1359,11 +1359,11 @@ jobs:
         conan remote remove conancenter
     - name: build_release
       run: | 
-        conan create ./libcurl/all --name=libcurl --version=8.4.0
+        conan create ./libcurl/all --name=libcurl --version=8.16.0
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: | 
-        conan create ./libcurl/all --name=libcurl --version=8.4.0 -s build_type=Debug --build missing
+        conan create ./libcurl/all --name=libcurl --version=8.16.0 -s build_type=Debug --build missing
         conan upload "*" -r protestator-conan -c
 
   build-date:
