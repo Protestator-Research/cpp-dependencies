@@ -347,7 +347,7 @@ class QtConan(ConanFile):
         if self.options.openssl:
             self.requires("openssl/[>=1.1 <4]")
         if self.options.with_pcre2:
-            self.requires("pcre2/10.42")
+            self.requires("pcre2/[>=10.42 <11]")
         if self.options.get_safe("with_vulkan"):
             # Note: the versions of vulkan-loader and moltenvk
             #       must be exactly part of the same Vulkan SDK version
@@ -358,15 +358,15 @@ class QtConan(ConanFile):
             if is_apple_os(self):
                 self.requires("moltenvk/1.2.2")
         if self.options.with_glib:
-            self.requires("glib/2.78.3")
+            self.requires("glib/[>=2.78.3 <3]")
         if self.options.with_doubleconversion and not self.options.multiconfiguration:
             self.requires("double-conversion/3.3.0")
         if self.options.get_safe("with_freetype", False) and not self.options.multiconfiguration:
-            self.requires("freetype/2.13.2")
+            self.requires("freetype/[>=2.13.2 <3]")
         if self.options.get_safe("with_fontconfig", False):
-            self.requires("fontconfig/2.15.0")
+            self.requires("fontconfig/[>=2.15.0 <3]")
         if self.options.get_safe("with_icu", False):
-            self.requires("icu/74.2")
+            self.requires("icu/[>=74.2 <80]")
         if self.options.get_safe("with_harfbuzz", False) and not self.options.multiconfiguration:
             self.requires("harfbuzz/[>=8.3.0]")
         if self.options.get_safe("with_libjpeg", False) and not self.options.multiconfiguration:
@@ -390,7 +390,7 @@ class QtConan(ConanFile):
         if self.options.get_safe("with_libalsa", False):
             self.requires("libalsa/1.2.10")
         if self.options.get_safe("with_x11") or self.options.qtwayland:
-            self.requires("xkbcommon/1.5.0")
+            self.requires("xkbcommon/[>=1.5.0 <2]")
         if self.options.get_safe("with_x11", False):
             self.requires("xorg/system")
         if self.options.get_safe("with_egl"):
