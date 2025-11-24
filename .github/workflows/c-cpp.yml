@@ -1147,11 +1147,11 @@ jobs:
         conan remote remove conancenter
     - name: build_release
       run: | 
-        conan create ./libxml2/all --name=libxml2 --version=2.15.0
+        conan create ./libxml2/cmake --name=libxml2 --version=2.15.0
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: | 
-        conan create ./libxml2/all --name=libxml2 --version=2.15.0 -s build_type=Debug
+        conan create ./libxml2/cmake --name=libxml2 --version=2.15.0 -s build_type=Debug
         conan upload "*" -r protestator-conan -c
   
   build-freetype:
