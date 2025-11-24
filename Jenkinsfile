@@ -8,13 +8,7 @@ pipeline {
             }
         }
         stage('prep runner') {
-            environment {
-                SERVICE_CREDS = credentials('builder')
-            }
             steps {
-                sh script: '''conan remote add protestator-conan https://protestatorresearch.jfrog.io/artifactory/api/conan/protestator-conan'''
-                sh script: '''conan remote login -p $SERVICE_CREDS_PSW protestator-conan $SERVICE_CREDS_USR'''
-                sh script: '''conan remote remove conancenter'''
                 sh script: '''conan remove "*" -c'''
             }
         }
