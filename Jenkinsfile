@@ -5,6 +5,10 @@ pipeline {
         stage('clone repo') {
             steps {
                 git 'https://github.com/Protestator-Research/cpp-dependencies'
+            }
+        }
+        stage('prep runner') {
+            steps {
                 sh script: '''conan profile detect'''
             }
         }
