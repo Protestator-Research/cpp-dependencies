@@ -276,14 +276,6 @@ pipeline {
                 sh script: '''conan remove "*" -c'''
             }
         }
-        stage('md4c') {
-            steps {
-                sh script: '''conan create ./md4c/all --name=md4c --version=0.5.2'''
-                sh script: '''conan create ./md4c/all --name=md4c --version=0.5.2 -s build_type=Debug'''
-                sh script: '''conan upload "*" -r protestator-conan -c'''
-                sh script: '''conan remove "*" -c'''
-            }
-        }
         stage('nlohmann_json') {
             steps {
                 sh script: '''conan create ./nlohmann_json/all --name=nlohmann_json --version=3.11.3'''
