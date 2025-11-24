@@ -22,8 +22,8 @@ pipeline {
         }
         stage('cmake') {
             steps {
-                sh script: '''create ./cmake/binary --name=cmake --version=4.1.2 --build-require'''
-                sh script: '''create ./cmake/binary --name=cmake --version=4.1.2 --build-require -s build_type=Debug --build missing'''
+                sh script: '''conan create ./cmake/binary --name=cmake --version=4.1.2 --build-require'''
+                sh script: '''conan create ./cmake/binary --name=cmake --version=4.1.2 --build-require -s build_type=Debug --build missing'''
                 sh script: '''conan upload "*" -r protestator-conan -c'''
                 sh script: '''conan remove "*" -c'''
             }
