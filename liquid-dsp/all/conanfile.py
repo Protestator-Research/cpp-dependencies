@@ -71,7 +71,7 @@ class LiquidDspConan(ConanFile):
 
     def build_requirements(self):
         # For ./bootstrap.sh
-        self.tool_requires("autoconf/2.71")
+        self.tool_requires("autoconf/[>=2.71 <3]")
         self.tool_requires("automake/1.16.5")
 
     def source(self):

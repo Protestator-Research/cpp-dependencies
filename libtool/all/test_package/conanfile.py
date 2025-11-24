@@ -25,7 +25,7 @@ class TestPackageConan(ConanFile):
         self.requires(self.tested_reference_str) # Since we are testing libltdl as well
 
     def build_requirements(self):
-        self.tool_requires("autoconf/2.71")
+        self.tool_requires("autoconf/[>=2.71 <3]")
         self.tool_requires("automake/1.16.5")
         if self.settings_build.os == "Windows":
             self.win_bash = True

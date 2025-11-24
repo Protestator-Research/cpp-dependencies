@@ -59,7 +59,7 @@ class VerilatorConan(ConanFile):
             else:
                 self.build_requires("bison/3.7.6")
         if Version(self.version) >= "4.224":
-            self.build_requires("autoconf/2.71")
+            self.build_requires("autoconf/[>=2.71 <3]")
 
 
     def requirements(self):
