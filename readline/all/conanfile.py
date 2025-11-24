@@ -40,7 +40,7 @@ class ReadLineConan(ConanFile):
         if self.options.with_library == "termcap":
             self.requires("termcap/1.3.1")
         elif self.options.with_library == "curses":
-            self.requires("ncurses/6.4", transitive_headers=True, transitive_libs=True)
+            self.requires("ncurses/[>=6.4 <7]", transitive_headers=True, transitive_libs=True)
 
     def validate(self):
         if is_msvc(self):

@@ -70,11 +70,11 @@ class GLibConan(ConanFile):
     def requirements(self):
         self.requires("zlib/[>=1.2.11 <2]")
         self.requires("libffi/[>=3.4.4 <4]")
-        self.requires("pcre2/10.42")
+        self.requires("pcre2/[>=10.42 <11]")
         if self.options.get_safe("with_elf"):
             self.requires("elfutils/0.190")
         if self.options.get_safe("with_mount"):
-            self.requires("libmount/2.39.2")
+            self.requires("libmount/[>=2.39.2 <3]")
         if self.options.get_safe("with_selinux"):
             self.requires("libselinux/3.6")
         if self.settings.os != "Linux":
