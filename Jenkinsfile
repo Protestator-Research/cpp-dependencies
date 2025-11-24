@@ -388,6 +388,30 @@ pipeline {
                 sh script: '''conan remove "*" -c'''
             }
         }
+        stage('fontconfig') {
+            steps {
+                sh script: '''conan create ./fontconfig/all --name=fontconfig --version=2.15.0'''
+                sh script: '''conan create ./fontconfig/all --name=fontconfig --version=2.15.0 -s build_type=Debug'''
+                sh script: '''conan upload "*" -r protestator-conan -c'''
+                sh script: '''conan remove "*" -c'''
+            }
+        }
+        stage('wayland') {
+            steps {
+                sh script: '''conan create ./wayland/all --name=wayland --version=1.22.0'''
+                sh script: '''conan create ./wayland/all --name=wayland --version=1.22.0 -s build_type=Debug'''
+                sh script: '''conan upload "*" -r protestator-conan -c'''
+                sh script: '''conan remove "*" -c'''
+            }
+        }
+        stage('wayland-protocols') {
+            steps {
+                sh script: '''conan create ./wayland-protocols/all --name=wayland-protocols --version=1.45 --build-require'''
+                sh script: '''conan create ./wayland-protocols/all --name=wayland-protocols --version=1.45 --build-require -s build_type=Debug'''
+                sh script: '''conan upload "*" -r protestator-conan -c'''
+                sh script: '''conan remove "*" -c'''
+            }
+        }
         stage('clean runner') {
             steps {
                 sh script: '''conan remove "*" -c'''
