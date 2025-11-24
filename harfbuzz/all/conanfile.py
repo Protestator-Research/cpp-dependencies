@@ -73,11 +73,11 @@ class HarfbuzzConan(ConanFile):
 
     def requirements(self):
         if self.options.with_freetype:
-            self.requires("freetype/2.13.2")
+            self.requires("freetype/[>=2.13.2 <3]")
         if self.options.with_icu:
-            self.requires("icu/74.1")
+            self.requires("icu/[>=74.1 <80]")
         if self.options.with_glib:
-            self.requires("glib/2.78.3")
+            self.requires("glib/[>=2.78.3 <3]")
 
     def validate(self):
         if self.options.shared and self.options.with_glib and not self.dependencies["glib"].options.shared:
