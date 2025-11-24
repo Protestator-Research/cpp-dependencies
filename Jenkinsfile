@@ -9,7 +9,7 @@ pipeline {
         }
         stage('prep runner') {
             environment {
-                SERVICE_CREDS = credentials('ARTIFACTORY_URL')
+                SERVICE_CREDS = credentials('builder')
             }
             steps {
                 sh script: '''conan remote add protestator-conan https://protestatorresearch.jfrog.io/artifactory/api/conan/protestator-conan'''
