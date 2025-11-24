@@ -70,7 +70,7 @@ class LibpqConan(ConanFile):
         if self.options.with_openssl:
             self.requires("openssl/[>=1.1 <4]")
         if self.options.with_icu:
-            self.requires("icu/75.1")
+            self.requires("icu/[>=75.1 <80]")
 
     def build_requirements(self):
         if is_msvc(self):
