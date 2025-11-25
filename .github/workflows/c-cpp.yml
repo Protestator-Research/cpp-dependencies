@@ -1653,6 +1653,7 @@ jobs:
         conan create ./qt/6.x.x --name=qt --version=6.8.3 -s build_type=Debug
         conan upload "*" -r protestator-conan -c
   
+        
   # build-z3:
   #   runs-on: self-hosted
   #   env: # Or as an environment variable
