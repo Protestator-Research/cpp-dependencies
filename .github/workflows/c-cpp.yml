@@ -9,7 +9,7 @@ on:
 
 jobs:
   build-m4:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -17,14 +17,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-    #     # - name: prepare runner
-    #   run: | 
-    #     sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-    #     sudo pip install --ignore-installed --upgrade conan
-    #     conan profile detect
-    #     conan remote add protestator-conan $ARTIFACTORY_URL
-    #     conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-    #     conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: |
         conan create ./m4/all --name=m4 --version=1.4.20 --build-require
@@ -37,7 +37,7 @@ jobs:
       run: conan remove "*" -c
 
   build-cmake:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -45,14 +45,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-    #     # - name: prepare runner
-    #   run: | 
-    #     sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-    #     sudo pip install --ignore-installed --upgrade conan
-    #     conan profile detect
-    #     conan remote add protestator-conan $ARTIFACTORY_URL
-    #     conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-    #     conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: |
         conan create ./cmake/binary --name=cmake --version=4.1.2 --build-require
@@ -65,7 +65,7 @@ jobs:
       run: conan remove "*" -c
 
   build-autoconf:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -73,14 +73,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-    #     # - name: prepare runner
-    #   run: | 
-    #     sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-    #     sudo pip install --ignore-installed --upgrade conan
-    #     conan profile detect
-    #     conan remote add protestator-conan $ARTIFACTORY_URL
-    #     conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-    #     conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: conan create ./autoconf/all --name=autoconf --version=2.72 --build-require
     - name: build debug
@@ -91,7 +91,7 @@ jobs:
       run: conan remove "*" -c
   
   build-automake:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -99,14 +99,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-    #     # - name: prepare runner
-    #   run: | 
-    #     sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-    #     sudo pip install --ignore-installed --upgrade conan
-    #     conan profile detect
-    #     conan remote add protestator-conan $ARTIFACTORY_URL
-    #     conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-    #     conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: conan create ./automake/all --name=automake --version=1.16.5 --build-require
     - name: build debug
@@ -117,7 +117,7 @@ jobs:
       run: conan remove "*" -c
   
   build-ninja:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -125,14 +125,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-    #     # - name: prepare runner
-    #   run: | 
-    #     sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-    #     sudo pip install --ignore-installed --upgrade conan
-    #     conan profile detect
-    #     conan remote add protestator-conan $ARTIFACTORY_URL
-    #     conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-    #     conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run:  | 
         conan create ./ninja/all --name=ninja --version=1.13.1 --build-require
@@ -146,7 +146,7 @@ jobs:
 
 
   build-meson:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -154,15 +154,15 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-    #     # - name: prepare runner
-    #   run: | 
-    #     sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev cmake ninja-build uuid-dev
-    #     sudo pip install --ignore-installed --upgrade conan
-    #     conan profile detect
-    #     conan remote add protestator-conan $ARTIFACTORY_URL
-    #     conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-    #     conan remote remove conancenter
-    #     pip3 install --ignore-installed ninja
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev cmake ninja-build uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
+        pip3 install --ignore-installed ninja
     - name: build_release
       run: conan create ./meson/all --name=meson --version=1.9.1 --build-require
     - name: build debug
@@ -173,7 +173,7 @@ jobs:
       run: conan remove "*" -c
 
   build-pkgconf:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -181,14 +181,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-        # - name: prepare runner
-      # run: | 
-      #   sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev cmake ninja-build uuid-dev
-      #   sudo pip install --ignore-installed --upgrade conan
-      #   conan profile detect
-      #   conan remote add protestator-conan $ARTIFACTORY_URL
-      #   conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-      #   conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev cmake ninja-build uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: conan create ./pkgconf/all --name=pkgconf --version=2.5.1 --build-require --build missing
     - name: build debug
@@ -199,7 +199,7 @@ jobs:
       run: conan remove "*" -c
 
   build-xorg:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -207,14 +207,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-        # - name: prepare runner
-      # run: | 
-      #   sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev cmake ninja-build uuid-dev
-      #   sudo pip install --ignore-installed --upgrade conan
-      #   conan profile detect
-      #   conan remote add protestator-conan $ARTIFACTORY_URL
-      #   conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-      #   conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev cmake ninja-build uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: conan create ./xorg/all --name=xorg --version=system
     - name: build debug
@@ -225,7 +225,7 @@ jobs:
       run: conan remove "*" -c
   
   build-xkeyboard-config:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -233,14 +233,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-        # - name: prepare runner
-      # run: | 
-      #   sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev cmake ninja-build uuid-dev
-      #   sudo pip install --ignore-installed --upgrade conan
-      #   conan profile detect
-      #   conan remote add protestator-conan $ARTIFACTORY_URL
-      #   conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-      #   conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev cmake ninja-build uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: conan create ./xkeyboard-config/all --name=xkeyboard-config --version=system
     - name: build debug
@@ -251,7 +251,7 @@ jobs:
       run: conan remove "*" -c
 
   build-gnu-config:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -259,15 +259,15 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-    #     # - name: prepare runner
-      # run: | 
-      #   sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev cmake ninja-build uuid-dev
-      #   sudo pip install --ignore-installed --upgrade conan
-      #   conan profile detect
-      #   conan remote add protestator-conan $ARTIFACTORY_URL
-      #   conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-      #   conan remote remove conancenter
-        # pip3 install --ignore-installed ninja
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev cmake ninja-build uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
+        pip3 install --ignore-installed ninja
     - name: build_release
       run: conan create ./gnu-config/all --name=gnu-config --version=cci.20210814
     - name: build debug
@@ -278,7 +278,7 @@ jobs:
       run: conan remove "*" -c
 
   build-opengl:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -286,15 +286,15 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-        # - name: prepare runner
-      # run: | 
-      #   sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev cmake ninja-build uuid-dev
-      #   sudo pip install --ignore-installed --upgrade conan
-      #   conan profile detect
-      #   conan remote add protestator-conan $ARTIFACTORY_URL
-      #   conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-      #   conan remote remove conancenter
-        # pip3 install --ignore-installed ninja
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev cmake ninja-build uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
+        pip3 install --ignore-installed ninja
     - name: build_release
       run: conan create ./opengl/all --name=opengl --version=system
     - name: build debug
@@ -305,7 +305,7 @@ jobs:
       run: conan remove "*" -c
 
   build-b2:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -313,15 +313,15 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-        # - name: prepare runner
-      # run: | 
-      #   sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev cmake ninja-build uuid-dev
-      #   sudo pip install --ignore-installed --upgrade conan
-      #   conan profile detect
-      #   conan remote add protestator-conan $ARTIFACTORY_URL
-      #   conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-      #   conan remote remove conancenter
-        # pip3 install --ignore-installed ninja
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev cmake ninja-build uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
+        pip3 install --ignore-installed ninja
     - name: build_release
       run: | 
         conan create ./b2/portable --name=b2 --version=5.3.3
@@ -334,7 +334,7 @@ jobs:
       run: conan remove "*" -c
 
   build-lz4:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -342,15 +342,15 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-        # - name: prepare runner
-      # run: | 
-      #   sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev cmake ninja-build uuid-dev
-      #   sudo pip install --ignore-installed --upgrade conan
-      #   conan profile detect
-      #   conan remote add protestator-conan $ARTIFACTORY_URL
-      #   conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-      #   conan remote remove conancenter
-        # pip3 install --ignore-installed ninja
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev cmake ninja-build uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
+        pip3 install --ignore-installed ninja
     - name: build_release
       run: |
         conan create ./lz4/all --name=lz4 --version=1.9.4
@@ -363,7 +363,7 @@ jobs:
       run: conan remove "*" -c
 
   build-nasm:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -371,15 +371,15 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-        # - name: prepare runner
-      # run: | 
-      #   sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev cmake ninja-build uuid-dev
-      #   sudo pip install --ignore-installed --upgrade conan
-      #   conan profile detect
-      #   conan remote add protestator-conan $ARTIFACTORY_URL
-      #   conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-      #   conan remote remove conancenter
-        # pip3 install --ignore-installed ninja
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev cmake ninja-build uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
+        pip3 install --ignore-installed ninja
     - name: build_release
       run: conan create ./nasm/all --name=nasm --version=2.16.01
     - name: build debug
@@ -390,7 +390,7 @@ jobs:
       run: conan remove "*" -c
 
   build-linux-headers-generic:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -398,15 +398,15 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-        # - name: prepare runner
-      # run: | 
-      #   sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev cmake ninja-build uuid-dev
-      #   sudo pip install --ignore-installed --upgrade conan
-      #   conan profile detect
-      #   conan remote add protestator-conan $ARTIFACTORY_URL
-      #   conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-      #   conan remote remove conancenter
-        # pip3 install --ignore-installed ninja
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev cmake ninja-build uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
+        pip3 install --ignore-installed ninja
     - name: build_release
       run: conan create ./linux-headers-generic/all --name=linux-headers-generic --version=6.5.9
     - name: build debug
@@ -417,7 +417,7 @@ jobs:
       run: conan remove "*" -c
 
   build-antlr-runtime:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -425,15 +425,15 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-        # - name: prepare runner
-      # run: | 
-      #   sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev cmake ninja-build uuid-dev
-      #   sudo pip install --ignore-installed --upgrade conan
-      #   conan profile detect
-      #   conan remote add protestator-conan $ARTIFACTORY_URL
-      #   conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-      #   conan remote remove conancenter
-        # pip3 install --ignore-installed ninja
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev cmake ninja-build uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
+        pip3 install --ignore-installed ninja
     - name: build_release
       run: conan create ./antlr4-cppruntime/all --name=antlr4-cppruntime --version=4.13.2
     - name: build debug
@@ -444,7 +444,7 @@ jobs:
       run: conan remove "*" -c
 
   build-zlib:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -452,15 +452,15 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-        # - name: prepare runner
-      # run: | 
-      #   sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev cmake ninja-build uuid-dev
-      #   sudo pip install --ignore-installed --upgrade conan
-      #   conan profile detect
-      #   conan remote add protestator-conan $ARTIFACTORY_URL
-      #   conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-      #   conan remote remove conancenter
-        # pip3 install --ignore-installed ninja
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev cmake ninja-build uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
+        pip3 install --ignore-installed ninja
     - name: build_release
       run: conan create ./zlib/all --name=zlib --version=1.3.1
     - name: build debug
@@ -471,7 +471,7 @@ jobs:
       run: conan remove "*" -c
 
   build-bzip2:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -479,15 +479,15 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-        # - name: prepare runner
-      # run: | 
-      #   sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev cmake ninja-build uuid-dev
-      #   sudo pip install --ignore-installed --upgrade conan
-      #   conan profile detect
-      #   conan remote add protestator-conan $ARTIFACTORY_URL
-      #   conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-      #   conan remote remove conancenter
-        # pip3 install --ignore-installed ninja
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev cmake ninja-build uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
+        pip3 install --ignore-installed ninja
     - name: build_release
       run: conan create ./bzip2/all --name=bzip2 --version=1.0.8
     - name: build debug
@@ -498,7 +498,7 @@ jobs:
       run: conan remove "*" -c
 
   build-brotli:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -506,15 +506,15 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-        # - name: prepare runner
-      # run: | 
-      #   sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev cmake ninja-build uuid-dev
-      #   sudo pip install --ignore-installed --upgrade conan
-      #   conan profile detect
-      #   conan remote add protestator-conan $ARTIFACTORY_URL
-      #   conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-      #   conan remote remove conancenter
-        # pip3 install --ignore-installed ninja
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev cmake ninja-build uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
+        pip3 install --ignore-installed ninja
     - name: build_release
       run: conan create ./brotli/all --name=brotli --version=1.1.0
     - name: build debug
@@ -525,7 +525,7 @@ jobs:
       run: conan remove "*" -c
 
   build-double-conversion:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -533,15 +533,15 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-        # - name: prepare runner
-      # run: | 
-      #   sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev cmake ninja-build uuid-dev
-      #   sudo pip install --ignore-installed --upgrade conan
-      #   conan profile detect
-      #   conan remote add protestator-conan $ARTIFACTORY_URL
-      #   conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-      #   conan remote remove conancenter
-        # pip3 install --ignore-installed ninja
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev cmake ninja-build uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
+        pip3 install --ignore-installed ninja
     - name: build_release
       run: conan create ./double-conversion/all --name=double-conversion --version=3.3.0
     - name: build debug
@@ -552,7 +552,7 @@ jobs:
       run: conan remove "*" -c
 
   build-expat:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -560,15 +560,15 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-        # - name: prepare runner
-      # run: | 
-      #   sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev cmake ninja-build uuid-dev
-      #   sudo pip install --ignore-installed --upgrade conan
-      #   conan profile detect
-      #   conan remote add protestator-conan $ARTIFACTORY_URL
-      #   conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-      #   conan remote remove conancenter
-        # pip3 install --ignore-installed ninja
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev cmake ninja-build uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
+        pip3 install --ignore-installed ninja
     - name: build_release
       run: |
         conan create ./expat/all --name=expat --version=2.7.3
@@ -581,7 +581,7 @@ jobs:
       run: conan remove "*" -c
 
   build-flex:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -589,15 +589,15 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-        # - name: prepare runner
-      # run: | 
-      #   sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev cmake ninja-build uuid-dev
-      #   sudo pip install --ignore-installed --upgrade conan
-      #   conan profile detect
-      #   conan remote add protestator-conan $ARTIFACTORY_URL
-      #   conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-      #   conan remote remove conancenter
-        # pip3 install --ignore-installed ninja
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev cmake ninja-build uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
+        pip3 install --ignore-installed ninja
     - name: build_release
       run: conan create ./flex/all --name=flex --version=2.6.4 --build missing
     - name: build debug
@@ -608,7 +608,7 @@ jobs:
       run: conan remove "*" -c
   
   build-bison:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     needs: build-flex
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
@@ -617,14 +617,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-    #     # - name: prepare runner
-    #   run: | 
-    #     sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-    #     sudo pip install --ignore-installed --upgrade conan
-    #     conan profile detect
-    #     conan remote add protestator-conan $ARTIFACTORY_URL
-    #     conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-    #     conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: conan create ./bison/all --name=bison --version=3.8.2 --build-require
     - name: build debug
@@ -635,7 +635,7 @@ jobs:
       run: conan remove "*" -c
 
   build-gperf:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -643,14 +643,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-    #     # - name: prepare runner
-    #   run: | 
-    #     sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-    #     sudo pip install --ignore-installed --upgrade conan
-    #     conan profile detect
-    #     conan remote add protestator-conan $ARTIFACTORY_URL
-    #     conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-    #     conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: conan create ./gperf/all --name=gperf --version=3.1 --build-require
     - name: build debug
@@ -661,7 +661,7 @@ jobs:
       run: conan remove "*" -c
 
   build-icu:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -669,14 +669,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-    #     # - name: prepare runner
-    #   run: | 
-    #     sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-    #     sudo pip install --ignore-installed --upgrade conan
-    #     conan profile detect
-    #     conan remote add protestator-conan $ARTIFACTORY_URL
-    #     conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-    #     conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: conan create ./icu/all --name=icu --version=77.1
     - name: build debug
@@ -687,7 +687,7 @@ jobs:
       run: conan remove "*" -c
 
   build-libbacktrace:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -695,14 +695,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-    #     # - name: prepare runner
-    #   run: | 
-    #     sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-    #     sudo pip install --ignore-installed --upgrade conan
-    #     conan profile detect
-    #     conan remote add protestator-conan $ARTIFACTORY_URL
-    #     conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-    #     conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: | 
         conan create ./libbacktrace/all --name=libbacktrace --version=cci.20240730
@@ -713,7 +713,7 @@ jobs:
         conan upload "*" -r protestator-conan -c
 
   build-libelf:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -721,14 +721,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-    #     # - name: prepare runner
-    #   run: | 
-    #     sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-    #     sudo pip install --ignore-installed --upgrade conan
-    #     conan profile detect
-    #     conan remote add protestator-conan $ARTIFACTORY_URL
-    #     conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-    #     conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: conan create ./libelf/all --name=libelf --version=0.8.13
     - name: build debug
@@ -739,7 +739,7 @@ jobs:
       run: conan remove "*" -c
   
   build-libpng:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -747,14 +747,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-    #     # - name: prepare runner
-    #   run: | 
-    #     sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-    #     sudo pip install --ignore-installed --upgrade conan
-    #     conan profile detect
-    #     conan remote add protestator-conan $ARTIFACTORY_URL
-    #     conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-    #     conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: | 
         conan create ./libpng/all --name=libpng --version=1.6.50
@@ -767,7 +767,7 @@ jobs:
       run: conan remove "*" -c
 
   build-libffi:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -775,14 +775,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-    #     # - name: prepare runner
-    #   run: | 
-    #     sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-    #     sudo pip install --ignore-installed --upgrade conan
-    #     conan profile detect
-    #     conan remote add protestator-conan $ARTIFACTORY_URL
-    #     conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-    #     conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: | 
         conan create ./libffi/all --name=libffi --version=3.4.8
@@ -795,7 +795,7 @@ jobs:
       run: conan remove "*" -c
 
   build-libiconv:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -803,14 +803,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-    #     # - name: prepare runner
-    #   run: | 
-    #     sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-    #     sudo pip install --ignore-installed --upgrade conan
-    #     conan profile detect
-    #     conan remote add protestator-conan $ARTIFACTORY_URL
-    #     conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-    #     conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: |
         conan create ./libiconv/all --name=libiconv --version=1.17
@@ -824,7 +824,7 @@ jobs:
 
 
   build-libmount:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -832,14 +832,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-    #     # - name: prepare runner
-    #   run: | 
-    #     sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-    #     sudo pip install --ignore-installed --upgrade conan
-    #     conan profile detect
-    #     conan remote add protestator-conan $ARTIFACTORY_URL
-    #     conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-    #     conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: |
         conan create ./libmount/all --name=libmount --version=2.40.2
@@ -852,7 +852,7 @@ jobs:
       run: conan remove "*" -c
 
   build-md4c:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -860,14 +860,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-    #     # - name: prepare runner
-    #   run: | 
-    #     sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-    #     sudo pip install --ignore-installed --upgrade conan
-    #     conan profile detect
-    #     conan remote add protestator-conan $ARTIFACTORY_URL
-    #     conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-    #     conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: |
         conan create ./md4c/all --name=md4c --version=0.5.2
@@ -880,7 +880,7 @@ jobs:
       run: conan remove "*" -c
 
   build-nlohmann_json:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -888,14 +888,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-    #     # - name: prepare runner
-    #   run: | 
-    #     sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-    #     sudo pip install --ignore-installed --upgrade conan
-    #     conan profile detect
-    #     conan remote add protestator-conan $ARTIFACTORY_URL
-    #     conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-    #     conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: |
         conan create ./nlohmann_json/all --name=nlohmann_json --version=3.11.3
@@ -908,7 +908,7 @@ jobs:
       run: conan remove "*" -c
 
   build-sqlite3:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -916,14 +916,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-    #     # - name: prepare runner
-    #   run: | 
-    #     sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-    #     sudo pip install --ignore-installed --upgrade conan
-    #     conan profile detect
-    #     conan remote add protestator-conan $ARTIFACTORY_URL
-    #     conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-    #     conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: |
         conan create ./sqlite3/all --name=sqlite3 --version=3.50.4
@@ -936,7 +936,7 @@ jobs:
       run: conan remove "*" -c
 
   build-libtool:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -944,14 +944,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-    #     # - name: prepare runner
-    #   run: | 
-    #     sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-    #     sudo pip install --ignore-installed --upgrade conan
-    #     conan profile detect
-    #     conan remote add protestator-conan $ARTIFACTORY_URL
-    #     conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-    #     conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: |
         conan create ./libtool/all --name=libtool --version=2.4.7
@@ -964,7 +964,7 @@ jobs:
       run: conan remove "*" -c
 
   build-nspr:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -972,14 +972,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-    #     # - name: prepare runner
-    #   run: | 
-    #     sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-    #     sudo pip install --ignore-installed --upgrade conan
-    #     conan profile detect
-    #     conan remote add protestator-conan $ARTIFACTORY_URL
-    #     conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-    #     conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: conan create ./nspr/all --name=nspr --version=4.35
     - name: build debug
@@ -990,7 +990,7 @@ jobs:
       run: conan remove "*" -c
 
   build-util-linux-libuuid:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -998,14 +998,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-    #     # - name: prepare runner
-    #   run: | 
-    #     sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-    #     sudo pip install --ignore-installed --upgrade conan
-    #     conan profile detect
-    #     conan remote add protestator-conan $ARTIFACTORY_URL
-    #     conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-    #     conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: conan create ./util-linux-libuuid/all --name=util-linux-libuuid --version=2.39.2
     - name: build debug
@@ -1016,7 +1016,7 @@ jobs:
       run: conan remove "*" -c
 
   build-pcre2:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1025,14 +1025,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-    #     # - name: prepare runner
-    #   run: | 
-    #     sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-    #     sudo pip install --ignore-installed --upgrade conan
-    #     conan profile detect
-    #     conan remote add protestator-conan $ARTIFACTORY_URL
-    #     conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-    #     conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: | 
         conan create ./pcre2/all --name=pcre2 --version=10.44
@@ -1045,7 +1045,7 @@ jobs:
       run: conan remove "*" -c
 
   build-xz_utils:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1053,14 +1053,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-    #     # - name: prepare runner
-    #   run: | 
-    #     sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-    #     sudo pip install --ignore-installed --upgrade conan
-    #     conan profile detect
-    #     conan remote add protestator-conan $ARTIFACTORY_URL
-    #     conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-    #     conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: |
        conan create ./xz_utils/all --name=xz_utils --version=5.4.5
@@ -1073,7 +1073,7 @@ jobs:
       run: conan remove "*" -c
 
   build-gettext:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1081,14 +1081,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-    #     # - name: prepare runner
-    #   run: | 
-    #     sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-    #     sudo pip install --ignore-installed --upgrade conan
-    #     conan profile detect
-    #     conan remote add protestator-conan $ARTIFACTORY_URL
-    #     conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-    #     conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: |
        conan create ./gettext/all --name=gettext --version=0.22.5
@@ -1101,7 +1101,7 @@ jobs:
       run: conan remove "*" -c
 
   build-zstd:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1109,14 +1109,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-    #     # - name: prepare runner
-    #   run: | 
-    #     sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-    #     sudo pip install --ignore-installed --upgrade conan
-    #     conan profile detect
-    #     conan remote add protestator-conan $ARTIFACTORY_URL
-    #     conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-    #     conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: |
        conan create ./zstd/all --name=zstd --version=1.5.7
@@ -1129,7 +1129,7 @@ jobs:
       run: conan remove "*" -c
 
   build-elfutils:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1138,14 +1138,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-    #     # - name: prepare runner
-    #   run: | 
-    #     sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-    #     sudo pip install --ignore-installed --upgrade conan
-    #     conan profile detect
-    #     conan remote add protestator-conan $ARTIFACTORY_URL
-    #     conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-    #     conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: | 
         conan create ./elfutils/all --name=elfutils --version=0.190
@@ -1158,7 +1158,7 @@ jobs:
       run: conan remove "*" -c
 
   build-openssl:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1167,14 +1167,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-    #     # - name: prepare runner
-    #   run: | 
-    #     sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-    #     sudo pip install --ignore-installed --upgrade conan
-    #     conan profile detect
-    #     conan remote add protestator-conan $ARTIFACTORY_URL
-    #     conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-    #     conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: |
        conan create ./openssl/3.x.x --name=openssl --version=3.6.0
@@ -1187,7 +1187,7 @@ jobs:
       run: conan remove "*" -c
 
   build-odbc:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1196,14 +1196,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-    #     # - name: prepare runner
-    #   run: | 
-    #     sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-    #     sudo pip install --ignore-installed --upgrade conan
-    #     conan profile detect
-    #     conan remote add protestator-conan $ARTIFACTORY_URL
-    #     conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-    #     conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: conan create ./odbc/all --name=odbc --version=2.3.11
     - name: build debug
@@ -1214,7 +1214,7 @@ jobs:
       run: conan remove "*" -c
 
   build-libxml2:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1223,14 +1223,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-        # - name: prepare runner
-      # run: | 
-      #   sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev
-      #   sudo pip install --ignore-installed --upgrade conan
-      #   conan profile detect
-      #   conan remote add protestator-conan $ARTIFACTORY_URL
-      #   conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-      #   conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: | 
         conan create ./libxml2/cmake --name=libxml2 --version=2.15.0
@@ -1243,7 +1243,7 @@ jobs:
       run: conan remove "*" -c
   
   build-freetype:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1252,14 +1252,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-    #     # - name: prepare runner
-    #   run: | 
-    #     sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-    #     sudo pip install --ignore-installed --upgrade conan
-    #     conan profile detect
-    #     conan remote add protestator-conan $ARTIFACTORY_URL
-    #     conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-    #     conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: |
         conan create ./freetype/meson --name=freetype --version=2.14.1
@@ -1273,7 +1273,7 @@ jobs:
 
 
   build-fontconfig:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1300,7 +1300,7 @@ jobs:
       run: conan remove "*" -c
   
   build-wayland:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1309,14 +1309,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-    #     # - name: prepare runner
-    #   run: | 
-    #     sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-    #     sudo pip install --ignore-installed --upgrade conan
-    #     conan profile detect
-    #     conan remote add protestator-conan $ARTIFACTORY_URL
-    #     conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-    #     conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: |
         conan create ./wayland/all --name=wayland --version=1.22.0
@@ -1329,7 +1329,7 @@ jobs:
       run: conan remove "*" -c
 
   build-wayland-protocols:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1338,14 +1338,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-        # - name: prepare runner
-      # run: | 
-      #   sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev uuid-dev
-      #   sudo pip install --ignore-installed --upgrade conan
-      #   conan profile detect
-      #   conan remote add protestator-conan $ARTIFACTORY_URL
-      #   conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-      #   conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: |
         conan create ./wayland-protocols/all --name=wayland-protocols --version=1.45 --build-require
@@ -1359,7 +1359,7 @@ jobs:
 
 
   build-boost:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1368,14 +1368,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-    #     # - name: prepare runner
-    #   run: | 
-    #     sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-    #     sudo pip install --ignore-installed --upgrade conan
-    #     conan profile detect
-    #     conan remote add protestator-conan $ARTIFACTORY_URL
-    #     conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-    #     conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: |
         conan create ./boost/all --name=boost --version=1.89.0
@@ -1388,7 +1388,7 @@ jobs:
       run: conan remove "*" -c
 
   build-redboltz-mqtt_cpp:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1397,14 +1397,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-    #     # - name: prepare runner
-    #   run: | 
-    #     sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-    #     sudo pip install --ignore-installed --upgrade conan
-    #     conan profile detect
-    #     conan remote add protestator-conan $ARTIFACTORY_URL
-    #     conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-    #     conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: conan create ./redboltz-mqtt_cpp/all --name=redboltz-mqtt_cpp --version=13.2.1
     - name: build debug
@@ -1415,7 +1415,7 @@ jobs:
       run: conan remove "*" -c
 
   build-async_mqtt:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1424,14 +1424,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-    #     # - name: prepare runner
-    #   run: | 
-    #     sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-    #     sudo pip install --ignore-installed --upgrade conan
-    #     conan profile detect
-    #     conan remote add protestator-conan $ARTIFACTORY_URL
-    #     conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-    #     conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: conan create ./async_mqtt/all --name=async-mqtt --version=8.0.1
     - name: build debug
@@ -1442,7 +1442,7 @@ jobs:
       run: conan remove "*" -c
 
   build-libxslt:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1451,14 +1451,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-    #     # - name: prepare runner
-    #   run: | 
-    #     sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-    #     sudo pip install --ignore-installed --upgrade conan
-    #     conan profile detect
-    #     conan remote add protestator-conan $ARTIFACTORY_URL
-    #     conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-    #     conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: | 
         conan create ./libxslt/all --name=libxslt --version=1.1.43
@@ -1471,7 +1471,7 @@ jobs:
       run: conan remove "*" -c
 
   build-readline:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1480,14 +1480,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-    #     # - name: prepare runner
-    #   run: | 
-    #     sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-    #     sudo pip install --ignore-installed --upgrade conan
-    #     conan profile detect
-    #     conan remote add protestator-conan $ARTIFACTORY_URL
-    #     conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-    #     conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: | 
         conan create ./readline/all --name=readline --version=8.2
@@ -1500,7 +1500,7 @@ jobs:
       run: conan remove "*" -c
 
   build-libpq:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1509,14 +1509,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-    #     # - name: prepare runner
-    #   run: | 
-    #     sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-    #     sudo pip install --ignore-installed --upgrade conan
-    #     conan profile detect
-    #     conan remote add protestator-conan $ARTIFACTORY_URL
-    #     conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-    #     conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: | 
         conan create ./libpq/meson --name=libpq --version=17.5
@@ -1529,7 +1529,7 @@ jobs:
       run: conan remove "*" -c
 
   build-libcurl:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1538,14 +1538,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-    #     # - name: prepare runner
-    #   run: | 
-    #     sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-    #     sudo pip install --ignore-installed --upgrade conan
-    #     conan profile detect
-    #     conan remote add protestator-conan $ARTIFACTORY_URL
-    #     conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-    #     conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: | 
         conan create ./libcurl/all --name=libcurl --version=8.16.0
@@ -1558,7 +1558,7 @@ jobs:
       run: conan remove "*" -c
 
   build-date:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1567,14 +1567,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-    #     # - name: prepare runner
-    #   run: | 
-    #     sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-    #     sudo pip install --ignore-installed --upgrade conan
-    #     conan profile detect
-    #     conan remote add protestator-conan $ARTIFACTORY_URL
-    #     conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-    #     conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: |
         conan create ./date/all --name=date --version=3.0.4
@@ -1587,7 +1587,7 @@ jobs:
       run: conan remove "*" -c
 
   build-libselinux:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1596,14 +1596,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-    #     # - name: prepare runner
-    #   run: | 
-    #     sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-    #     sudo pip install --ignore-installed --upgrade conan
-    #     conan profile detect
-    #     conan remote add protestator-conan $ARTIFACTORY_URL
-    #     conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-    #     conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: conan create ./libselinux/all --name=libselinux --version=3.6
     - name: build debug
@@ -1614,7 +1614,7 @@ jobs:
       run: conan remove "*" -c
 
   build-glib:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1623,14 +1623,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-    #     # - name: prepare runner
-    #   run: | 
-    #     sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-    #     sudo pip install --ignore-installed --upgrade conan
-    #     conan profile detect
-    #     conan remote add protestator-conan $ARTIFACTORY_URL
-    #     conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-    #     conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: | 
         conan create ./glib/all --name=glib --version=2.85.3
@@ -1643,7 +1643,7 @@ jobs:
       run: conan remove "*" -c
 
   build-xkbcommon:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1652,14 +1652,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-    #     # - name: prepare runner
-    #   run: | 
-    #     sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-    #     sudo pip install --ignore-installed --upgrade conan
-    #     conan profile detect
-    #     conan remote add protestator-conan $ARTIFACTORY_URL
-    #     conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-    #     conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: |
         conan create ./xkbcommon/all --name=xkbcommon --version=1.6.0
@@ -1672,7 +1672,7 @@ jobs:
       run: conan remove "*" -c
 
   build-gtest:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1681,14 +1681,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-    #     # - name: prepare runner
-    #   run: | 
-    #     sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-    #     sudo pip install --ignore-installed --upgrade conan
-    #     conan profile detect
-    #     conan remote add protestator-conan $ARTIFACTORY_URL
-    #     conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-    #     conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: |
         conan create ./gtest/all --name=gtest --version=1.17.0
@@ -1701,7 +1701,7 @@ jobs:
       run: conan remove "*" -c
 
   build-harfbuzz:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1710,14 +1710,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-    #     # - name: prepare runner
-    #   run: | 
-    #     sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-    #     sudo pip install --ignore-installed --upgrade conan
-    #     conan profile detect
-    #     conan remote add protestator-conan $ARTIFACTORY_URL
-    #     conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-    #     conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: |
         conan create ./harfbuzz/all --name=harfbuzz --version=11.4.1
@@ -1730,7 +1730,7 @@ jobs:
       run: conan remove "*" -c
 
   build-qt:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1739,14 +1739,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-    #     # - name: prepare runner
-    #   run: | 
-    #     sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-    #     sudo pip install --ignore-installed --upgrade conan
-    #     conan profile detect
-    #     conan remote add protestator-conan $ARTIFACTORY_URL
-    #     conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-    #     conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: | 
         conan create ./qt/6.x.x --name=qt --version=6.8.3
@@ -1755,7 +1755,7 @@ jobs:
       run: conan remove "*" -c
 
   build-qt-debug:
-    runs-on: self-hosted
+    runs-on: LargerRunner
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1764,14 +1764,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-    #     # - name: prepare runner
-    #   run: | 
-    #     sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
-    #     sudo pip install --ignore-installed --upgrade conan
-    #     conan profile detect
-    #     conan remote add protestator-conan $ARTIFACTORY_URL
-    #     conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-    #     conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev uuid-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build debug
       run: |
         conan create ./qt/6.x.x --name=qt --version=6.8.3 -s build_type=Debug
@@ -1781,7 +1781,7 @@ jobs:
   
 
   # build-z3:
-  #   runs-on: self-hosted
+  #   runs-on: ubuntu-latest
   #   env: # Or as an environment variable
   #     ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
   #     ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1807,7 +1807,7 @@ jobs:
   #       conan upload "*" -r protestator-conan -c
 
   # build-llvm-core:
-  #   runs-on: self-hosted
+  #   runs-on: ubuntu-latest
   #   env: # Or as an environment variable
   #     ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
   #     ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1830,7 +1830,7 @@ jobs:
   #     run: conan upload "*" -r protestator-conan -c
 
   # build-llvm-openmp:
-  #   runs-on: self-hosted
+  #   runs-on: ubuntu-latest
   #   env: # Or as an environment variable
   #     ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
   #     ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1853,7 +1853,7 @@ jobs:
   #     run: conan upload "*" -r protestator-conan -c
 
   # build-stb:
-  #   runs-on: self-hosted
+  #   runs-on: ubuntu-latest
   #   env: # Or as an environment variable
   #     ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
   #     ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1877,7 +1877,7 @@ jobs:
   #     run: conan upload "*" -r protestator-conan -c
 
   # build-ensmallen:
-  #   runs-on: self-hosted
+  #   runs-on: ubuntu-latest
   #   env: # Or as an environment variable
   #     ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
   #     ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1903,7 +1903,7 @@ jobs:
 
   # build-armadillo:
   #   needs: [build-openblas, build-hdf5]
-  #   runs-on: self-hosted
+  #   runs-on: ubuntu-latest
   #   env: # Or as an environment variable
   #     ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
   #     ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1927,7 +1927,7 @@ jobs:
   #     run: conan upload "*" -r protestator-conan -c
 
   # build-cereal:
-  #   runs-on: self-hosted
+  #   runs-on: ubuntu-latest
   #   env: # Or as an environment variable
   #     ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
   #     ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1951,7 +1951,7 @@ jobs:
   #     run: conan upload "*" -r protestator-conan -c
   
   # build-mlpack:
-  #   runs-on: self-hosted
+  #   runs-on: ubuntu-latest
   #   env: # Or as an environment variable
   #     ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
   #     ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1974,7 +1974,7 @@ jobs:
   #     run: conan upload "*" -r protestator-conan -c
   
   # build-openblas:
-  #   runs-on: self-hosted
+  #   runs-on: ubuntu-latest
   #   env: # Or as an environment variable
   #     ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
   #     ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1998,7 +1998,7 @@ jobs:
   #     run: conan upload "*" -r protestator-conan -c
 
   # build-hdf5:
-  #   runs-on: self-hosted
+  #   runs-on: ubuntu-latest
   #   env: # Or as an environment variable
   #     ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
   #     ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -2023,7 +2023,7 @@ jobs:
 
   build-ncurses:
     needs: [build-pcre2]
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -2031,14 +2031,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-        # - name: prepare runner
-      # run: | 
-      #   sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev
-      #   sudo pip install --ignore-installed --upgrade conan
-      #   conan profile detect
-      #   conan remote add protestator-conan $ARTIFACTORY_URL
-      #   conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-      #   conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: | 
         conan create ./ncurses/all --name=ncurses --version=6.5
@@ -2049,7 +2049,7 @@ jobs:
         conan upload "*" -r protestator-conan -c
 
   build-termcap:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -2057,14 +2057,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
-        # - name: prepare runner
-      # run: | 
-      #   sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev
-      #   sudo pip install --ignore-installed --upgrade conan
-      #   conan profile detect
-      #   conan remote add protestator-conan $ARTIFACTORY_URL
-      #   conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
-      #   conan remote remove conancenter
+    - name: prepare runner
+      run: | 
+        sudo apt update && sudo apt -y install make autoconf python3 python3-pip cmake libgl-dev libgl1-mesa-dev xkb-data libx11-xcb-dev libfontenc-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxres-dev libxss-dev libxtst-dev libxv-dev libxxf86vm-dev libxcb-glx0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-cursor-dev libxcb-dri2-0-dev libxcb-dri3-dev libxcb-present-dev libxcb-composite0-dev libxcb-ewmh-dev libxcb-res0-dev libxcb-util-dev
+        sudo pip install --ignore-installed --upgrade conan
+        conan profile detect
+        conan remote add protestator-conan $ARTIFACTORY_URL
+        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
     - name: build_release
       run: conan create ./termcap/all --name=termcap --version=1.3.1
     - name: build debug
@@ -2076,7 +2076,7 @@ jobs:
 
   # build-editline:
   #   needs: [build-termcap, build-ncurses]
-  #   runs-on: self-hosted
+  #   runs-on: ubuntu-latest
   #   env: # Or as an environment variable
   #     ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
   #     ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
