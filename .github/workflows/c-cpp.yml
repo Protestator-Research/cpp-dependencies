@@ -9,7 +9,7 @@ on:
 
 jobs:
   build-m4:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -35,7 +35,7 @@ jobs:
         conan upload "*" -r protestator-conan -c
 
   build-cmake:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -61,7 +61,7 @@ jobs:
         conan upload "*" -r protestator-conan -c
 
   build-autoconf:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -85,7 +85,7 @@ jobs:
       run: conan upload "*" -r protestator-conan -c
   
   build-automake:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -109,7 +109,7 @@ jobs:
       run: conan upload "*" -r protestator-conan -c
   
   build-ninja:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -136,7 +136,7 @@ jobs:
 
 
   build-meson:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -161,7 +161,7 @@ jobs:
       run: conan upload "*" -r protestator-conan -c
 
   build-pkgconf:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -185,7 +185,7 @@ jobs:
       run: conan upload "*" -r protestator-conan -c
 
   build-xorg:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -209,7 +209,7 @@ jobs:
       run: conan upload "*" -r protestator-conan -c
   
   build-xkeyboard-config:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -233,7 +233,7 @@ jobs:
       run: conan upload "*" -r protestator-conan -c
 
   build-gnu-config:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -258,7 +258,7 @@ jobs:
       run: conan upload "*" -r protestator-conan -c
 
   build-opengl:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -283,7 +283,7 @@ jobs:
       run: conan upload "*" -r protestator-conan -c
 
   build-b2:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -310,7 +310,7 @@ jobs:
         conan upload "*" -r protestator-conan -c
 
   build-lz4:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -337,7 +337,7 @@ jobs:
         conan upload "*" -r protestator-conan -c
 
   build-nasm:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -362,7 +362,7 @@ jobs:
       run: conan upload "*" -r protestator-conan -c
 
   build-linux-headers-generic:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -387,7 +387,7 @@ jobs:
       run: conan upload "*" -r protestator-conan -c
 
   build-antlr-runtime:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -412,7 +412,7 @@ jobs:
       run: conan upload "*" -r protestator-conan -c
 
   build-zlib:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -437,7 +437,7 @@ jobs:
       run: conan upload "*" -r protestator-conan -c
 
   build-bzip2:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -462,7 +462,7 @@ jobs:
       run: conan upload "*" -r protestator-conan -c
 
   build-brotli:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -487,7 +487,7 @@ jobs:
       run: conan upload "*" -r protestator-conan -c
 
   build-double-conversion:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -512,7 +512,7 @@ jobs:
       run: conan upload "*" -r protestator-conan -c
 
   build-expat:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -539,7 +539,7 @@ jobs:
         conan upload "*" -r protestator-conan -c
 
   build-flex:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -564,7 +564,7 @@ jobs:
       run: conan upload "*" -r protestator-conan -c
   
   build-bison:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: build-flex
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
@@ -589,7 +589,7 @@ jobs:
       run: conan upload "*" -r protestator-conan -c
 
   build-gperf:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -613,7 +613,7 @@ jobs:
       run: conan upload "*" -r protestator-conan -c
 
   build-icu:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -637,7 +637,7 @@ jobs:
       run: conan upload "*" -r protestator-conan -c
 
   build-libbacktrace:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -663,7 +663,7 @@ jobs:
         conan upload "*" -r protestator-conan -c
 
   build-libelf:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -687,7 +687,7 @@ jobs:
       run: conan upload "*" -r protestator-conan -c
   
   build-libpng:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -713,7 +713,7 @@ jobs:
         conan upload "*" -r protestator-conan -c
 
   build-libffi:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -739,7 +739,7 @@ jobs:
         conan upload "*" -r protestator-conan -c
 
   build-libiconv:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -766,7 +766,7 @@ jobs:
 
 
   build-libmount:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -792,7 +792,7 @@ jobs:
         conan upload "*" -r protestator-conan -c
 
   build-md4c:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -818,7 +818,7 @@ jobs:
         conan upload "*" -r protestator-conan -c
 
   build-nlohmann_json:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -844,7 +844,7 @@ jobs:
         conan upload "*" -r protestator-conan -c
 
   build-sqlite3:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -870,7 +870,7 @@ jobs:
         conan upload "*" -r protestator-conan -c
 
   build-libtool:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -896,7 +896,7 @@ jobs:
         conan upload "*" -r protestator-conan -c
 
   build-nspr:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -920,7 +920,7 @@ jobs:
       run: conan upload "*" -r protestator-conan -c
 
   build-util-linux-libuuid:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -944,7 +944,7 @@ jobs:
       run: conan upload "*" -r protestator-conan -c
 
   build-pcre2:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -971,7 +971,7 @@ jobs:
         conan upload "*" -r protestator-conan -c
 
   build-xz_utils:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -997,7 +997,7 @@ jobs:
         conan upload "*" -r protestator-conan -c
 
   build-gettext:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1023,7 +1023,7 @@ jobs:
         conan upload "*" -r protestator-conan -c
 
   build-zstd:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1049,7 +1049,7 @@ jobs:
         conan upload "*" -r protestator-conan -c
 
   build-elfutils:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1076,7 +1076,7 @@ jobs:
         conan upload "*" -r protestator-conan -c
 
   build-openssl:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1103,7 +1103,7 @@ jobs:
         conan upload "*" -r protestator-conan -c
 
   build-odbc:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1128,7 +1128,7 @@ jobs:
       run: conan upload "*" -r protestator-conan -c
 
   build-libxml2:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1155,7 +1155,7 @@ jobs:
         conan upload "*" -r protestator-conan -c
   
   build-freetype:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1183,7 +1183,7 @@ jobs:
 
 
   build-fontconfig:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1208,7 +1208,7 @@ jobs:
       run: conan upload "*" -r protestator-conan -c
   
   build-wayland:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1235,7 +1235,7 @@ jobs:
         conan upload "*" -r protestator-conan -c
 
   build-wayland-protocols:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1263,7 +1263,7 @@ jobs:
 
 
   build-boost:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1290,7 +1290,7 @@ jobs:
         conan upload "*" -r protestator-conan -c
 
   build-redboltz-mqtt_cpp:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1315,7 +1315,7 @@ jobs:
       run: conan upload "*" -r protestator-conan -c
 
   build-async_mqtt:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1340,7 +1340,7 @@ jobs:
       run: conan upload "*" -r protestator-conan -c
 
   build-libxslt:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1367,7 +1367,7 @@ jobs:
         conan upload "*" -r protestator-conan -c
 
   build-readline:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1394,7 +1394,7 @@ jobs:
         conan upload "*" -r protestator-conan -c
 
   build-libpq:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1421,7 +1421,7 @@ jobs:
         conan upload "*" -r protestator-conan -c
 
   build-libcurl:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1448,7 +1448,7 @@ jobs:
         conan upload "*" -r protestator-conan -c
 
   build-date:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1475,7 +1475,7 @@ jobs:
         conan upload "*" -r protestator-conan -c
 
   build-libselinux:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1500,7 +1500,7 @@ jobs:
       run: conan upload "*" -r protestator-conan -c
 
   build-glib:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1527,7 +1527,7 @@ jobs:
         conan upload "*" -r protestator-conan -c
 
   build-xkbcommon:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1554,7 +1554,7 @@ jobs:
         conan upload "*" -r protestator-conan -c
 
   build-gtest:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1581,7 +1581,7 @@ jobs:
         conan upload "*" -r protestator-conan -c
 
   build-harfbuzz:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1608,7 +1608,7 @@ jobs:
         conan upload "*" -r protestator-conan -c
 
   build-qt:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1631,7 +1631,7 @@ jobs:
         conan upload "*" -r protestator-conan -c
 
   build-qt-debug:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1654,7 +1654,7 @@ jobs:
         conan upload "*" -r protestator-conan -c
   
   # build-z3:
-  #   runs-on: ubuntu-latest
+  #   runs-on: self-hosted
   #   env: # Or as an environment variable
   #     ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
   #     ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1680,7 +1680,7 @@ jobs:
   #       conan upload "*" -r protestator-conan -c
 
   # build-llvm-core:
-  #   runs-on: ubuntu-latest
+  #   runs-on: self-hosted
   #   env: # Or as an environment variable
   #     ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
   #     ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1703,7 +1703,7 @@ jobs:
   #     run: conan upload "*" -r protestator-conan -c
 
   # build-llvm-openmp:
-  #   runs-on: ubuntu-latest
+  #   runs-on: self-hosted
   #   env: # Or as an environment variable
   #     ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
   #     ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1726,7 +1726,7 @@ jobs:
   #     run: conan upload "*" -r protestator-conan -c
 
   # build-stb:
-  #   runs-on: ubuntu-latest
+  #   runs-on: self-hosted
   #   env: # Or as an environment variable
   #     ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
   #     ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1750,7 +1750,7 @@ jobs:
   #     run: conan upload "*" -r protestator-conan -c
 
   # build-ensmallen:
-  #   runs-on: ubuntu-latest
+  #   runs-on: self-hosted
   #   env: # Or as an environment variable
   #     ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
   #     ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1776,7 +1776,7 @@ jobs:
 
   # build-armadillo:
   #   needs: [build-openblas, build-hdf5]
-  #   runs-on: ubuntu-latest
+  #   runs-on: self-hosted
   #   env: # Or as an environment variable
   #     ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
   #     ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1800,7 +1800,7 @@ jobs:
   #     run: conan upload "*" -r protestator-conan -c
 
   # build-cereal:
-  #   runs-on: ubuntu-latest
+  #   runs-on: self-hosted
   #   env: # Or as an environment variable
   #     ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
   #     ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1824,7 +1824,7 @@ jobs:
   #     run: conan upload "*" -r protestator-conan -c
   
   # build-mlpack:
-  #   runs-on: ubuntu-latest
+  #   runs-on: self-hosted
   #   env: # Or as an environment variable
   #     ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
   #     ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1847,7 +1847,7 @@ jobs:
   #     run: conan upload "*" -r protestator-conan -c
   
   # build-openblas:
-  #   runs-on: ubuntu-latest
+  #   runs-on: self-hosted
   #   env: # Or as an environment variable
   #     ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
   #     ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1871,7 +1871,7 @@ jobs:
   #     run: conan upload "*" -r protestator-conan -c
 
   # build-hdf5:
-  #   runs-on: ubuntu-latest
+  #   runs-on: self-hosted
   #   env: # Or as an environment variable
   #     ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
   #     ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1896,7 +1896,7 @@ jobs:
 
   build-ncurses:
     needs: [build-pcre2]
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1922,7 +1922,7 @@ jobs:
         conan upload "*" -r protestator-conan -c
 
   build-termcap:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1947,7 +1947,7 @@ jobs:
 
   # build-editline:
   #   needs: [build-termcap, build-ncurses]
-  #   runs-on: ubuntu-latest
+  #   runs-on: self-hosted
   #   env: # Or as an environment variable
   #     ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
   #     ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
