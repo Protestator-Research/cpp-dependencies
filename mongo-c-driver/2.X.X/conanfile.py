@@ -72,13 +72,13 @@ class MongoCDriverConan(ConanFile):
         if self.options.with_sasl == "cyrus":
             self.requires("cyrus-sasl/2.1.28")
         if self.options.with_snappy:
-            self.requires("snappy/1.1.10")
+            self.requires("snappy/[>=1.1.10 <2]")
         if self.options.with_zlib:
             self.requires("zlib/[>=1.2.11 <2]")
         if self.options.with_zstd:
             self.requires("zstd/[^1.5]")
         if self.options.with_icu:
-            self.requires("icu/74.2")
+            self.requires("icu/[^74.2]")
 
     def validate(self):
         if self.options.with_ssl == "darwin" and not is_apple_os(self):
@@ -203,23 +203,23 @@ class MongoCDriverConan(ConanFile):
         # FIXME: two CMake module/config files should be generated (mongoc-1.0-config.cmake and bson-1.0-config.cmake),
         # but it can't be modeled right now.
         mongoc_target = "mongoc_shared" if self.options.shared else "mongoc_static"
-        self.cpp_info.set_property("cmake_file_name", "mongoc-1.0")
-        self.cpp_info.set_property("cmake_target_name", f"mongo::{mongoc_target}")
+        self.cpp_info.set_property("cmake_file_name", "mongoc")
+        self.cpp_info.set_property("cmake_target_name", f"mongoc::{mongoc_target}")
 
-        self.cpp_info.filenames["cmake_find_package"] = "mongoc-1.0"
-        self.cpp_info.filenames["cmake_find_package_multi"] = "mongoc-1.0"
-        self.cpp_info.names["cmake_find_package"] = "mongo"
-        self.cpp_info.names["cmake_find_package_multi"] = "mongo"
+        self.cpp_info.filenames["cmake_find_package"] = "mongoc"
+        self.cpp_info.filenames["cmake_find_package_multi"] = "mongoc"
+        self.cpp_info.names["cmake_find_package"] = "mongoc"
+        self.cpp_info.names["cmake_find_package_multi"] = "mongoc"
 
         # mongoc
-        self.cpp_info.components["mongoc"].set_property("cmake_target_name", f"mongo::{mongoc_target}")
-        self.cpp_info.components["mongoc"].set_property("pkg_config_name", "libmongoc-1.0" if self.options.shared else "libmongoc-static-1.0")
+        self.cpp_info.components["mongoc"].set_property("cmake_target_name", f"mongoc::{mongoc_target}")
+        self.cpp_info.components["mongoc"].set_property("pkg_config_name", "mongoc2-static")
 
         self.cpp_info.components["mongoc"].names["cmake_find_package"] = mongoc_target
         self.cpp_info.components["mongoc"].names["cmake_find_package_multi"] = mongoc_target
 
-        self.cpp_info.components["mongoc"].includedirs = [os.path.join("include", "libmongoc-1.0")]
-        self.cpp_info.components["mongoc"].libs = ["mongoc-1.0" if self.options.shared else "mongoc-static-1.0"]
+        self.cpp_info.components["mongoc"].includedirs = [os.path.join("include", "mongoc-2.2.0")]
+        self.cpp_info.components["mongoc"].libs = ["mongoc2"]
         if not self.options.shared:
             self.cpp_info.components["mongoc"].defines = ["MONGOC_STATIC"]
         self.cpp_info.components["mongoc"].requires = ["bson"]
@@ -250,14 +250,14 @@ class MongoCDriverConan(ConanFile):
 
         # bson
         bson_target = "bson_shared" if self.options.shared else "bson_static"
-        self.cpp_info.components["bson"].set_property("cmake_target_name", f"mongo::{bson_target}")
-        self.cpp_info.components["bson"].set_property("pkg_config_name", "libbson-1.0" if self.options.shared else "libbson-static-1.0")
+        self.cpp_info.components["bson"].set_property("cmake_target_name", f"mongoc::{bson_target}")
+        self.cpp_info.components["bson"].set_property("pkg_config_name", "bson2-static")
 
         self.cpp_info.components["bson"].names["cmake_find_package"] = bson_target
         self.cpp_info.components["bson"].names["cmake_find_package_multi"] = bson_target
 
-        self.cpp_info.components["bson"].includedirs = [os.path.join("include", "libbson-1.0")]
-        self.cpp_info.components["bson"].libs = ["bson-1.0" if self.options.shared else "bson-static-1.0"]
+        self.cpp_info.components["bson"].includedirs = [os.path.join("include", "bson-2.2.0")]
+        self.cpp_info.components["bson"].libs = ["bson2"]
         if not self.options.shared:
             self.cpp_info.components["bson"].defines = ["BSON_STATIC"]
         if self.settings.os in ["Linux", "FreeBSD"]:

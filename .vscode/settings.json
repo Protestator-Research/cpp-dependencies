@@ -3,5 +3,6 @@
         "stdio.h": "c",
         "nss.h": "c",
         "nssutil.h": "c"
-    }
+    },
+    "cmake.sourceDirectory": "/Users/herzog/Documents/Projekte/cpp-dependencies/cpp-optparse/all"
 }
