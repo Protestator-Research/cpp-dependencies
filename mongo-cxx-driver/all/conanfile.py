@@ -48,9 +48,9 @@ class MongoCxxConan(ConanFile):
         cmake_layout(self, src_folder="src")
 
     def requirements(self):
-        self.requires("mongo-c-driver/1.29.0")
+        self.requires("mongo-c-driver/2.2.0")
         if self.options.polyfill == "boost":
-            self.requires("boost/1.86.0", transitive_headers=True)
+            self.requires("boost/[>=1.86.0 <2]", transitive_headers=True)
 
     @property
     def _minimal_std_version(self):
@@ -139,8 +139,8 @@ class MongoCxxConan(ConanFile):
         # FIXME: two CMake module/config files should be generated (mongoc-1.0-config.cmake and bson-1.0-config.cmake),
         # but it can't be modeled right now.
         # Fix should happen in mongo-c-driver recipe
-        mongoc_config_file = os.path.join(self.generators_folder, "mongoc-1.0-config.cmake")
-        bson_config_file = os.path.join(self.generators_folder, "bson-1.0-config.cmake")
+        mongoc_config_file = os.path.join(self.generators_folder, "mongoc-config.cmake")
+        bson_config_file = os.path.join(self.generators_folder, "bson-config.cmake")
         if not os.path.exists(bson_config_file):
             self.output.info("Copying mongoc config file to bson")
             shutil.copy(src=mongoc_config_file, dst=bson_config_file)

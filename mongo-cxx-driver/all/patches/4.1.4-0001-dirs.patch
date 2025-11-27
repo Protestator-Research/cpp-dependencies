@@ -1,0 +1,113 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index ba79322d93..7023e2942e 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -235,7 +235,7 @@ unset(dist_generated_depends CACHE)
+ set(BUILD_SOURCE_DIR ${CMAKE_BINARY_DIR})
+ 
+ include(MakeDistFiles)
+-
++if(FALSE)
+ add_custom_target(hugo_dir
+     COMMAND ${CMAKE_COMMAND} -E make_directory hugo
+ )
+@@ -304,6 +304,7 @@ add_custom_target(format-lint
+ add_custom_target(docs
+     DEPENDS hugo doxygen-current
+ )
++endif()
+ 
+ set(THIRD_PARTY_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/third_party)
+ set(DATA_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/data)
+@@ -319,10 +320,13 @@ if(ENABLE_TESTS)
+     enable_testing()
+ endif()
+ 
++if(FALSE)
+ include(FetchMongoC)
++endif()
+ 
+ add_subdirectory(src)
+ 
++if(FALSE)
+ add_subdirectory(examples EXCLUDE_FROM_ALL)
+ 
+ add_subdirectory(benchmark EXCLUDE_FROM_ALL)
+@@ -448,3 +452,4 @@ endif()
+ if(CMAKE_GENERATOR_TOOLSET)
+     message(STATUS "\tinstance: ${CMAKE_GENERATOR_TOOLSET}")
+ endif()
++endif()
+diff --git a/src/bsoncxx/CMakeLists.txt b/src/bsoncxx/CMakeLists.txt
+index 10e090c1d1..78a37a5055 100644
+--- a/src/bsoncxx/CMakeLists.txt
++++ b/src/bsoncxx/CMakeLists.txt
+@@ -56,24 +56,15 @@ elseif(BSONCXX_POLY_OPTIONS_SET EQUAL 0)
+     endif()
+ endif()
+ 
+-if(TARGET bson_shared OR TARGET bson_static)
+-    message(STATUS "Using bson targets imported via add_subdirectory() without version checks")
+ 
+-    if(BSONCXX_LINK_WITH_STATIC_MONGOC)
+-        set(bson_target bson::static)
+-    else()
+-        set(bson_target bson::shared)
+-    endif()
+-else()
+-    find_package(bson ${BSON_REQUIRED_VERSION} REQUIRED)
++find_package(mongoc REQUIRED)
+ 
+-    message(STATUS "Found bson: ${bson_DIR} (found version \"${bson_VERSION}\")")
++message(STATUS "Found bson: ${bson_DIR} (found version \"${bson_VERSION}\")")
+ 
+-    if(BSONCXX_LINK_WITH_STATIC_MONGOC)
+-        set(bson_target bson::static)
+-    else()
+-        set(bson_target bson::shared)
+-    endif()
++if(TARGET mongoc::bson_shared)
++    set(bson_target mongoc::bson_shared)
++else()
++    set(bson_target mongoc::bson_static)
+ endif()
+ 
+ set(bsoncxx_sources "") # Required by bsoncxx_add_library().
+diff --git a/src/mongocxx/CMakeLists.txt b/src/mongocxx/CMakeLists.txt
+index 8b40ce7b72..6d37cbee49 100644
+--- a/src/mongocxx/CMakeLists.txt
++++ b/src/mongocxx/CMakeLists.txt
+@@ -31,26 +31,18 @@ endif ()
+ 
+ set(MONGOCXX_OUTPUT_BASENAME "mongocxx" CACHE STRING "Output mongocxx library base name")
+ 
+-if(TARGET mongoc_shared OR TARGET mongoc_static)
+-    message(STATUS "Using mongoc targets imported via add_subdirectory() without version checks")
+ 
+-    if(MONGOCXX_LINK_WITH_STATIC_MONGOC)
+-        set(mongoc_target mongoc::static)
+-    else()
+-        set(mongoc_target mongoc::shared)
+-    endif()
+-else()
+-    find_package(mongoc ${MONGOC_REQUIRED_VERSION} REQUIRED)
++find_package(mongoc REQUIRED CONFIG)
+ 
+-    message(STATUS "Found mongoc: ${mongoc_DIR} (found version \"${mongoc_VERSION}\")")
++message(STATUS "Found mongoc: ${mongoc_DIR} (found version \"${mongoc_VERSION}\")")
+ 
+-    if(MONGOCXX_LINK_WITH_STATIC_MONGOC)
+-        set(mongoc_target mongoc::static)
+-    else()
+-        set(mongoc_target mongoc::shared)
+-    endif()
++if(TARGET mongoc::mongoc_shared)
++    set(mongoc_target mongoc::mongoc_shared)
++else()
++    set(mongoc_target mongoc::mongoc_static)
+ endif()
+ 
++
+ set(mongocxx_sources "") # Required by mongocxx_add_library().
+ 
+ add_subdirectory(include)
