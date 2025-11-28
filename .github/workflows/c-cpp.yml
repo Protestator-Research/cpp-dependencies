@@ -1826,7 +1826,7 @@ jobs:
       run: |
         conan create ./qt/6.x.x --name=qt --version=6.8.3 -s build_type=Debug
         conan upload "*" -r protestator-conan -c
-    - ame: build with charts and nettools
+    - name: build with charts and nettools
       run: | 
         conan create ./qt/6.x.x --name=qt --version=6.8.3 -o qtcharts=True -o qthttpserver=True -s build_type=Debug
         conan upload "*" -r protestator-conan -c 
