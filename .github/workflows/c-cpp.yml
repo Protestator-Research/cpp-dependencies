@@ -1881,8 +1881,8 @@ jobs:
       run: | 
         pip install conan --break-system-packages
         conan profile detect
-        conan remote add protestator-conan $ARTIFACTORY_URL
-        conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote add protestator-conan %ARTIFACTORY_URL%
+        conan remote login -p %ARTIFACTORY_TOKEN% protestator-conan %ARTIFACTORY_USER%
         conan remote remove conancenter
     - name: release
       run: | 
