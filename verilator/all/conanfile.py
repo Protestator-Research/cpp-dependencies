@@ -64,7 +64,7 @@ class VerilatorConan(ConanFile):
 
     def requirements(self):
         if self.settings.os == "Windows":
-            self.requires("strawberryperl/5.30.0.1")
+            self.requires("strawberryperl/[>=5.30.0.1 <6]")
         if self.settings.compiler == "Visual Studio":
             self.requires("dirent/1.23.2", private=True)
 

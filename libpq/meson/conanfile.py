@@ -87,7 +87,7 @@ class LibpqConan(ConanFile):
         if not self.conf.get("tools.gnu:pkg_config", default=False, check_type=str):
             self.tool_requires("pkgconf/[>=2.2 <3]")
         if self.settings_build.os == "Windows":
-            self.tool_requires("strawberryperl/5.32.1.1")
+            self.tool_requires("strawberryperl/[>=5.32.1.1 <6]")
             self.tool_requires("winflexbison/2.5.25")
         else:
             self.tool_requires("flex/2.6.4")
