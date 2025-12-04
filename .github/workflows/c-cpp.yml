@@ -1868,7 +1868,7 @@ jobs:
         conan upload "*" -r protestator-conan -c 
 
   build-qt-debug:
-    runs-on: ubuntu-latest
+    runs-on: LargerRunner
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1891,7 +1891,7 @@ jobs:
         conan upload "*" -r protestator-conan -c
   
   build-qt-debug-with-nettools:
-    runs-on: ubuntu-latest
+    runs-on: LargerRunner
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
