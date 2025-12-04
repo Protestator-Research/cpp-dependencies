@@ -1936,6 +1936,31 @@ jobs:
     - name: debug
       run: | 
         conan create ./strawberryperl/all --name=strawberryperl --version=5.40.2.1 -s build_type=Debug -o shared=True
+        conan upload "*" -r protestator-conan -c
+
+  build-msys2:
+    runs-on: windows-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+      ARTIFACTORY_USER: ${{ secrets.ARTIFACTORY_USERNAME }}
+    steps:
+    - uses: actions/checkout@v4
+    - uses: jfrog/setup-jfrog-cli@v4
+    - name: prepare runner
+      run: | 
+        pip install conan --break-system-packages
+        conan profile detect
+        conan remote add protestator-conan $env:ARTIFACTORY_URL
+        conan remote login -p $env:ARTIFACTORY_TOKEN protestator-conan $env:ARTIFACTORY_USER
+        conan remote remove conancenter
+    - name: release
+      run: |
+        conan create ./msys2/all --name=msys2 --version=cci.latest -o shared=True
+        conan upload "*" -r protestator-conan -c 
+    - name: debug
+      run: | 
+        conan create ./msys2/all --name=msys2 --version=cci.latest -s build_type=Debug -o shared=True
         conan upload "*" -r protestator-conan -c 
 
   # build-z3:
