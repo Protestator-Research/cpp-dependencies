@@ -1532,7 +1532,7 @@ jobs:
         conan upload "*" -r protestator-conan -c
 
   build-libxml2-windows:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
