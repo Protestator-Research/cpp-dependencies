@@ -483,6 +483,30 @@ jobs:
         conan create ./b2/portable --name=b2 --version=5.3.3 -s build_type=Debug
         conan upload "*" -r protestator-conan -c
 
+  build-b2-windows:
+    runs-on: windows-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+      ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
+    steps:
+    - uses: actions/checkout@v4
+    - uses: jfrog/setup-jfrog-cli@v4
+    - name: prepare runner
+      run: | 
+        pip install conan --break-system-packages
+        conan profile detect
+        conan remote add protestator-conan $env:ARTIFACTORY_URL
+        conan remote login -p $env:ARTIFACTORY_TOKEN protestator-conan $env:ARTIFACTORY_USER
+        conan remote remove conancenter
+    - name: build release
+      run: | 
+        conan create ./b2/portable --name=b2 --version=5.3.3
+        conan upload "*" -r protestator-conan -c
+    - name: build debug
+      run: | 
+        conan create ./b2/portable --name=b2 --version=5.3.3 -s build_type=Debug
+        conan upload "*" -r protestator-conan -c
 
   build-lz4:
     runs-on: ubuntu-latest
@@ -614,6 +638,28 @@ jobs:
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
+  build-antlr-runtime-windows:
+    runs-on: ubuntu-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+      ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
+    steps:
+    - uses: actions/checkout@v4
+    - uses: jfrog/setup-jfrog-cli@v4
+    - name: prepare runner
+      run: | 
+        pip install conan --break-system-packages
+        conan profile detect
+        conan remote add protestator-conan $env:ARTIFACTORY_URL
+        conan remote login -p $env:ARTIFACTORY_TOKEN protestator-conan $env:ARTIFACTORY_USER
+        conan remote remove conancenter
+    - name: build release
+      run: conan create ./antlr4-cppruntime/all --name=antlr4-cppruntime --version=4.13.2
+    - name: build debug
+      run: conan create ./antlr4-cppruntime/all --name=antlr4-cppruntime --version=4.13.2 -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r protestator-conan -c
 
   build-zlib:
     runs-on: ubuntu-latest
@@ -737,6 +783,28 @@ jobs:
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
+  build-brotli-windows:
+    runs-on: windows-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+      ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
+    steps:
+    - uses: actions/checkout@v4
+    - uses: jfrog/setup-jfrog-cli@v4
+    - name: prepare runner
+      run: | 
+        pip install conan --break-system-packages
+        conan profile detect
+        conan remote add protestator-conan $env:ARTIFACTORY_URL
+        conan remote login -p $env:ARTIFACTORY_TOKEN protestator-conan $env:ARTIFACTORY_USER
+        conan remote remove conancenter
+    - name: build release
+      run: conan create ./brotli/all --name=brotli --version=1.1.0
+    - name: build debug
+      run: conan create ./brotli/all --name=brotli --version=1.1.0 -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r protestator-conan -c
 
   build-double-conversion:
     runs-on: ubuntu-latest
@@ -763,6 +831,28 @@ jobs:
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
+  build-double-conversion-windows:
+    runs-on: winodws-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+      ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
+    steps:
+    - uses: actions/checkout@v4
+    - uses: jfrog/setup-jfrog-cli@v4
+    - name: prepare runner
+      run: | 
+        pip install conan --break-system-packages
+        conan profile detect
+        conan remote add protestator-conan $env:ARTIFACTORY_URL
+        conan remote login -p $env:ARTIFACTORY_TOKEN protestator-conan $env:ARTIFACTORY_USER
+        conan remote remove conancenter
+    - name: build release
+      run: conan create ./double-conversion/all --name=double-conversion --version=3.3.0
+    - name: build debug
+      run: conan create ./double-conversion/all --name=double-conversion --version=3.3.0 -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r protestator-conan -c
   
   build-yaml-cpp:
     runs-on: ubuntu-latest
@@ -789,7 +879,29 @@ jobs:
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
-  
+  build-yaml-cpp-windows:
+    runs-on: windows-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+      ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
+    steps:
+    - uses: actions/checkout@v4
+    - uses: jfrog/setup-jfrog-cli@v4
+    - name: prepare runner
+      run: | 
+        pip install conan --break-system-packages
+        conan profile detect
+        conan remote add protestator-conan $env:ARTIFACTORY_URL
+        conan remote login -p $env:ARTIFACTORY_TOKEN protestator-conan $env:ARTIFACTORY_USER
+        conan remote remove conancenter
+    - name: build release
+      run: conan create ./yaml-cpp/all --name=yaml-cpp --version=0.8.0
+    - name: build debug
+      run: conan create ./yaml-cpp/all --name=yaml-cpp --version=0.8.0 -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r protestator-conan -c
+
   build-expat:
     runs-on: ubuntu-latest
     env: # Or as an environment variable
@@ -919,6 +1031,28 @@ jobs:
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
+  build-icu-windows:
+    runs-on: windows-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+      ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
+    steps:
+    - uses: actions/checkout@v4
+    - uses: jfrog/setup-jfrog-cli@v4
+    - name: prepare runner
+      run: | 
+        pip install conan --break-system-packages
+        conan profile detect
+        conan remote add protestator-conan $env:ARTIFACTORY_URL
+        conan remote login -p $env:ARTIFACTORY_TOKEN protestator-conan $env:ARTIFACTORY_USER
+        conan remote remove conancenter
+    - name: build release
+      run: conan create ./icu/all --name=icu --version=77.1
+    - name: build debug
+      run: conan create ./icu/all --name=icu --version=77.1 -s build_type=Debug
+    - name: deploy
+      run: conan upload "*" -r protestator-conan -c
 
   build-libbacktrace:
     runs-on: ubuntu-latest
@@ -972,6 +1106,32 @@ jobs:
         conan create ./snappy/all --name=snappy --version=1.2.1 -s build_type=Debug --build missing
         conan upload "*" -r protestator-conan -c
 
+  build-snappy-windows:
+    runs-on: windows-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+      ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
+    steps:
+    - uses: actions/checkout@v4
+    - uses: jfrog/setup-jfrog-cli@v4
+    - name: prepare runner
+      run: | 
+        pip install conan --break-system-packages
+        conan profile detect
+        conan remote add protestator-conan $env:ARTIFACTORY_URL
+        conan remote login -p $env:ARTIFACTORY_TOKEN protestator-conan $env:ARTIFACTORY_USER
+        conan remote remove conancenter
+    - name: build release
+      run: | 
+        conan create ./snappy/all --name=snappy --version=1.2.1
+        conan upload "*" -r protestator-conan -c
+    - name: build debug
+      run: | 
+        conan create ./snappy/all --name=snappy --version=1.2.1 -s build_type=Debug --build missing
+        conan upload "*" -r protestator-conan -c
+
+
   build-libelf:
     runs-on: ubuntu-latest
     env: # Or as an environment variable
@@ -996,7 +1156,6 @@ jobs:
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
-  
   build-libpng:
     runs-on: ubuntu-latest
     env: # Or as an environment variable
@@ -1023,6 +1182,30 @@ jobs:
         conan create ./libpng/all --name=libpng --version=1.6.50 -s build_type=Debug
         conan upload "*" -r protestator-conan -c
 
+  build-libpng-windows:
+    runs-on: windows-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+      ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
+    steps:
+    - uses: actions/checkout@v4
+    - uses: jfrog/setup-jfrog-cli@v4
+    - name: prepare runner
+      run: | 
+        pip install conan --break-system-packages
+        conan profile detect
+        conan remote add protestator-conan $env:ARTIFACTORY_URL
+        conan remote login -p $env:ARTIFACTORY_TOKEN protestator-conan $env:ARTIFACTORY_USER
+        conan remote remove conancenter
+    - name: build release
+      run: | 
+        conan create ./libpng/all --name=libpng --version=1.6.50
+        conan upload "*" -r protestator-conan -c
+    - name: build debug
+      run: |
+        conan create ./libpng/all --name=libpng --version=1.6.50 -s build_type=Debug
+        conan upload "*" -r protestator-conan -c
 
   build-libffi:
     runs-on: ubuntu-latest
@@ -1050,6 +1233,30 @@ jobs:
         conan create ./libffi/all --name=libffi --version=3.4.8 -s build_type=Debug
         conan upload "*" -r protestator-conan -c
 
+  build-libffi-windows:
+    runs-on: windows-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+      ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
+    steps:
+    - uses: actions/checkout@v4
+    - uses: jfrog/setup-jfrog-cli@v4
+    - name: prepare runner
+      run: | 
+        pip install conan --break-system-packages
+        conan profile detect
+        conan remote add protestator-conan $env:ARTIFACTORY_URL
+        conan remote login -p $env:ARTIFACTORY_TOKEN protestator-conan $env:ARTIFACTORY_USER
+        conan remote remove conancenter
+    - name: build release
+      run: | 
+        conan create ./libffi/all --name=libffi --version=3.4.8
+        conan upload "*" -r protestator-conan -c
+    - name: build debug
+      run: |
+        conan create ./libffi/all --name=libffi --version=3.4.8 -s build_type=Debug
+        conan upload "*" -r protestator-conan -c
 
   build-libiconv:
     runs-on: ubuntu-latest
@@ -1156,6 +1363,33 @@ jobs:
         conan upload "*" -r protestator-conan -c
 
 
+  build-md4c-windows:
+    runs-on: ubuntu-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+      ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
+    steps:
+    - uses: actions/checkout@v4
+    - uses: jfrog/setup-jfrog-cli@v4
+    - name: prepare runner
+      run: | 
+        pip install conan --break-system-packages
+        conan profile detect
+        conan remote add protestator-conan $env:ARTIFACTORY_URL
+        conan remote login -p $env:ARTIFACTORY_TOKEN protestator-conan $env:ARTIFACTORY_USER
+        conan remote remove conancenter
+    - name: build release
+      run: |
+        conan create ./md4c/all --name=md4c --version=0.5.2
+        conan upload "*" -r protestator-conan -c
+    - name: build debug
+      run: |
+        conan create ./md4c/all --name=md4c --version=0.5.2 -s build_type=Debug
+        conan upload "*" -r protestator-conan -c
+
+
+
   build-nlohmann_json:
     runs-on: ubuntu-latest
     env: # Or as an environment variable
@@ -1172,6 +1406,31 @@ jobs:
         conan profile detect
         conan remote add protestator-conan $ARTIFACTORY_URL
         conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
+        conan remote remove conancenter
+    - name: build release
+      run: |
+        conan create ./nlohmann_json/all --name=nlohmann_json --version=3.11.3
+        conan upload "*" -r protestator-conan -c
+    - name: build debug
+      run: |
+        conan create ./nlohmann_json/all --name=nlohmann_json --version=3.11.3 -s build_type=Debug --build missing
+        conan upload "*" -r protestator-conan -c
+
+  build-nlohmann_json-windows:
+    runs-on: windows-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+      ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
+    steps:
+    - uses: actions/checkout@v4
+    - uses: jfrog/setup-jfrog-cli@v4
+    - name: prepare runner
+      run: | 
+        pip install conan --break-system-packages
+        conan profile detect
+        conan remote add protestator-conan $env:ARTIFACTORY_URL
+        conan remote login -p $env:ARTIFACTORY_TOKEN protestator-conan $env:ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build release
       run: |
@@ -1209,6 +1468,30 @@ jobs:
         conan create ./sqlite3/all --name=sqlite3 --version=3.50.4 -s build_type=Debug --build missing
         conan upload "*" -r protestator-conan -c
 
+  build-sqlite3-windows:
+    runs-on: windows-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+      ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
+    steps:
+    - uses: actions/checkout@v4
+    - uses: jfrog/setup-jfrog-cli@v4
+    - name: prepare runner
+      run: | 
+        pip install conan --break-system-packages
+        conan profile detect
+        conan remote add protestator-conan $env:ARTIFACTORY_URL
+        conan remote login -p $env:ARTIFACTORY_TOKEN protestator-conan $env:ARTIFACTORY_USER
+        conan remote remove conancenter
+    - name: build release
+      run: |
+        conan create ./sqlite3/all --name=sqlite3 --version=3.50.4
+        conan upload "*" -r protestator-conan -c
+    - name: build debug
+      run: |
+        conan create ./sqlite3/all --name=sqlite3 --version=3.50.4 -s build_type=Debug --build missing
+        conan upload "*" -r protestator-conan -c
 
   build-libtool:
     runs-on: ubuntu-latest
