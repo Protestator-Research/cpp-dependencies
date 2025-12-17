@@ -752,9 +752,13 @@ jobs:
         conan remote login -p $env:ARTIFACTORY_TOKEN protestator-conan $env:ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build release
-      run: conan create ./bzip2/all --name=bzip2 --version=1.0.8 -o shared=True
+      run: | 
+        conan create ./bzip2/all --name=bzip2 --version=1.0.8 -o shared=True 
+        conan create ./bzip2/all --name=bzip2 --version=1.0.8 -o shared=True --build-require
     - name: build debug
-      run: conan create ./bzip2/all --name=bzip2 --version=1.0.8 -s build_type=Debug -o shared=True
+      run: |
+        conan create ./bzip2/all --name=bzip2 --version=1.0.8 -s build_type=Debug -o shared=True
+        conan create ./bzip2/all --name=bzip2 --version=1.0.8 -o shared=True --build-require
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
@@ -848,9 +852,13 @@ jobs:
         conan remote login -p $env:ARTIFACTORY_TOKEN protestator-conan $env:ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build release
-      run: conan create ./double-conversion/all --name=double-conversion --version=3.3.0
+      run: |
+        conan create ./double-conversion/all --name=double-conversion --version=3.3.0
+        conan create ./double-conversion/all --name=double-conversion --version=3.3.0 --build-require
     - name: build debug
-      run: conan create ./double-conversion/all --name=double-conversion --version=3.3.0 -s build_type=Debug
+      run: |
+        conan create ./double-conversion/all --name=double-conversion --version=3.3.0 -s build_type=Debug
+        conan create ./double-conversion/all --name=double-conversion --version=3.3.0 -s build_type=Debug --build-require
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
   
@@ -1677,6 +1685,33 @@ jobs:
       run: |
         conan create ./zstd/all --name=zstd --version=1.5.7 -s build_type=Debug --build missing
         conan upload "*" -r protestator-conan -c
+  
+  build-zstd-windows:
+    runs-on: windows-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+      ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
+    steps:
+    - uses: actions/checkout@v4
+    - uses: jfrog/setup-jfrog-cli@v4
+    - name: prepare runner
+      run: | 
+        pip install conan --break-system-packages
+        conan profile detect
+        conan remote add protestator-conan $env:ARTIFACTORY_URL
+        conan remote login -p $env:ARTIFACTORY_TOKEN protestator-conan $env:ARTIFACTORY_USER
+        conan remote remove conancenter
+    - name: build release
+      run: |
+       conan create ./zstd/all --name=zstd --version=1.5.7
+       conan create ./zstd/all --name=zstd --version=1.5.7 --build-require
+       conan upload "*" -r protestator-conan -c
+    - name: build debug
+      run: |
+        conan create ./zstd/all --name=zstd --version=1.5.7 -s build_type=Debug --build missing
+        conan create ./zstd/all --name=zstd --version=1.5.7 -s build_type=Debug --build missing --build-require
+        conan upload "*" -r protestator-conan -c
 
 
   build-elfutils:
@@ -1754,10 +1789,12 @@ jobs:
     - name: build release
       run: |
        conan create ./openssl/3.x.x --name=openssl --version=3.6.0 --build missing
+       conan create ./openssl/3.x.x --name=openssl --version=3.6.0 --build missing --build-require
        conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
         conan create ./openssl/3.x.x --name=openssl --version=3.6.0 -s build_type=Debug --build missing
+        conan create ./openssl/3.x.x --name=openssl --version=3.6.0 -s build_type=Debug --build missing --build-require
         conan upload "*" -r protestator-conan -c
 
 
@@ -1944,7 +1981,7 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: |
-        conan create ./wayland-protocols/all --name=wayland-protocols --version=1.45 --build-require
+        conan create ./wayland-protocols/all --name=wayland-protocols --version=1.45 --build-require 
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
@@ -2122,7 +2159,7 @@ jobs:
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
       ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-    needs: [build-openssl-windows,build-libxml2-windows,build-lz4]
+    needs: [build-openssl-windows,build-libxml2-windows,build-lz4-windows]
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
@@ -2136,10 +2173,12 @@ jobs:
     - name: build release
       run: | 
         conan create ./libpq/meson --name=libpq --version=17.5
+        conan create ./libpq/meson --name=libpq --version=17.5 --build-require
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
         conan create ./libpq/meson --name=libpq --version=17.5 -s build_type=Debug --build missing
+        conan create ./libpq/meson --name=libpq --version=17.5 -s build_type=Debug --build missing --build-require
         conan upload "*" -r protestator-conan -c
 
   build-libcurl:
