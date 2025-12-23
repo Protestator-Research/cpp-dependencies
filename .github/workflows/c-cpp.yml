@@ -639,7 +639,7 @@ jobs:
       run: conan upload "*" -r protestator-conan -c
 
   build-antlr-runtime-windows:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
