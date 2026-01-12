@@ -1520,7 +1520,7 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: |
-        conan create ./libtool/all --name=libtool --version=2.4.7
+        conan create ./libtool/all --name=libtool --version=2.4.7 --build missing
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: | 
