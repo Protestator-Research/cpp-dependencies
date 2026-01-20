@@ -276,9 +276,9 @@ jobs:
         conan remote remove conancenter
         pip3 install --ignore-installed ninja
     - name: build release
-      run: conan create ./meson/all --name=meson --version=1.9.1 --build-require
+      run: conan create ./meson/all --name=meson --version=1.9.1 --build-require --build missing
     - name: build debug
-      run: conan create ./meson/all --name=meson --version=1.9.1 --build-require -s build_type=Debug
+      run: conan create ./meson/all --name=meson --version=1.9.1 --build-require -s build_type=Debug --build missing
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
@@ -638,29 +638,6 @@ jobs:
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
-  build-antlr-runtime-windows:
-    runs-on: windows-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-      ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-    steps:
-    - uses: actions/checkout@v4
-    - uses: jfrog/setup-jfrog-cli@v4
-    - name: prepare runner
-      run: | 
-        pip install conan --break-system-packages
-        conan profile detect
-        conan remote add protestator-conan $env:ARTIFACTORY_URL
-        conan remote login -p $env:ARTIFACTORY_TOKEN protestator-conan $env:ARTIFACTORY_USER
-        conan remote remove conancenter
-    - name: build release
-      run: conan create ./antlr4-cppruntime/all --name=antlr4-cppruntime --version=4.13.2
-    - name: build debug
-      run: conan create ./antlr4-cppruntime/all --name=antlr4-cppruntime --version=4.13.2 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r protestator-conan -c
-
   build-zlib:
     runs-on: ubuntu-latest
     env: # Or as an environment variable
@@ -753,12 +730,12 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: | 
-        conan create ./bzip2/all --name=bzip2 --version=1.0.8 -o shared=True 
-        conan create ./bzip2/all --name=bzip2 --version=1.0.8 -o shared=True --build-require
+        conan create ./bzip2/all --name=bzip2 --version=1.0.8  
+        conan create ./bzip2/all --name=bzip2 --version=1.0.8 --build-require
     - name: build debug
       run: |
-        conan create ./bzip2/all --name=bzip2 --version=1.0.8 -s build_type=Debug -o shared=True
-        conan create ./bzip2/all --name=bzip2 --version=1.0.8 -o shared=True --build-require
+        conan create ./bzip2/all --name=bzip2 --version=1.0.8 -s build_type=Debug
+        conan create ./bzip2/all --name=bzip2 --version=1.0.8 --build-require
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
@@ -836,7 +813,7 @@ jobs:
       run: conan upload "*" -r protestator-conan -c
 
   build-double-conversion-windows:
-    runs-on: winodws-latest
+    runs-on: windows-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1039,29 +1016,6 @@ jobs:
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
-  build-icu-windows:
-    runs-on: windows-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-      ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-    steps:
-    - uses: actions/checkout@v4
-    - uses: jfrog/setup-jfrog-cli@v4
-    - name: prepare runner
-      run: | 
-        pip install conan --break-system-packages
-        conan profile detect
-        conan remote add protestator-conan $env:ARTIFACTORY_URL
-        conan remote login -p $env:ARTIFACTORY_TOKEN protestator-conan $env:ARTIFACTORY_USER
-        conan remote remove conancenter
-    - name: build release
-      run: conan create ./icu/all --name=icu --version=77.1
-    - name: build debug
-      run: conan create ./icu/all --name=icu --version=77.1 -s build_type=Debug
-    - name: deploy
-      run: conan upload "*" -r protestator-conan -c
-
   build-libbacktrace:
     runs-on: ubuntu-latest
     env: # Or as an environment variable
@@ -1213,7 +1167,7 @@ jobs:
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./rapidjson/all --name=pradjson --version=1.1.0 -s build_type=Debug
+        conan create ./rapidjson/all --name=rapidjson --version=1.1.0 -s build_type=Debug
         conan upload "*" -r protestator-conan -c
 
   build-libpng-windows:
@@ -1952,9 +1906,9 @@ jobs:
         conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build release
-      run: conan create ./fontconfig/all --name=fontconfig --version=2.15.0
+      run: conan create ./fontconfig/all --name=fontconfig --version=2.15.0 --build missing
     - name: build debug
-      run: conan create ./fontconfig/all --name=fontconfig --version=2.15.0 -s build_type=Debug
+      run: conan create ./fontconfig/all --name=fontconfig --version=2.15.0 -s build_type=Debug --build missing
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
@@ -1979,11 +1933,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: |
-        conan create ./wayland/all --name=wayland --version=1.22.0
+        conan create ./wayland/all --name=wayland --version=1.22.0 --build missing
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: | 
-        conan create ./wayland/all --name=wayland --version=1.22.0 -s build_type=Debug
+        conan create ./wayland/all --name=wayland --version=1.22.0 -s build_type=Debug --build missing
         conan upload "*" -r protestator-conan -c
 
 
@@ -2036,11 +1990,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: |
-        conan create ./boost/all --name=boost --version=1.89.0
+        conan create ./boost/all --name=boost --version=1.89.0 --build missing
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./boost/all --name=boost --version=1.89.0 -s build_type=Debug
+        conan create ./boost/all --name=boost --version=1.89.0 -s build_type=Debug --build missing
         conan upload "*" -r protestator-conan -c
 
 
@@ -2116,7 +2070,7 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: | 
-        conan create ./libxslt/all --name=libxslt --version=1.1.43
+        conan create ./libxslt/all --name=libxslt --version=1.1.43 --build missing
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
@@ -2172,7 +2126,7 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: | 
-        conan create ./libpq/meson --name=libpq --version=17.5
+        conan create ./libpq/meson --name=libpq --version=17.5 --build missing
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
@@ -2198,8 +2152,8 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: | 
-        conan create ./libpq/meson --name=libpq --version=17.5
-        conan create ./libpq/meson --name=libpq --version=17.5 --build-require
+        conan create ./libpq/meson --name=libpq --version=17.5 --build missing
+        conan create ./libpq/meson --name=libpq --version=17.5 --build-require --build missing
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
@@ -2227,11 +2181,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: | 
-        conan create ./libpqxx/all --name=libpqxx --version=7.10.1
+        conan create ./libpqxx/all --name=libpqxx --version=7.10.1 --build missing
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./libpqxx/all --name=libpqxx --version=7.10.1 -s build_type=Debug --build missing
+        conan create ./libpqxx/all --name=libpqxx --version=7.10.1 -s build_type=Debug --build missing --build missing
         conan upload "*" -r protestator-conan -c
 
   build-pistache:
@@ -2309,7 +2263,7 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: | 
-        conan create ./libevent/all --name=libevent --version=2.1.12
+        conan create ./libevent/all --name=libevent --version=2.1.12 --build missing
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
@@ -2335,7 +2289,7 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: | 
-        conan create ./libevent/all --name=libevent --version=2.1.12
+        conan create ./libevent/all --name=libevent --version=2.1.12 --build missing
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
@@ -2362,7 +2316,7 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: | 
-        conan create ./libcurl/all --name=libcurl --version=8.16.0
+        conan create ./libcurl/all --name=libcurl --version=8.16.0 --build missing
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: | 
@@ -2470,11 +2424,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: | 
-        conan create ./glib/all --name=glib --version=2.85.3
+        conan create ./glib/all --name=glib --version=2.85.3 --build missing
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./glib/all --name=glib --version=2.85.3 -s build_type=Debug
+        conan create ./glib/all --name=glib --version=2.85.3 -s build_type=Debug --build missing
         conan upload "*" -r protestator-conan -c
 
 
@@ -2498,11 +2452,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: | 
-        conan create ./mongo-c-driver/2.X.X --version="2.2.0" --name="mongo-c-driver"
+        conan create ./mongo-c-driver/2.X.X --version="2.2.0" --name="mongo-c-driver" --build missing
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./mongo-c-driver/2.X.X --version="2.2.0" --name="mongo-c-driver" -s build_type=Debug
+        conan create ./mongo-c-driver/2.X.X --version="2.2.0" --name="mongo-c-driver" -s build_type=Debug --build missing
         conan upload "*" -r protestator-conan -c
 
 
