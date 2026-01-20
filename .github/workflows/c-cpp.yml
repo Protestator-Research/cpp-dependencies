@@ -1961,11 +1961,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: |
-        conan create ./wayland-protocols/all --name=wayland-protocols --version=1.45 --build-require 
+        conan create ./wayland-protocols/all --name=wayland-protocols --version=1.45 --build-require --build missing
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./wayland-protocols/all --name=wayland-protocols --version=1.45 --build-require -s build_type=Debug
+        conan create ./wayland-protocols/all --name=wayland-protocols --version=1.45 --build-require -s build_type=Debug --build missing
         conan upload "*" -r protestator-conan -c
 
 
@@ -2208,11 +2208,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: | 
-        conan create ./pistache/all --name=libpqxx --version=0.4.25
+        conan create ./pistache/all --name=pistache --version=0.4.25 --build missing
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./pistache/all --name=libpqxx --version=0.4.25 -s build_type=Debug --build missing
+        conan create ./pistache/all --name=pistache --version=0.4.25 -s build_type=Debug --build missing
         conan upload "*" -r protestator-conan -c
 
   build-libpqxx-windows:
@@ -2508,11 +2508,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: |
-        conan create ./xkbcommon/all --name=xkbcommon --version=1.6.0
+        conan create ./xkbcommon/all --name=xkbcommon --version=1.6.0 --build missing
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./xkbcommon/all --name=xkbcommon --version=1.6.0 -s build_type=Debug
+        conan create ./xkbcommon/all --name=xkbcommon --version=1.6.0 -s build_type=Debug --build missing
         conan upload "*" -r protestator-conan -c
 
 
@@ -2564,11 +2564,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: |
-        conan create ./harfbuzz/all --name=harfbuzz --version=11.4.1
+        conan create ./harfbuzz/all --name=harfbuzz --version=11.4.1 --build missing
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./harfbuzz/all --name=harfbuzz --version=11.4.1 -s build_type=Debug
+        conan create ./harfbuzz/all --name=harfbuzz --version=11.4.1 -s build_type=Debug --build missing
         conan upload "*" -r protestator-conan -c
 
 
