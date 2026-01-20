@@ -52,13 +52,13 @@ class PistacheConan(ConanFile):
             del self.options.with_libevent
 
     def requirements(self):
-        self.requires("rapidjson/cci.20230929")
-        self.requires("date/3.0.1")
+        self.requires("rapidjson/[>=cci.20230929 <2]")
+        self.requires("date/[>=3.0.1 <4]")
         if self.options.with_ssl:
             self.requires("openssl/[>=1.1 <4]")
         if self.settings.os != "Linux" or self.options.get_safe("with_libevent"):
             # INFO: meson.build:188: Linux can use native epoll support. Other OS need libevent always
-            self.requires("libevent/2.1.12")
+            self.requires("libevent/[>=2.1.12 <3]")
 
     def validate(self):
         if self.settings.os != "Linux" and Version(self.version) < "0.4.25":
