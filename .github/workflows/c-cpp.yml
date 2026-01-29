@@ -2043,9 +2043,9 @@ jobs:
         conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build release
-      run: conan create ./async_mqtt/all --name=async-mqtt --version=8.0.1
+      run: conan create ./async_mqtt/all --name=async-mqtt --version=10.2.8
     - name: build debug
-      run: conan create ./async_mqtt/all --name=async-mqtt --version=8.0.1 -s build_type=Debug
+      run: conan create ./async_mqtt/all --name=async-mqtt --version=10.2.8 -s build_type=Debug
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
@@ -2592,7 +2592,7 @@ jobs:
         conan remote remove conancenter
     - name: build
       run: | 
-        conan create ./qt/6.x.x --name=qt --version=6.8.3
+        conan create ./qt/6.x.x --name=qt --version=6.8.3 --build missig
         conan upload "*" -r protestator-conan -c
 
   build-qt-nettools:
@@ -2615,7 +2615,7 @@ jobs:
         conan remote remove conancenter
     - name: build with charts and nettools
       run: | 
-        conan create ./qt/6.x.x --name=qt --version=6.8.3 -o qtcharts=True -o qthttpserver=True
+        conan create ./qt/6.x.x --name=qt --version=6.8.3 -o qtcharts=True -o qthttpserver=True --build missing
         conan upload "*" -r protestator-conan -c 
 
   build-qt-debug:
@@ -2638,7 +2638,7 @@ jobs:
         conan remote remove conancenter
     - name: build debug
       run: |
-        conan create ./qt/6.x.x --name=qt --version=6.8.3 -s build_type=Debug
+        conan create ./qt/6.x.x --name=qt --version=6.8.3 -s build_type=Debug --build missing
         conan upload "*" -r protestator-conan -c
   
   build-qt-debug-with-nettools:
@@ -2661,7 +2661,7 @@ jobs:
         conan remote remove conancenter
     - name: build with charts and nettools
       run: | 
-        conan create ./qt/6.x.x --name=qt --version=6.8.3 -o qtcharts=True -o qthttpserver=True -s build_type=Debug
+        conan create ./qt/6.x.x --name=qt --version=6.8.3 -o qtcharts=True -o qthttpserver=True -s build_type=Debug --build missing
         conan upload "*" -r protestator-conan -c
 
   build-strawberry-perl:
