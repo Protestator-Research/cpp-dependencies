@@ -59,12 +59,12 @@ class VerilatorConan(ConanFile):
             else:
                 self.build_requires("bison/3.7.6")
         if Version(self.version) >= "4.224":
-            self.build_requires("autoconf/[>=2.71 <3]")
+            self.build_requires("autoconf/2.71")
 
 
     def requirements(self):
         if self.settings.os == "Windows":
-            self.requires("strawberryperl/[>=5.30.0.1 <6]")
+            self.requires("strawberryperl/5.30.0.1")
         if self.settings.compiler == "Visual Studio":
             self.requires("dirent/1.23.2", private=True)
 

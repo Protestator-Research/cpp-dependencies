@@ -56,7 +56,7 @@ class NetSnmpConan(ConanFile):
         basic_layout(self, src_folder="src")
 
     def requirements(self):
-        self.requires("openssl/[>=1.1 <4]")
+        self.requires("openssl/[>=1.1 <4]", transitive_headers=True)
         self.requires("pcre/8.45")
         self.requires("zlib/[>=1.2.11 <2]")
 
@@ -68,14 +68,14 @@ class NetSnmpConan(ConanFile):
 
     def build_requirements(self):
         if is_msvc(self):
-            self.tool_requires("strawberryperl/[>=5.32.1.1 <6]")
+            self.tool_requires("strawberryperl/5.32.1.1")
         else:
             self.tool_requires("gnu-config/cci.20210814")
-            self.tool_requires("autoconf/[>=2.71 <3]")
+            self.tool_requires("autoconf/2.71")
             self.tool_requires("automake/1.16.5")
             self.tool_requires("libtool/2.4.7")
         if not self.conf.get("tools.gnu:pkg_config", default=False, check_type=str):
-            self.tool_requires("pkgconf/2.2.0")
+            self.tool_requires("pkgconf/[>=2.2.0 <3]")
 
     def source(self):
         get(self, **self.conan_data["sources"][self.version], strip_root=True)

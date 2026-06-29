@@ -599,6 +599,12 @@ class BoostConan(ConanFile):
             if Version(self.version) == "1.86.0" and is_msvc(self):
                 setattr(self.options, "without_process", True)
 
+        if Version(self.version) in ["1.90.0", "1.91.0"]:
+            # FIXME: boost.coroutine doesn't support Windows ARM64 due to missing context assembly
+            # See https://github.com/boostorg/context/issues/296
+            if self._is_windows_platform and "arm" in str(self.settings.arch):
+                self.options.without_coroutine = True
+
     @property
     def _configure_options(self):
         return self._dependencies["configure_options"]
@@ -623,6 +629,14 @@ class BoostConan(ConanFile):
         if Version(self.version) == "1.85.0":
             # https://github.com/boostorg/stacktrace/blob/boost-1.85.0/build/Jamfile.v2#L143
             return not self.options.header_only and not self.options.without_stacktrace and self.settings.os != "Windows"
+        elif Version(self.version) >= "1.91.0":
+            # INFO: from_exception is built for all targets; only Cygwin is excluded upstream
+            # https://github.com/boostorg/stacktrace/blob/boost-1.91.0/build/Jamfile.v2#L252
+            if self.options.header_only or self.options.without_stacktrace:
+                return False
+            if self.settings.get_safe("os.subsystem") == "cygwin":
+                return False
+            return True
         elif Version(self.version) >= "1.86.0":
             # https://github.com/boostorg/stacktrace/blob/boost-1.86.0/build/Jamfile.v2#L148
             return not self.options.header_only and not self.options.without_stacktrace and self._b2_architecture == "x86"
@@ -821,7 +835,7 @@ class BoostConan(ConanFile):
         if self._with_zstd:
             self.requires("zstd/[>=1.5 <1.6]")
         if self._with_stacktrace_backtrace:
-            self.requires("libbacktrace/cci.20240730", transitive_headers=True, transitive_libs=True)
+            self.requires("libbacktrace/cci.20210118", transitive_headers=True, transitive_libs=True)
 
         if self._with_icu:
             self.requires("icu/74.2")

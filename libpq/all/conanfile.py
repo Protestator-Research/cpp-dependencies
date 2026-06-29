@@ -1,5 +1,5 @@
 from conan import ConanFile
-from conan.tools.apple import fix_apple_shared_install_name
+from conan.tools.apple import fix_apple_shared_install_name, is_apple_os
 from conan.tools.build import cross_building
 from conan.tools.env import Environment, VirtualBuildEnv, VirtualRunEnv
 from conan.tools.files import apply_conandata_patches, chdir, copy, export_conandata_patches, get, replace_in_file, rm, rmdir
@@ -70,11 +70,11 @@ class LibpqConan(ConanFile):
         if self.options.with_openssl:
             self.requires("openssl/[>=1.1 <4]")
         if self.options.with_icu:
-            self.requires("icu/[>=75.1 <80]")
+            self.requires("icu/75.1")
 
     def build_requirements(self):
         if is_msvc(self):
-            self.tool_requires("[>=5.32.1.1 <6]")
+            self.tool_requires("strawberryperl/5.32.1.1")
         elif self._settings_build.os == "Windows":
             self.win_bash = True
             if not self.conf.get("tools.microsoft.bash:path", check_type=str):
@@ -117,6 +117,8 @@ class LibpqConan(ConanFile):
             tc.make_args.append(f"DESTDIR={unix_path(self, self.package_folder)}")
             if self.settings.os == "Windows":
                 tc.make_args.append("MAKE_DLL={}".format(str(self.options.shared).lower()))
+            if is_apple_os(self):
+                tc.extra_ldflags.append("-headerpad_max_install_names")
             tc.generate()
             AutotoolsDeps(self).generate()
             PkgConfigDeps(self).generate()
@@ -164,7 +166,8 @@ class LibpqConan(ConanFile):
                 # Interim solution - recipes should move to using meson-based newer libpq
                 replace_in_file(self, solution_pm, "($output =~ /^\/favor:<.+AMD64/m) ? 'x64' : 'Win32';", "'ARM64';")
                 replace_in_file(self, msbuild_project_pm, "$self->{platform} eq 'Win32' ? 'MachineX86' : 'MachineX64';", "'MachineARM64';")
-                replace_in_file(self, msbuild_project_pm, "<RandomizedBaseAddress>false", "<RandomizedBaseAddress>true")
+                if Version(self.version) < '16':
+                    replace_in_file(self, msbuild_project_pm, "<RandomizedBaseAddress>false", "<RandomizedBaseAddress>true")
                 replace_in_file(self, os.path.join(self.source_folder, "src/port/pg_crc32c_sse42.c"), "nmmintrin.h", "intrin.h")
             if self.options.with_openssl:
                 openssl = self.dependencies["openssl"]

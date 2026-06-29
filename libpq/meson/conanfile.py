@@ -40,11 +40,11 @@ class LibpqConan(ConanFile):
         # but this is True by default in upstream
         "with_icu": False,
         "with_zlib": True,
-        "with_zstd": True,
-        "with_libxml2": True,
+        "with_zstd": False,
+        "with_libxml2": False,
         "with_lz4": True,
-        "with_xslt": True,
-        "with_readline": True,
+        "with_xslt": False,
+        "with_readline": False,
         "disable_rpath": False,
     }
 
@@ -78,7 +78,7 @@ class LibpqConan(ConanFile):
         if self.options.with_lz4:
             self.requires("lz4/1.9.4")
         if self.options.with_xslt:
-            self.requires("libxslt/[>=1.1 <2]")
+            self.requires("libxslt/[^1.1]")
         if self.options.get_safe("with_readline"):
             self.requires("readline/8.2")
 
@@ -87,7 +87,7 @@ class LibpqConan(ConanFile):
         if not self.conf.get("tools.gnu:pkg_config", default=False, check_type=str):
             self.tool_requires("pkgconf/[>=2.2 <3]")
         if self.settings_build.os == "Windows":
-            self.tool_requires("strawberryperl/[>=5.32.1.1 <6]")
+            self.tool_requires("strawberryperl/5.32.1.1")
             self.tool_requires("winflexbison/2.5.25")
         else:
             self.tool_requires("flex/2.6.4")
