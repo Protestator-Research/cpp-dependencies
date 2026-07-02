@@ -2126,11 +2126,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: | 
-        conan create ./libpq/meson --name=libpq --version=17.5 --build missing
+        conan create ./libpq/meson --name=libpq --version=17.7 --build missing
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./libpq/meson --name=libpq --version=17.5 -s build_type=Debug --build missing
+        conan create ./libpq/meson --name=libpq --version=17.7 -s build_type=Debug --build missing
         conan upload "*" -r protestator-conan -c
 
   build-libpq-windows:
@@ -2181,11 +2181,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: | 
-        conan create ./libpqxx/all --name=libpqxx --version=7.10.1 --build missing
+        conan create ./libpqxx/all --name=libpqxx --version=7.10.1 --build missing -s compiler.cppstd=gnu20
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./libpqxx/all --name=libpqxx --version=7.10.1 -s build_type=Debug --build missing --build missing
+        conan create ./libpqxx/all --name=libpqxx --version=7.10.1 -s build_type=Debug --build missing -s compiler.cppstd=gnu20
         conan upload "*" -r protestator-conan -c
 
   build-pistache:
@@ -2316,11 +2316,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: | 
-        conan create ./libcurl/all --name=libcurl --version=8.16.0 --build missing
+        conan create ./libcurl/all --name=libcurl --version=8.20.0 --build missing
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: | 
-        conan create ./libcurl/all --name=libcurl --version=8.16.0 -s build_type=Debug --build missing
+        conan create ./libcurl/all --name=libcurl --version=8.20.0 -s build_type=Debug --build missing
         conan upload "*" -r protestator-conan -c
 
 
@@ -2397,11 +2397,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: |
-        conan create ./libsodium/all --name=libsodium --version=1.0.20
+        conan create ./libsodium/all --name=libsodium --version=1.0.22
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: | 
-        conan create ./libsodium/all --name=libsodium --version=1.0.20 -s build_type=Debug --build missing
+        conan create ./libsodium/all --name=libsodium --version=1.0.22 -s build_type=Debug --build missing
         conan upload "*" -r protestator-conan -c
 
   build-glib:
@@ -2564,11 +2564,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: |
-        conan create ./harfbuzz/all --name=harfbuzz --version=11.4.1 --build missing
+        conan create ./harfbuzz/all --name=harfbuzz --version=12.3.0 --build missing
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./harfbuzz/all --name=harfbuzz --version=11.4.1 -s build_type=Debug --build missing
+        conan create ./harfbuzz/all --name=harfbuzz --version=12.3.0 -s build_type=Debug --build missing
         conan upload "*" -r protestator-conan -c
 
 
@@ -3127,9 +3127,9 @@ jobs:
         conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build release
-      run: conan create ./trantor/all --name=trantor --version=1.5.21
+      run: conan create ./trantor/all --name=trantor --version=1.5.21 --build missing
     - name: build debug
-      run: conan create ./trantor/all --name=trantor --version=1.5.21 -s build_type=Debug
+      run: conan create ./trantor/all --name=trantor --version=1.5.21 -s build_type=Debug --build missing
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
