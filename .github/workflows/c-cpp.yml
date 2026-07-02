@@ -79,11 +79,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: |
-        conan create ./cmake/binary --name=cmake --version=4.1.2 --build-require
+        conan create ./cmake/binary --name=cmake --version=4.3.3 --build-require
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./cmake/binary --name=cmake --version=4.1.2 --build-require -s build_type=Debug
+        conan create ./cmake/binary --name=cmake --version=4.3.3 --build-require -s build_type=Debug
         conan upload "*" -r protestator-conan -c
 
   build-cmake-windows:
@@ -104,11 +104,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: |
-        conan create ./cmake/binary --name=cmake --version=4.1.2 --build-require
+        conan create ./cmake/binary --name=cmake --version=4.3.3 --build-require
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./cmake/binary --name=cmake --version=4.1.2 --build-require -s build_type=Debug
+        conan create ./cmake/binary --name=cmake --version=4.3.3 --build-require -s build_type=Debug
         conan upload "*" -r protestator-conan -c
 
   build-autoconf:
@@ -657,9 +657,9 @@ jobs:
         conan remote remove conancenter
         pip3 install --ignore-installed ninja
     - name: build release
-      run: conan create ./zlib/all --name=zlib --version=1.3.1
+      run: conan create ./zlib/all --name=zlib --version=1.3.2
     - name: build debug
-      run: conan create ./zlib/all --name=zlib --version=1.3.1 -s build_type=Debug
+      run: conan create ./zlib/all --name=zlib --version=1.3.2 -s build_type=Debug
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
   
@@ -680,9 +680,9 @@ jobs:
         conan remote login -p $env:ARTIFACTORY_TOKEN protestator-conan $env:ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build release
-      run: conan create ./zlib/all --name=zlib --version=1.3.1 -o shared=True
+      run: conan create ./zlib/all --name=zlib --version=1.3.2 -o shared=True
     - name: build debug
-      run: conan create ./zlib/all --name=zlib --version=1.3.1 -s build_type=Debug -o shared=True
+      run: conan create ./zlib/all --name=zlib --version=1.3.2 -s build_type=Debug -o shared=True
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
@@ -858,9 +858,9 @@ jobs:
         conan remote remove conancenter
         pip3 install --ignore-installed ninja
     - name: build release
-      run: conan create ./yaml-cpp/all --name=yaml-cpp --version=0.8.0
+      run: conan create ./yaml-cpp/all --name=yaml-cpp --version=0.9.0
     - name: build debug
-      run: conan create ./yaml-cpp/all --name=yaml-cpp --version=0.8.0 -s build_type=Debug
+      run: conan create ./yaml-cpp/all --name=yaml-cpp --version=0.9.0 -s build_type=Debug
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
@@ -881,9 +881,9 @@ jobs:
         conan remote login -p $env:ARTIFACTORY_TOKEN protestator-conan $env:ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build release
-      run: conan create ./yaml-cpp/all --name=yaml-cpp --version=0.8.0
+      run: conan create ./yaml-cpp/all --name=yaml-cpp --version=0.9.0
     - name: build debug
-      run: conan create ./yaml-cpp/all --name=yaml-cpp --version=0.8.0 -s build_type=Debug
+      run: conan create ./yaml-cpp/all --name=yaml-cpp --version=0.9.0 -s build_type=Debug
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
@@ -907,11 +907,11 @@ jobs:
         pip3 install --ignore-installed ninja
     - name: build release
       run: |
-        conan create ./expat/all --name=expat --version=2.7.3
+        conan create ./expat/all --name=expat --version=2.7.5
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./expat/all --name=expat --version=2.7.3 -s build_type=Debug --build missing
+        conan create ./expat/all --name=expat --version=2.7.5 -s build_type=Debug --build missing
         conan upload "*" -r protestator-conan -c
 
 
@@ -1137,11 +1137,36 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: | 
-        conan create ./libpng/all --name=libpng --version=1.6.50
+        conan create ./libpng/all --name=libpng --version=1.6.58
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./libpng/all --name=libpng --version=1.6.50 -s build_type=Debug
+        conan create ./libpng/all --name=libpng --version=1.6.58 -s build_type=Debug
+        conan upload "*" -r protestator-conan -c
+
+  build-libpng-windows:
+    runs-on: windows-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+      ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
+    steps:
+    - uses: actions/checkout@v4
+    - uses: jfrog/setup-jfrog-cli@v4
+    - name: prepare runner
+      run: | 
+        pip install conan --break-system-packages
+        conan profile detect
+        conan remote add protestator-conan $env:ARTIFACTORY_URL
+        conan remote login -p $env:ARTIFACTORY_TOKEN protestator-conan $env:ARTIFACTORY_USER
+        conan remote remove conancenter
+    - name: build release
+      run: | 
+        conan create ./libpng/all --name=libpng --version=1.6.58
+        conan upload "*" -r protestator-conan -c
+    - name: build debug
+      run: |
+        conan create ./libpng/all --name=libpng --version=1.6.58 -s build_type=Debug
         conan upload "*" -r protestator-conan -c
 
   build-rapidjson:
@@ -1168,31 +1193,6 @@ jobs:
     - name: build debug
       run: |
         conan create ./rapidjson/all --name=rapidjson --version=1.1.0 -s build_type=Debug
-        conan upload "*" -r protestator-conan -c
-
-  build-libpng-windows:
-    runs-on: windows-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-      ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-    steps:
-    - uses: actions/checkout@v4
-    - uses: jfrog/setup-jfrog-cli@v4
-    - name: prepare runner
-      run: | 
-        pip install conan --break-system-packages
-        conan profile detect
-        conan remote add protestator-conan $env:ARTIFACTORY_URL
-        conan remote login -p $env:ARTIFACTORY_TOKEN protestator-conan $env:ARTIFACTORY_USER
-        conan remote remove conancenter
-    - name: build release
-      run: | 
-        conan create ./libpng/all --name=libpng --version=1.6.50
-        conan upload "*" -r protestator-conan -c
-    - name: build debug
-      run: |
-        conan create ./libpng/all --name=libpng --version=1.6.50 -s build_type=Debug
         conan upload "*" -r protestator-conan -c
 
   build-libffi:
