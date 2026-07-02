@@ -30,7 +30,7 @@ class ReadLineConan(ConanFile):
     default_options = {
         "shared": False,
         "fPIC": True,
-        "with_library": "termcap",
+        "with_library": "curses",
     }
 
     implements = ["auto_shared_fpic"]
