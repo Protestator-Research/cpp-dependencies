@@ -1824,11 +1824,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: | 
-        conan create ./libxml2/cmake --name=libxml2 --version=2.15.0 --build missing
+        conan create ./libxml2/cmake --name=libxml2 --version=2.15.3 --build missing
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: | 
-        conan create ./libxml2/cmake --name=libxml2 --version=2.15.0 -s build_type=Debug --build missing
+        conan create ./libxml2/cmake --name=libxml2 --version=2.15.3 -s build_type=Debug --build missing
         conan upload "*" -r protestator-conan -c
 
   build-libxml2-windows:
@@ -1850,11 +1850,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: | 
-        conan create ./libxml2/cmake --name=libxml2 --version=2.15.0 --build missing
+        conan create ./libxml2/cmake --name=libxml2 --version=2.15.3 --build missing
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: | 
-        conan create ./libxml2/cmake --name=libxml2 --version=2.15.0 -s build_type=Debug --build missing
+        conan create ./libxml2/cmake --name=libxml2 --version=2.15.3 -s build_type=Debug --build missing
         conan upload "*" -r protestator-conan -c
 
   
