@@ -135,28 +135,28 @@ jobs:
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
-  build-autoconf-windows:
-    runs-on: windows-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-      ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-    steps:
-    - uses: actions/checkout@v4
-    - uses: jfrog/setup-jfrog-cli@v4
-    - name: prepare runner
-      run: | 
-        pip install conan --break-system-packages
-        conan profile detect
-        conan remote add protestator-conan $env:ARTIFACTORY_URL
-        conan remote login -p $env:ARTIFACTORY_TOKEN protestator-conan $env:ARTIFACTORY_USER
-        conan remote remove conancenter
-    - name: build release
-      run: conan create ./autoconf/all --name=autoconf --version=2.72 --build-require --build missing
-    - name: build debug
-      run: conan create ./autoconf/all --name=autoconf --version=2.72 --build-require -s build_type=Debug --build missing
-    - name: deploy
-      run: conan upload "*" -r protestator-conan -c
+  # build-autoconf-windows:
+  #   runs-on: windows-latest
+  #   env: # Or as an environment variable
+  #     ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+  #     ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+  #     ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
+  #   steps:
+  #   - uses: actions/checkout@v4
+  #   - uses: jfrog/setup-jfrog-cli@v4
+  #   - name: prepare runner
+  #     run: | 
+  #       pip install conan --break-system-packages
+  #       conan profile detect
+  #       conan remote add protestator-conan $env:ARTIFACTORY_URL
+  #       conan remote login -p $env:ARTIFACTORY_TOKEN protestator-conan $env:ARTIFACTORY_USER
+  #       conan remote remove conancenter
+  #   - name: build release
+  #     run: conan create ./autoconf/all --name=autoconf --version=2.72 --build-require --build missing
+  #   - name: build debug
+  #     run: conan create ./autoconf/all --name=autoconf --version=2.72 --build-require -s build_type=Debug --build missing
+  #   - name: deploy
+  #     run: conan upload "*" -r protestator-conan -c
   
   build-automake:
     runs-on: ubuntu-latest
@@ -182,28 +182,28 @@ jobs:
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
-  build-automake-windows:
-    runs-on: windows-latest
-    env: # Or as an environment variable
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-      ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-    steps:
-    - uses: actions/checkout@v4
-    - uses: jfrog/setup-jfrog-cli@v4
-    - name: prepare runner
-      run: | 
-        pip install conan --break-system-packages
-        conan profile detect
-        conan remote add protestator-conan $env:ARTIFACTORY_URL
-        conan remote login -p $env:ARTIFACTORY_TOKEN protestator-conan $env:ARTIFACTORY_USER
-        conan remote remove conancenter
-    - name: build release
-      run: conan create ./automake/all --name=automake --version=1.16.5 --build-require --build missing
-    - name: build debug
-      run: conan create ./automake/all --name=automake --version=1.16.5 --build-require -s build_type=Debug --build missing
-    - name: deploy
-      run: conan upload "*" -r protestator-conan -c
+  # build-automake-windows:
+  #   runs-on: windows-latest
+  #   env: # Or as an environment variable
+  #     ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+  #     ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+  #     ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
+  #   steps:
+  #   - uses: actions/checkout@v4
+  #   - uses: jfrog/setup-jfrog-cli@v4
+  #   - name: prepare runner
+  #     run: | 
+  #       pip install conan --break-system-packages
+  #       conan profile detect
+  #       conan remote add protestator-conan $env:ARTIFACTORY_URL
+  #       conan remote login -p $env:ARTIFACTORY_TOKEN protestator-conan $env:ARTIFACTORY_USER
+  #       conan remote remove conancenter
+  #   - name: build release
+  #     run: conan create ./automake/all --name=automake --version=1.16.5 --build-require --build missing
+  #   - name: build debug
+  #     run: conan create ./automake/all --name=automake --version=1.16.5 --build-require -s build_type=Debug --build missing
+  #   - name: deploy
+  #     run: conan upload "*" -r protestator-conan -c
 
   build-ninja:
     runs-on: ubuntu-latest
@@ -2098,7 +2098,7 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: | 
-        conan create ./readline/all --name=readline --version=8.2
+        conan create ./readline/all --name=readline --version=8.2 --build missing
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
