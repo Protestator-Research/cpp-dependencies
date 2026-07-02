@@ -6,4 +6,3 @@ patches:
   "17.7":
     - patch_file: "patches/17.5-pgflex-preserve-environment-variables.patch"
     - patch_file: "patches/17.7-backport-arm64-windows-support.patch"
-https://github.com/Protestator-Research/cpp-dependencies/actions/runs/28598072283/job/84800568582#step:5:1
