@@ -152,9 +152,9 @@ jobs:
         conan remote login -p $env:ARTIFACTORY_TOKEN protestator-conan $env:ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build release
-      run: conan create ./autoconf/all --name=autoconf --version=2.72 --build-require
+      run: conan create ./autoconf/all --name=autoconf --version=2.72 --build-require --build missing
     - name: build debug
-      run: conan create ./autoconf/all --name=autoconf --version=2.72 --build-require -s build_type=Debug
+      run: conan create ./autoconf/all --name=autoconf --version=2.72 --build-require -s build_type=Debug --build missing
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
   
@@ -199,9 +199,9 @@ jobs:
         conan remote login -p $env:ARTIFACTORY_TOKEN protestator-conan $env:ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build release
-      run: conan create ./automake/all --name=automake --version=1.16.5 --build-require
+      run: conan create ./automake/all --name=automake --version=1.16.5 --build-require --build missing
     - name: build debug
-      run: conan create ./automake/all --name=automake --version=1.16.5 --build-require -s build_type=Debug
+      run: conan create ./automake/all --name=automake --version=1.16.5 --build-require -s build_type=Debug --build missing
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
@@ -907,7 +907,7 @@ jobs:
         pip3 install --ignore-installed ninja
     - name: build release
       run: |
-        conan create ./expat/all --name=expat --version=2.7.5
+        conan create ./expat/all --name=expat --version=2.7.5 --build missing
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
@@ -1449,11 +1449,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: |
-        conan create ./sqlite3/all --name=sqlite3 --version=3.50.4
+        conan create ./sqlite3/all --name=sqlite3 --version=3.51.3
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./sqlite3/all --name=sqlite3 --version=3.50.4 -s build_type=Debug --build missing
+        conan create ./sqlite3/all --name=sqlite3 --version=3.51.3 -s build_type=Debug --build missing
         conan upload "*" -r protestator-conan -c
 
   build-sqlite3-windows:
@@ -1474,11 +1474,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: |
-        conan create ./sqlite3/all --name=sqlite3 --version=3.50.4
+        conan create ./sqlite3/all --name=sqlite3 --version=3.51.3
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./sqlite3/all --name=sqlite3 --version=3.50.4 -s build_type=Debug --build missing
+        conan create ./sqlite3/all --name=sqlite3 --version=3.51.3 -s build_type=Debug --build missing
         conan upload "*" -r protestator-conan -c
 
   build-libtool:
@@ -1632,7 +1632,7 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: |
-       conan create ./gettext/all --name=gettext --version=0.22.5
+       conan create ./gettext/all --name=gettext --version=0.22.5 --build missing
        conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
@@ -1742,11 +1742,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: |
-       conan create ./openssl/3.x.x --name=openssl --version=3.6.0 --build missing
+       conan create ./openssl/3.x.x --name=openssl --version=3.6.3 --build missing
        conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./openssl/3.x.x --name=openssl --version=3.6.0 -s build_type=Debug --build missing
+        conan create ./openssl/3.x.x --name=openssl --version=3.6.3 -s build_type=Debug --build missing
         conan upload "*" -r protestator-conan -c
 
   build-openssl-windows:
@@ -1768,13 +1768,13 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: |
-       conan create ./openssl/3.x.x --name=openssl --version=3.6.0 --build missing
-       conan create ./openssl/3.x.x --name=openssl --version=3.6.0 --build missing --build-require
+       conan create ./openssl/3.x.x --name=openssl --version=3.6.3 --build missing
+       conan create ./openssl/3.x.x --name=openssl --version=3.6.3 --build missing --build-require
        conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./openssl/3.x.x --name=openssl --version=3.6.0 -s build_type=Debug --build missing
-        conan create ./openssl/3.x.x --name=openssl --version=3.6.0 -s build_type=Debug --build missing --build-require
+        conan create ./openssl/3.x.x --name=openssl --version=3.6.3 -s build_type=Debug --build missing
+        conan create ./openssl/3.x.x --name=openssl --version=3.6.3 -s build_type=Debug --build missing --build-require
         conan upload "*" -r protestator-conan -c
 
 
@@ -1797,9 +1797,9 @@ jobs:
         conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build release
-      run: conan create ./odbc/all --name=odbc --version=2.3.11
+      run: conan create ./odbc/all --name=odbc --version=2.3.11 --build missing
     - name: build debug
-      run: conan create ./odbc/all --name=odbc --version=2.3.11 -s build_type=Debug
+      run: conan create ./odbc/all --name=odbc --version=2.3.11 -s build_type=Debug --build missing
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
@@ -2371,9 +2371,9 @@ jobs:
         conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build release
-      run: conan create ./libselinux/all --name=libselinux --version=3.6
+      run: conan create ./libselinux/all --name=libselinux --version=3.6 --build missing
     - name: build debug
-      run: conan create ./libselinux/all --name=libselinux --version=3.6 -s build_type=Debug
+      run: conan create ./libselinux/all --name=libselinux --version=3.6 -s build_type=Debug --build missing
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
