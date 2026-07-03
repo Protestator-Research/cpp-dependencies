@@ -213,7 +213,7 @@ class ArrowConan(ConanFile):
         if self.options.with_utf8proc:
             self.requires("utf8proc/2.8.0")
         if self.options.with_backtrace:
-            self.requires("libbacktrace/cci.20210118")
+            self.requires("libbacktrace/cci.20240730")
         if self.options.with_orc:
             self.requires("orc/2.0.0")
 

@@ -102,7 +102,7 @@ class LibtorchRecipe(ConanFile):
         # MINIZ_DISABLE_ZIP_READER_CRC32_CHECKS to disable crc32 checks when reading zip files.
 
         if self._has_backtrace:
-            self.requires("libbacktrace/cci.20210118")
+            self.requires("libbacktrace/cci.20240730")
         if self._has_ittapi:
             self.requires("ittapi/3.25.5")
         if self.options.with_gflags:
