@@ -2592,7 +2592,7 @@ jobs:
         conan remote remove conancenter
     - name: build
       run: | 
-        conan create ./qt/6.x.x --name=qt --version=6.8.3 --build missig
+        conan create ./qt/6.x.x --name=qt --version=6.11.1 --build missig
         conan upload "*" -r protestator-conan -c
 
   build-qt-nettools:
@@ -2615,7 +2615,7 @@ jobs:
         conan remote remove conancenter
     - name: build with charts and nettools
       run: | 
-        conan create ./qt/6.x.x --name=qt --version=6.8.3 -o qtcharts=True -o qthttpserver=True --build missing
+        conan create ./qt/6.x.x --name=qt --version=6.11.1 -o qtcharts=True -o qthttpserver=True --build missing
         conan upload "*" -r protestator-conan -c 
 
   build-qt-debug:
@@ -2638,7 +2638,7 @@ jobs:
         conan remote remove conancenter
     - name: build debug
       run: |
-        conan create ./qt/6.x.x --name=qt --version=6.8.3 -s build_type=Debug --build missing
+        conan create ./qt/6.x.x --name=qt --version=6.11.1 -s build_type=Debug --build missing
         conan upload "*" -r protestator-conan -c
   
   build-qt-debug-with-nettools:
@@ -2661,7 +2661,7 @@ jobs:
         conan remote remove conancenter
     - name: build with charts and nettools
       run: | 
-        conan create ./qt/6.x.x --name=qt --version=6.8.3 -o qtcharts=True -o qthttpserver=True -s build_type=Debug --build missing
+        conan create ./qt/6.x.x --name=qt --version=6.11.1 -o qtcharts=True -o qthttpserver=True -s build_type=Debug --build missing
         conan upload "*" -r protestator-conan -c
 
   build-strawberry-perl:
