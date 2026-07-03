@@ -2578,7 +2578,7 @@ jobs:
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
       ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-    needs: [build-zlib, build-openssl, build-pcre2, build-glib, build-double-conversion, build-freetype, build-fontconfig, build-icu, build-harfbuzz, build-libpng, build-libpq, build-odbc, build-wayland]
+    #needs: [build-zlib, build-openssl, build-pcre2, build-glib, build-double-conversion, build-freetype, build-fontconfig, build-icu, build-harfbuzz, build-libpng, build-libpq, build-odbc, build-wayland]
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
@@ -2601,7 +2601,7 @@ jobs:
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
       ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-    needs: [build-zlib, build-openssl, build-pcre2, build-glib, build-double-conversion, build-freetype, build-fontconfig, build-icu, build-harfbuzz, build-libpng, build-libpq, build-odbc, build-wayland]
+    #needs: [build-zlib, build-openssl, build-pcre2, build-glib, build-double-conversion, build-freetype, build-fontconfig, build-icu, build-harfbuzz, build-libpng, build-libpq, build-odbc, build-wayland]
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
@@ -2624,7 +2624,7 @@ jobs:
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
       ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-    needs: [build-zlib, build-openssl, build-pcre2, build-glib, build-double-conversion, build-freetype, build-fontconfig, build-icu, build-harfbuzz, build-libpng, build-libpq, build-odbc, build-wayland]
+    #needs: [build-zlib, build-openssl, build-pcre2, build-glib, build-double-conversion, build-freetype, build-fontconfig, build-icu, build-harfbuzz, build-libpng, build-libpq, build-odbc, build-wayland]
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
@@ -2647,7 +2647,7 @@ jobs:
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
       ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-    needs: [build-zlib, build-openssl, build-pcre2, build-glib, build-double-conversion, build-freetype, build-fontconfig, build-icu, build-harfbuzz, build-libpng, build-libpq, build-odbc, build-wayland]
+    #needs: [build-zlib, build-openssl, build-pcre2, build-glib, build-double-conversion, build-freetype, build-fontconfig, build-icu, build-harfbuzz, build-libpng, build-libpq, build-odbc, build-wayland]
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
