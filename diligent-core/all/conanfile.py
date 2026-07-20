@@ -128,7 +128,7 @@ class DiligentCoreConan(ConanFile):
         if self.settings.os in ["Linux", "FreeBSD"]:
             self.requires("xorg/system")
             if not cross_building(self, skip_x64_x86=True):
-                self.requires("xkbcommon/1.4.1")
+                self.requires("xkbcommon/1.6.0")
 
     def _diligent_platform(self):
         if self.settings.os == "Windows":
