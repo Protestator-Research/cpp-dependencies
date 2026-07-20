@@ -38,7 +38,7 @@ class TreeGenConan(ConanFile):
         cmake_layout(self, src_folder="src")
 
     def build_requirements(self):
-        self.tool_requires("m4/1.4.19")
+        self.tool_requires("m4/1.4.20")
         if self.settings.os == "Windows":
             self.tool_requires("winflexbison/2.5.25")
         else:
