@@ -1163,11 +1163,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: | 
-        conan create ./eigen/all --name=eigen --version=5.0.0
+        conan create ./eigen/all --name=eigen --version=5.0.1
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./eigen/all --name=eigen --version=5.0.0 -s build_type=Debug
+        conan create ./eigen/all --name=eigen --version=5.0.1 -s build_type=Debug
         conan upload "*" -r protestator-conan -c
 
   build-libpng-windows:
