@@ -5,7 +5,12 @@ sources:
   "3.11.0":
     url: "https://github.com/mongodb/mongo-cxx-driver/releases/download/r3.11.0/mongo-cxx-driver-r3.11.0.tar.gz"
     sha256: "cb4263229d769ec44aa66563e2dd2d70c6384c85d93840a52fe26b15436c54f1"
+  "4.5.0":
+    url: "https://github.com/mongodb/mongo-cxx-driver/archive/refs/tags/r4.5.0.tar.gz"
+    sha256: "5bb0586ee980660c573a2c5f126ef5607fd6d712a909f2f2d8b5c1b89a1d49db"
 patches:
+  "4.5.0":
+    - patch_file: "patches/4.0.0-0001-dirs.patch"
   "4.0.0":
     - patch_file: "patches/4.0.0-0001-dirs.patch"
   "3.11.0":
