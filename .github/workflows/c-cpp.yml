@@ -528,11 +528,11 @@ jobs:
         pip3 install --ignore-installed ninja
     - name: build release
       run: | 
-        conan create ./pugixml/all --name=pugixml --version=1.16.0
+        conan create ./pugixml/all --name=pugixml --version=1.16
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: | 
-        conan create ./pugixml/all --name=pugixml --version=1.16.0 -s build_type=Debug
+        conan create ./pugixml/all --name=pugixml --version=1.16 -s build_type=Debug
         conan upload "*" -r protestator-conan -c
 
   build-pugixml-windows:
@@ -553,11 +553,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: | 
-        conan create ./pugixml/all --name=pugixml --version=1.16.0
+        conan create ./pugixml/all --name=pugixml --version=1.16
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: | 
-        conan create ./pugixml/all --name=pugixml --version=1.16.0 -s build_type=Debug
+        conan create ./pugixml/all --name=pugixml --version=1.16 -s build_type=Debug
         conan upload "*" -r protestator-conan -c
 
 
