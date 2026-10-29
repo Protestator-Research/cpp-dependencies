@@ -72,13 +72,13 @@ class MongoCDriverConan(ConanFile):
         if self.options.with_sasl == "cyrus":
             self.requires("cyrus-sasl/2.1.28")
         if self.options.with_snappy:
-            self.requires("snappy/1.1.10")
+            self.requires("snappy/1.2.1")
         if self.options.with_zlib:
             self.requires("zlib/[>=1.2.11 <2]")
         if self.options.with_zstd:
             self.requires("zstd/[^1.5]")
         if self.options.with_icu:
-            self.requires("icu/[>=74.2 79<]")
+            self.requires("icu/74.2")
 
     def validate(self):
         if self.options.with_ssl == "darwin" and not is_apple_os(self):
@@ -178,8 +178,6 @@ class MongoCDriverConan(ConanFile):
                         'if(ENABLE_SNAPPY MATCHES "ON")\n  find_package(Snappy REQUIRED)')
         replace_in_file(self, libmongoc_cmake, "SNAPPY_LIBRARIES", "Snappy_LIBRARIES")
         replace_in_file(self, libmongoc_cmake, "SNAPPY_INCLUDE_DIRS", "Snappy_INCLUDE_DIRS")
-        if Version(self.version) < "1.25":
-            replace_in_file(self, libmongoc_cmake, "set (SSL_LIBRARIES -ltls -lcrypto)", "")
         # cleanup rpath
         replace_in_file(self, os.path.join(self.source_folder, "CMakeLists.txt"),
                               "set (CMAKE_INSTALL_RPATH_USE_LINK_PATH ON)", "")

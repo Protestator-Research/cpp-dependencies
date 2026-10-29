@@ -2632,11 +2632,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: | 
-        conan create ./mongo-c-driver/2.X.X --version="2.2.0" --name="mongo-c-driver" --build missing
+        conan create ./mongo-c-driver/all --version="2.5.7" --name="mongo-c-driver" --build missing
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./mongo-c-driver/2.X.X --version="2.2.0" --name="mongo-c-driver" -s build_type=Debug --build missing
+        conan create ./mongo-c-driver/all --version="2.5.7" --name="mongo-c-driver" -s build_type=Debug --build missing
         conan upload "*" -r protestator-conan -c
 
 
@@ -2660,11 +2660,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: | 
-        conan create ./mongo-cxx-driver/all --version="4.5.0" --name="mongo-cxx-driver"
+        conan create ./mongo-cxx-driver/all --version="4.6.0" --name="mongo-cxx-driver"
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./mongo-cxx-driver/all --version="4.5.0" --name="mongo-cxx-driver" -s build_type=Debug
+        conan create ./mongo-cxx-driver/all --version="4.6.0" --name="mongo-cxx-driver" -s build_type=Debug
         conan upload "*" -r protestator-conan -c
 
 
