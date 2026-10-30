@@ -2964,11 +2964,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: |
-        conan create ./z3/all --name=z3 --version=4.15.4
+        conan create ./z3/all --name=z3 --version=4.15.4 -s compiler.cppstd=20
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./z3/all --name=z3 --version=4.15.4 -s build_type=Debug
+        conan create ./z3/all --name=z3 --version=4.15.4 -s build_type=Debug -s compiler.cppstd=20
         conan upload "*" -r protestator-conan -c
 
   build-llvm-core:

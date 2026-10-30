@@ -68,6 +68,10 @@ class GlpkConan(ConanFile):
             env.generate(scope="build")
 
         tc = AutotoolsToolchain(self)
+
+        if self.settings.compiler in ("gcc", "clang"):
+            tc.extra_cflags.append("-std=gnu17")
+            
         if is_msvc(self):
             tc.extra_defines.append("__WOE__")
         if (Version(conan_version).major < "2" and self.settings.compiler == "Visual Studio" \
