@@ -2964,11 +2964,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: |
-        conan create ./z3/all --name=z3 --version=4.14.1
+        conan create ./z3/all --name=z3 --version=4.15.4
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./z3/all --name=z3 --version=4.14.1 -s build_type=Debug
+        conan create ./z3/all --name=z3 --version=4.15.4 -s build_type=Debug
         conan upload "*" -r protestator-conan -c
 
   build-llvm-core:
@@ -3156,9 +3156,9 @@ jobs:
         conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build release
-      run: conan create ./openblas/all --name=openblas --version=0.3.25
+      run: conan create ./openblas/all --name=openblas --version=0.3.30
     - name: build debug
-      run: conan create ./openblas/all --name=openblas --version=0.3.25 -s build_type=Debug
+      run: conan create ./openblas/all --name=openblas --version=0.3.30 -s build_type=Debug
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
@@ -3180,9 +3180,9 @@ jobs:
         conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build release
-      run: conan create ./hdf5/all --name=hdf5 --version=1.14.0
+      run: conan create ./hdf5/all --name=hdf5 --version=1.14.6
     - name: build debug
-      run: conan create ./hdf5/all --name=hdf5 --version=1.14.0 -s build_type=Debug
+      run: conan create ./hdf5/all --name=hdf5 --version=1.14.6 -s build_type=Debug
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
