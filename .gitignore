@@ -1,4 +1,8 @@
 
 /nss/all/source_subfolder
 
-**/test_package/**
+# Build output of test packages. The sources in test_package must stay tracked,
+# otherwise CI skips the test or fails on missing files.
+**/test_package/build/
+**/test_package/build-*/
+**/test_package/CMakeUserPresets.json

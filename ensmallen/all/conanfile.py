@@ -43,6 +43,8 @@ class ensmallenRecipe(ConanFile):
         tc = CMakeToolchain(self)
         tc.variables["USE_OPENMP"] = False
         tc.cache_variables["USE_BANDICOOT"] = False
+        # ensmallen 2.x declares a CMake minimum below 3.5, which CMake 4 rejects
+        tc.cache_variables["CMAKE_POLICY_VERSION_MINIMUM"] = "3.5"
         tc.generate()
 
 

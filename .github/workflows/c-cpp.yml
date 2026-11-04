@@ -1217,7 +1217,10 @@ jobs:
         conan remote remove conancenter
         pip3 install --ignore-installed ninja
     - name: build release
-      run: conan create ./flex/all --name=flex --version=2.6.4 --build missing -o '*:shared=True'
+      run: |
+        conan create ./flex/all --name=flex --version=2.6.4 --build missing -o '*:shared=True'
+        # Consumers use flex as a tool_requires, which resolves to the static package
+        conan create ./flex/all --name=flex --version=2.6.4 --build missing --build-require
     - name: build debug
       run: conan create ./flex/all --name=flex --version=2.6.4 --build missing -s build_type=Debug -o '*:shared=True'
     - name: deploy
@@ -1324,12 +1327,12 @@ jobs:
     - name: build release
       run: |
         $PSNativeCommandUseErrorActionPreference = $true
-        conan create ./icu/all --name=icu --version=79.1 -o '*:shared=True' --build missing
+        conan create ./icu/all --name=icu --version=79.1 -s compiler.cppstd=17 -o '*:shared=True' --build missing
         conan create ./icu/all --name=icu --version=74.2 -o '*:shared=True' --build missing
     - name: build debug
       run: |
         $PSNativeCommandUseErrorActionPreference = $true
-        conan create ./icu/all --name=icu --version=79.1 -s build_type=Debug -o '*:shared=True' --build missing
+        conan create ./icu/all --name=icu --version=79.1 -s compiler.cppstd=17 -s build_type=Debug -o '*:shared=True' --build missing
         conan create ./icu/all --name=icu --version=74.2 -s build_type=Debug -o '*:shared=True' --build missing
     - name: deploy
       run: conan upload "*" -r protestator-conan -c

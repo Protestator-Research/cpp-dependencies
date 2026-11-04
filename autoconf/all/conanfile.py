@@ -44,6 +44,7 @@ class AutoconfConan(ConanFile):
         self.info.requires.clear()
 
     def build_requirements(self):
+        # Keep the m4 version in sync with flex and bison, otherwise consumers get a version conflict
         self.tool_requires("m4/1.4.19")
         if self._settings_build.os == "Windows":
             self.win_bash = True

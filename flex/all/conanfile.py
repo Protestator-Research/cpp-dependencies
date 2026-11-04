@@ -44,6 +44,7 @@ class FlexConan(ConanFile):
         self.requires("m4/1.4.19")
 
     def build_requirements(self):
+        # Keep the m4 version in sync with autoconf and bison, otherwise consumers get a version conflict
         self.tool_requires("m4/1.4.19")
         self.tool_requires("gnu-config/cci.20210814")
         if hasattr(self, "settings_build") and cross_building(self):
