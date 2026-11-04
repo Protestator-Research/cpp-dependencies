@@ -55,6 +55,8 @@ class TermcapConan(ConanFile):
         tc.cache_variables["TERMCAP_INC_OPTS"] = to_cmake_paths(optional_headers)
         tc.cache_variables["TERMCAP_CAP_FILE"] = os.path.join(self.source_folder, "termcap.src").replace("\\", "/")
         tc.cache_variables["CMAKE_INSTALL_SYSCONFDIR"] = os.path.join(self.package_folder, "bin", "etc").replace("\\", "/")
+        # The K&R style sources do not compile as C23, the default of GCC >= 15
+        tc.cache_variables["CMAKE_C_STANDARD"] = "99"
         tc.generate()
 
     def _patch_sources(self):

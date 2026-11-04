@@ -1,0 +1,4 @@
+# Check out LF on every OS. Conan hashes recipe files into the recipe revision, so a CRLF
+# checkout on Windows runners would create a different revision of the same recipe, and
+# Linux jobs then fail with "Missing binary" when the Windows revision is the latest one.
+* text=auto eol=lf

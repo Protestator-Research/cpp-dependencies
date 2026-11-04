@@ -828,12 +828,12 @@ jobs:
     - name: build release
       run: |
         $PSNativeCommandUseErrorActionPreference = $true
-        conan create ./antlr4-cppruntime/all --name=antlr4-cppruntime --version=4.13.2 -o '*:shared=True'
+        conan create ./antlr4-cppruntime/all --name=antlr4-cppruntime --version=4.13.2 -s compiler.cppstd=17 -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
         $PSNativeCommandUseErrorActionPreference = $true
-        conan create ./antlr4-cppruntime/all --name=antlr4-cppruntime --version=4.13.2 -s build_type=Debug -o '*:shared=True'
+        conan create ./antlr4-cppruntime/all --name=antlr4-cppruntime --version=4.13.2 -s build_type=Debug -s compiler.cppstd=17 -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
 
   build-zlib:

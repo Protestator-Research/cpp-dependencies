@@ -15,6 +15,7 @@ patches:
     - patch_file: "patches/1.4.19-0002-ar-lib.patch"
     - patch_file: "patches/1.4.20-0003-msvc-debug-assertion.patch"
     - patch_file: "patches/1.4.20-0004-disable-hardening-in-source.patch"
+    - patch_file: "patches/1.4.20-0005-glibc-2.43-const-generic-macros.patch"
   "1.4.19":
     - patch_file: "patches/1.4.19-0001-open-files-in-binary-mode.patch"
     - patch_file: "patches/1.4.19-0002-ar-lib.patch"
