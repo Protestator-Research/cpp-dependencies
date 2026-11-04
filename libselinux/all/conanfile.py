@@ -54,6 +54,7 @@ class LibSELinuxConan(ConanFile):
         basic_layout(self, src_folder="src")
 
     def requirements(self):
+        # Keep the pcre2 version in sync with glib, otherwise consumers get a version conflict
         self.requires("pcre2/10.42")
 
     def validate(self):

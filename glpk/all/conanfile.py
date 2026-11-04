@@ -74,6 +74,9 @@ class GlpkConan(ConanFile):
             and Version(self.settings.compiler.version) >= "12") or \
            (self.settings.compiler == "msvc" and Version(self.settings.compiler.version) >= "180"):
             tc.extra_cflags.append("-FS")
+        if self.settings.compiler == "gcc" and Version(self.settings.compiler.version) >= "15":
+            # GCC 15 defaults to C23, where bool is a keyword and "typedef int bool" in minisat.h fails
+            tc.extra_cflags.append("-std=gnu17")
         tc.generate()
 
         if is_msvc(self):

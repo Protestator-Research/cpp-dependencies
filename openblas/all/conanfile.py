@@ -108,6 +108,10 @@ class OpenblasConan(ConanFile):
     def config_options(self):
         if self.settings.os == "Windows":
             del self.options.fPIC
+        # Without dynamic_arch the kernels are tuned to the build machine's CPU, so a binary
+        # from the remote crashes with SIGILL on a machine that lacks those instructions.
+        if self.settings.os == "Linux" and self.settings.arch == "x86_64":
+            self.options.dynamic_arch = True
 
     def configure(self):
         if self.options.shared:
