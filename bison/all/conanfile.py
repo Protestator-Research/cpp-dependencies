@@ -16,6 +16,7 @@ class BisonConan(ConanFile):
     description = "Bison is a general-purpose parser generator"
     topics = ("bison", "parser")
     license = "GPL-3.0-or-later"
+    package_type = "application"
     settings = "os", "arch", "compiler", "build_type"
     options = {
         "fPIC": [True, False],
@@ -33,8 +34,11 @@ class BisonConan(ConanFile):
     def layout(self):
         basic_layout(self, src_folder="src")
 
+    def package_id(self):
+        del self.info.settings.compiler
+
     def requirements(self):
-        self.requires("m4/1.4.20")
+        self.requires("m4/1.4.19")
 
     def validate(self):
         if is_msvc(self) and self.version == "3.8.2":
@@ -65,6 +69,7 @@ class BisonConan(ConanFile):
         ])
         if self.settings.compiler == "apple-clang":
             tc.configure_args.append("gl_cv_compiler_check_decl_option=")
+            tc.extra_cflags.append("-Wno-error=incompatible-function-pointer-types")
         if is_msvc(self):
             # Avoid a `Assertion Failed Dialog Box` during configure with build_type=Debug
             # Visual Studio does not support the %n format flag:

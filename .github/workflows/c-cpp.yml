@@ -135,28 +135,28 @@ jobs:
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
-  # build-autoconf-windows:
-  #   runs-on: windows-latest
-  #   env: # Or as an environment variable
-  #     ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-  #     ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-  #     ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-  #   steps:
-  #   - uses: actions/checkout@v4
-  #   - uses: jfrog/setup-jfrog-cli@v4
-  #   - name: prepare runner
-  #     run: | 
-  #       pip install conan --break-system-packages
-  #       conan profile detect
-  #       conan remote add protestator-conan $env:ARTIFACTORY_URL
-  #       conan remote login -p $env:ARTIFACTORY_TOKEN protestator-conan $env:ARTIFACTORY_USER
-  #       conan remote remove conancenter
-  #   - name: build release
-  #     run: conan create ./autoconf/all --name=autoconf --version=2.72 --build-require --build missing
-  #   - name: build debug
-  #     run: conan create ./autoconf/all --name=autoconf --version=2.72 --build-require -s build_type=Debug --build missing
-  #   - name: deploy
-  #     run: conan upload "*" -r protestator-conan -c
+  build-autoconf-windows:
+    runs-on: windows-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+      ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
+    steps:
+    - uses: actions/checkout@v4
+    - uses: jfrog/setup-jfrog-cli@v4
+    - name: prepare runner
+      run: | 
+        pip install conan --break-system-packages
+        conan profile detect
+        conan remote add protestator-conan $env:ARTIFACTORY_URL
+        conan remote login -p $env:ARTIFACTORY_TOKEN protestator-conan $env:ARTIFACTORY_USER
+        conan remote remove conancenter
+    - name: build release
+      run: conan create ./autoconf/all --name=autoconf --version=2.71 --build-require --build missing
+    - name: build debug
+      run: conan create ./autoconf/all --name=autoconf --version=2.71 --build-require -s build_type=Debug --build missing
+    - name: deploy
+      run: conan upload "*" -r protestator-conan -c
   
   build-automake:
     runs-on: ubuntu-latest
@@ -182,28 +182,28 @@ jobs:
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
-  # build-automake-windows:
-  #   runs-on: windows-latest
-  #   env: # Or as an environment variable
-  #     ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-  #     ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-  #     ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-  #   steps:
-  #   - uses: actions/checkout@v4
-  #   - uses: jfrog/setup-jfrog-cli@v4
-  #   - name: prepare runner
-  #     run: | 
-  #       pip install conan --break-system-packages
-  #       conan profile detect
-  #       conan remote add protestator-conan $env:ARTIFACTORY_URL
-  #       conan remote login -p $env:ARTIFACTORY_TOKEN protestator-conan $env:ARTIFACTORY_USER
-  #       conan remote remove conancenter
-  #   - name: build release
-  #     run: conan create ./automake/all --name=automake --version=1.16.5 --build-require --build missing
-  #   - name: build debug
-  #     run: conan create ./automake/all --name=automake --version=1.16.5 --build-require -s build_type=Debug --build missing
-  #   - name: deploy
-  #     run: conan upload "*" -r protestator-conan -c
+  build-automake-windows:
+    runs-on: windows-latest
+    env: # Or as an environment variable
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+      ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
+    steps:
+    - uses: actions/checkout@v4
+    - uses: jfrog/setup-jfrog-cli@v4
+    - name: prepare runner
+      run: | 
+        pip install conan --break-system-packages
+        conan profile detect
+        conan remote add protestator-conan $env:ARTIFACTORY_URL
+        conan remote login -p $env:ARTIFACTORY_TOKEN protestator-conan $env:ARTIFACTORY_USER
+        conan remote remove conancenter
+    - name: build release
+      run: conan create ./automake/all --name=automake --version=1.16.5 --build-require --build missing
+    - name: build debug
+      run: conan create ./automake/all --name=automake --version=1.16.5 --build-require -s build_type=Debug --build missing
+    - name: deploy
+      run: conan upload "*" -r protestator-conan -c
 
   build-ninja:
     runs-on: ubuntu-latest
@@ -276,9 +276,9 @@ jobs:
         conan remote remove conancenter
         pip3 install --ignore-installed ninja
     - name: build release
-      run: conan create ./meson/all --name=meson --version=1.9.1 --build-require --build missing
+      run: conan create ./meson/all --name=meson --version=1.9.1 --build-require --build missing -o '*:shared=True'
     - name: build debug
-      run: conan create ./meson/all --name=meson --version=1.9.1 --build-require -s build_type=Debug --build missing
+      run: conan create ./meson/all --name=meson --version=1.9.1 --build-require -s build_type=Debug --build missing -o '*:shared=True'
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
@@ -423,9 +423,9 @@ jobs:
         conan remote remove conancenter
         pip3 install --ignore-installed ninja
     - name: build release
-      run: conan create ./gnu-config/all --name=gnu-config --version=cci.20210814
+      run: conan create ./gnu-config/all --name=gnu-config --version=cci.20210814 -o '*:shared=True'
     - name: build debug
-      run: conan create ./gnu-config/all --name=gnu-config --version=cci.20210814 -s build_type=Debug
+      run: conan create ./gnu-config/all --name=gnu-config --version=cci.20210814 -s build_type=Debug -o '*:shared=True'
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
@@ -451,7 +451,7 @@ jobs:
     - name: build release
       run: conan create ./opengl/all --name=opengl --version=system
     - name: build debug
-      run: conan create ./opengl/all --name=opengl --version=system -s build_type=Debug
+      run: conan create ./opengl/all --name=opengl --version=system -s build_type=Debug 
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
@@ -476,11 +476,11 @@ jobs:
         pip3 install --ignore-installed ninja
     - name: build release
       run: | 
-        conan create ./b2/portable --name=b2 --version=5.3.3
+        conan create ./b2/portable --name=b2 --version=5.3.3 -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: | 
-        conan create ./b2/portable --name=b2 --version=5.3.3 -s build_type=Debug
+        conan create ./b2/portable --name=b2 --version=5.3.3 -s build_type=Debug -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
 
   build-b2-windows:
@@ -501,11 +501,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: | 
-        conan create ./b2/portable --name=b2 --version=5.3.3
+        conan create ./b2/portable --name=b2 --version=5.3.3 -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: | 
-        conan create ./b2/portable --name=b2 --version=5.3.3 -s build_type=Debug
+        conan create ./b2/portable --name=b2 --version=5.3.3 -s build_type=Debug -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
 
   build-pugixml:
@@ -528,11 +528,11 @@ jobs:
         pip3 install --ignore-installed ninja
     - name: build release
       run: | 
-        conan create ./pugixml/all --name=pugixml --version=1.16
+        conan create ./pugixml/all --name=pugixml --version=1.16 -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: | 
-        conan create ./pugixml/all --name=pugixml --version=1.16 -s build_type=Debug
+        conan create ./pugixml/all --name=pugixml --version=1.16 -s build_type=Debug -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
 
   build-pugixml-windows:
@@ -553,11 +553,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: | 
-        conan create ./pugixml/all --name=pugixml --version=1.16
+        conan create ./pugixml/all --name=pugixml --version=1.16 -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: | 
-        conan create ./pugixml/all --name=pugixml --version=1.16 -s build_type=Debug
+        conan create ./pugixml/all --name=pugixml --version=1.16 -s build_type=Debug -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
 
 
@@ -581,11 +581,11 @@ jobs:
         pip3 install --ignore-installed ninja
     - name: build release
       run: |
-        conan create ./lz4/all --name=lz4 --version=1.9.4
+        conan create ./lz4/all --name=lz4 --version=1.9.4 -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./lz4/all --name=lz4 --version=1.9.4 -s build_type=Debug
+        conan create ./lz4/all --name=lz4 --version=1.9.4 -s build_type=Debug -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
 
 
@@ -607,11 +607,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: |
-        conan create ./lz4/all --name=lz4 --version=1.9.4
+        conan create ./lz4/all --name=lz4 --version=1.9.4 -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./lz4/all --name=lz4 --version=1.9.4 -s build_type=Debug
+        conan create ./lz4/all --name=lz4 --version=1.9.4 -s build_type=Debug -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
 
   build-nasm:
@@ -633,9 +633,9 @@ jobs:
         conan remote remove conancenter
         pip3 install --ignore-installed ninja
     - name: build release
-      run: conan create ./nasm/all --name=nasm --version=2.16.01
+      run: conan create ./nasm/all --name=nasm --version=2.16.01 -o '*:shared=True'
     - name: build debug
-      run: conan create ./nasm/all --name=nasm --version=2.16.01 -s build_type=Debug
+      run: conan create ./nasm/all --name=nasm --version=2.16.01 -s build_type=Debug -o '*:shared=True'
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
@@ -659,9 +659,9 @@ jobs:
         conan remote remove conancenter
         pip3 install --ignore-installed ninja
     - name: build release
-      run: conan create ./linux-headers-generic/all --name=linux-headers-generic --version=6.5.9
+      run: conan create ./linux-headers-generic/all --name=linux-headers-generic --version=6.5.9 -o '*:shared=True'
     - name: build debug
-      run: conan create ./linux-headers-generic/all --name=linux-headers-generic --version=6.5.9 -s build_type=Debug
+      run: conan create ./linux-headers-generic/all --name=linux-headers-generic --version=6.5.9 -s build_type=Debug -o '*:shared=True'
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
@@ -685,9 +685,9 @@ jobs:
         conan remote remove conancenter
         pip3 install --ignore-installed ninja
     - name: build release
-      run: conan create ./antlr4-cppruntime/all --name=antlr4-cppruntime --version=4.13.2
+      run: conan create ./antlr4-cppruntime/all --name=antlr4-cppruntime --version=4.13.2 -o '*:shared=True'
     - name: build debug
-      run: conan create ./antlr4-cppruntime/all --name=antlr4-cppruntime --version=4.13.2 -s build_type=Debug
+      run: conan create ./antlr4-cppruntime/all --name=antlr4-cppruntime --version=4.13.2 -s build_type=Debug -o '*:shared=True'
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
@@ -709,11 +709,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: |
-        conan create ./antlr4-cppruntime/all --name=antlr4-cppruntime --version=4.13.2
+        conan create ./antlr4-cppruntime/all --name=antlr4-cppruntime --version=4.13.2 -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./antlr4-cppruntime/all --name=antlr4-cppruntime --version=4.13.2 -s build_type=Debug
+        conan create ./antlr4-cppruntime/all --name=antlr4-cppruntime --version=4.13.2 -s build_type=Debug -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
 
   build-zlib:
@@ -735,9 +735,9 @@ jobs:
         conan remote remove conancenter
         pip3 install --ignore-installed ninja
     - name: build release
-      run: conan create ./zlib/all --name=zlib --version=1.3.2
+      run: conan create ./zlib/all --name=zlib --version=1.3.2 -o '*:shared=True'
     - name: build debug
-      run: conan create ./zlib/all --name=zlib --version=1.3.2 -s build_type=Debug
+      run: conan create ./zlib/all --name=zlib --version=1.3.2 -s build_type=Debug -o '*:shared=True'
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
   
@@ -758,9 +758,9 @@ jobs:
         conan remote login -p $env:ARTIFACTORY_TOKEN protestator-conan $env:ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build release
-      run: conan create ./zlib/all --name=zlib --version=1.3.2 -o shared=True
+      run: conan create ./zlib/all --name=zlib --version=1.3.2 -o shared=True -o '*:shared=True'
     - name: build debug
-      run: conan create ./zlib/all --name=zlib --version=1.3.2 -s build_type=Debug -o shared=True
+      run: conan create ./zlib/all --name=zlib --version=1.3.2 -s build_type=Debug -o shared=True -o '*:shared=True'
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
@@ -783,9 +783,9 @@ jobs:
         conan remote remove conancenter
         pip3 install --ignore-installed ninja
     - name: build release
-      run: conan create ./systemc/all --name=systemc --version=3.0.1
+      run: conan create ./systemc/all --name=systemc --version=3.0.1 -o '*:shared=True'
     - name: build debug
-      run: conan create ./systemc/all --name=systemc --version=3.0.1 -s build_type=Debug
+      run: conan create ./systemc/all --name=systemc --version=3.0.1 -s build_type=Debug -o '*:shared=True'
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
@@ -808,9 +808,9 @@ jobs:
         conan remote remove conancenter
         pip3 install --ignore-installed ninja
     - name: build release
-      run: conan create ./bzip2/all --name=bzip2 --version=1.0.8
+      run: conan create ./bzip2/all --name=bzip2 --version=1.0.8 -o '*:shared=True'
     - name: build debug
-      run: conan create ./bzip2/all --name=bzip2 --version=1.0.8 -s build_type=Debug
+      run: conan create ./bzip2/all --name=bzip2 --version=1.0.8 -s build_type=Debug -o '*:shared=True'
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
@@ -832,11 +832,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: | 
-        conan create ./bzip2/all --name=bzip2 --version=1.0.8  
+        conan create ./bzip2/all --name=bzip2 --version=1.0.8  -o '*:shared=True'
         conan create ./bzip2/all --name=bzip2 --version=1.0.8 --build-require
     - name: build debug
       run: |
-        conan create ./bzip2/all --name=bzip2 --version=1.0.8 -s build_type=Debug
+        conan create ./bzip2/all --name=bzip2 --version=1.0.8 -s build_type=Debug -o '*:shared=True'
         conan create ./bzip2/all --name=bzip2 --version=1.0.8 --build-require
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
@@ -860,9 +860,9 @@ jobs:
         conan remote remove conancenter
         pip3 install --ignore-installed ninja
     - name: build release
-      run: conan create ./brotli/all --name=brotli --version=1.1.0
+      run: conan create ./brotli/all --name=brotli --version=1.1.0 -o '*:shared=True'
     - name: build debug
-      run: conan create ./brotli/all --name=brotli --version=1.1.0 -s build_type=Debug
+      run: conan create ./brotli/all --name=brotli --version=1.1.0 -s build_type=Debug -o '*:shared=True'
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
@@ -883,9 +883,9 @@ jobs:
         conan remote login -p $env:ARTIFACTORY_TOKEN protestator-conan $env:ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build release
-      run: conan create ./brotli/all --name=brotli --version=1.1.0
+      run: conan create ./brotli/all --name=brotli --version=1.1.0 -o '*:shared=True'
     - name: build debug
-      run: conan create ./brotli/all --name=brotli --version=1.1.0 -s build_type=Debug
+      run: conan create ./brotli/all --name=brotli --version=1.1.0 -s build_type=Debug -o '*:shared=True'
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
@@ -908,9 +908,9 @@ jobs:
         conan remote remove conancenter
         pip3 install --ignore-installed ninja
     - name: build release
-      run: conan create ./double-conversion/all --name=double-conversion --version=3.3.0
+      run: conan create ./double-conversion/all --name=double-conversion --version=3.3.0 -o '*:shared=True'
     - name: build debug
-      run: conan create ./double-conversion/all --name=double-conversion --version=3.3.0 -s build_type=Debug
+      run: conan create ./double-conversion/all --name=double-conversion --version=3.3.0 -s build_type=Debug -o '*:shared=True'
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
@@ -932,12 +932,12 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: |
-        conan create ./double-conversion/all --name=double-conversion --version=3.3.0
-        conan create ./double-conversion/all --name=double-conversion --version=3.3.0 --build-require
+        conan create ./double-conversion/all --name=double-conversion --version=3.3.0 -o '*:shared=True'
+        conan create ./double-conversion/all --name=double-conversion --version=3.3.0 --build-require -o '*:shared=True'
     - name: build debug
       run: |
-        conan create ./double-conversion/all --name=double-conversion --version=3.3.0 -s build_type=Debug
-        conan create ./double-conversion/all --name=double-conversion --version=3.3.0 -s build_type=Debug --build-require
+        conan create ./double-conversion/all --name=double-conversion --version=3.3.0 -s build_type=Debug -o '*:shared=True'
+        conan create ./double-conversion/all --name=double-conversion --version=3.3.0 -s build_type=Debug --build-require -o '*:shared=True'
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
   
@@ -960,9 +960,9 @@ jobs:
         conan remote remove conancenter
         pip3 install --ignore-installed ninja
     - name: build release
-      run: conan create ./yaml-cpp/all --name=yaml-cpp --version=0.9.0
+      run: conan create ./yaml-cpp/all --name=yaml-cpp --version=0.9.0 -o '*:shared=True'
     - name: build debug
-      run: conan create ./yaml-cpp/all --name=yaml-cpp --version=0.9.0 -s build_type=Debug
+      run: conan create ./yaml-cpp/all --name=yaml-cpp --version=0.9.0 -s build_type=Debug -o '*:shared=True'
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
@@ -983,9 +983,9 @@ jobs:
         conan remote login -p $env:ARTIFACTORY_TOKEN protestator-conan $env:ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build release
-      run: conan create ./yaml-cpp/all --name=yaml-cpp --version=0.9.0
+      run: conan create ./yaml-cpp/all --name=yaml-cpp --version=0.9.0 -o '*:shared=True'
     - name: build debug
-      run: conan create ./yaml-cpp/all --name=yaml-cpp --version=0.9.0 -s build_type=Debug
+      run: conan create ./yaml-cpp/all --name=yaml-cpp --version=0.9.0 -s build_type=Debug -o '*:shared=True'
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
@@ -1009,11 +1009,11 @@ jobs:
         pip3 install --ignore-installed ninja
     - name: build release
       run: |
-        conan create ./expat/all --name=expat --version=2.7.5 --build missing
+        conan create ./expat/all --name=expat --version=2.7.5 --build missing -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./expat/all --name=expat --version=2.7.5 -s build_type=Debug --build missing
+        conan create ./expat/all --name=expat --version=2.7.5 -s build_type=Debug --build missing -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
 
 
@@ -1036,9 +1036,9 @@ jobs:
         conan remote remove conancenter
         pip3 install --ignore-installed ninja
     - name: build release
-      run: conan create ./flex/all --name=flex --version=2.6.4 --build missing
+      run: conan create ./flex/all --name=flex --version=2.6.4 --build missing -o '*:shared=True'
     - name: build debug
-      run: conan create ./flex/all --name=flex --version=2.6.4 --build missing -s build_type=Debug
+      run: conan create ./flex/all --name=flex --version=2.6.4 --build missing -s build_type=Debug -o '*:shared=True'
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
@@ -1062,9 +1062,9 @@ jobs:
         conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build release
-      run: conan create ./bison/all --name=bison --version=3.8.2 --build-require
+      run: conan create ./bison/all --name=bison --version=3.8.2 --build-require -o '*:shared=True'
     - name: build debug
-      run: conan create ./bison/all --name=bison --version=3.8.2 --build-require -s build_type=Debug
+      run: conan create ./bison/all --name=bison --version=3.8.2 --build-require -s build_type=Debug -o '*:shared=True'
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
@@ -1087,9 +1087,9 @@ jobs:
         conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build release
-      run: conan create ./gperf/all --name=gperf --version=3.1 --build-require
+      run: conan create ./gperf/all --name=gperf --version=3.1 --build-require -o '*:shared=True'
     - name: build debug
-      run: conan create ./gperf/all --name=gperf --version=3.1 --build-require -s build_type=Debug
+      run: conan create ./gperf/all --name=gperf --version=3.1 --build-require -s build_type=Debug -o '*:shared=True'
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
@@ -1112,9 +1112,9 @@ jobs:
         conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build release
-      run: conan create ./icu/all --name=icu --version=77.1
+      run: conan create ./icu/all --name=icu --version=77.1 -o '*:shared=True'
     - name: build debug
-      run: conan create ./icu/all --name=icu --version=77.1 -s build_type=Debug
+      run: conan create ./icu/all --name=icu --version=77.1 -s build_type=Debug -o '*:shared=True'
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
@@ -1137,11 +1137,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: | 
-        conan create ./libbacktrace/all --name=libbacktrace --version=cci.20240730
+        conan create ./libbacktrace/all --name=libbacktrace --version=cci.20240730 -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: | 
-        conan create ./libbacktrace/all --name=libbacktrace --version=cci.20240730 -s build_type=Debug --build missing
+        conan create ./libbacktrace/all --name=libbacktrace --version=cci.20240730 -s build_type=Debug --build missing -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
 
   build-snappy:
@@ -1163,11 +1163,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: | 
-        conan create ./snappy/all --name=snappy --version=1.2.1
+        conan create ./snappy/all --name=snappy --version=1.2.1 -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: | 
-        conan create ./snappy/all --name=snappy --version=1.2.1 -s build_type=Debug --build missing
+        conan create ./snappy/all --name=snappy --version=1.2.1 -s build_type=Debug --build missing -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
 
   build-snappy-windows:
@@ -1188,11 +1188,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: | 
-        conan create ./snappy/all --name=snappy --version=1.2.1
+        conan create ./snappy/all --name=snappy --version=1.2.1 -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: | 
-        conan create ./snappy/all --name=snappy --version=1.2.1 -s build_type=Debug --build missing
+        conan create ./snappy/all --name=snappy --version=1.2.1 -s build_type=Debug --build missing -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
 
 
@@ -1214,9 +1214,9 @@ jobs:
         conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build release
-      run: conan create ./libelf/all --name=libelf --version=0.8.13
+      run: conan create ./libelf/all --name=libelf --version=0.8.13 -o '*:shared=True'
     - name: build debug
-      run: conan create ./libelf/all --name=libelf --version=0.8.13 -s build_type=Debug
+      run: conan create ./libelf/all --name=libelf --version=0.8.13 -s build_type=Debug -o '*:shared=True'
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
@@ -1239,11 +1239,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: | 
-        conan create ./libpng/all --name=libpng --version=1.6.58
+        conan create ./libpng/all --name=libpng --version=1.6.58 -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./libpng/all --name=libpng --version=1.6.58 -s build_type=Debug
+        conan create ./libpng/all --name=libpng --version=1.6.58 -s build_type=Debug -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
 
   build-eigen:
@@ -1265,11 +1265,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: | 
-        conan create ./eigen/all --name=eigen --version=5.0.1
+        conan create ./eigen/all --name=eigen --version=5.0.1 -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./eigen/all --name=eigen --version=5.0.1 -s build_type=Debug
+        conan create ./eigen/all --name=eigen --version=5.0.1 -s build_type=Debug -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
 
   build-libpng-windows:
@@ -1290,11 +1290,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: | 
-        conan create ./libpng/all --name=libpng --version=1.6.58
+        conan create ./libpng/all --name=libpng --version=1.6.58 -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./libpng/all --name=libpng --version=1.6.58 -s build_type=Debug
+        conan create ./libpng/all --name=libpng --version=1.6.58 -s build_type=Debug -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
 
   build-rapidjson:
@@ -1316,11 +1316,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: | 
-        conan create ./rapidjson/all --name=rapidjson --version=1.1.0
+        conan create ./rapidjson/all --name=rapidjson --version=1.1.0 -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./rapidjson/all --name=rapidjson --version=1.1.0 -s build_type=Debug
+        conan create ./rapidjson/all --name=rapidjson --version=1.1.0 -s build_type=Debug -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
 
   build-libffi:
@@ -1342,11 +1342,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: | 
-        conan create ./libffi/all --name=libffi --version=3.4.8
+        conan create ./libffi/all --name=libffi --version=3.4.8 -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./libffi/all --name=libffi --version=3.4.8 -s build_type=Debug
+        conan create ./libffi/all --name=libffi --version=3.4.8 -s build_type=Debug -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
 
   build-libffi-windows:
@@ -1367,11 +1367,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: | 
-        conan create ./libffi/all --name=libffi --version=3.4.8
+        conan create ./libffi/all --name=libffi --version=3.4.8 -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./libffi/all --name=libffi --version=3.4.8 -s build_type=Debug
+        conan create ./libffi/all --name=libffi --version=3.4.8 -s build_type=Debug -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
 
   build-libiconv:
@@ -1393,11 +1393,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: |
-        conan create ./libiconv/all --name=libiconv --version=1.17
+        conan create ./libiconv/all --name=libiconv --version=1.17 -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./libiconv/all --name=libiconv --version=1.17 -s build_type=Debug --build missing
+        conan create ./libiconv/all --name=libiconv --version=1.17 -s build_type=Debug --build missing -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
 
   build-libiconv-windows:
@@ -1418,11 +1418,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: |
-        conan create ./libiconv/all --name=libiconv --version=1.17
+        conan create ./libiconv/all --name=libiconv --version=1.17 -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./libiconv/all --name=libiconv --version=1.17 -s build_type=Debug --build missing
+        conan create ./libiconv/all --name=libiconv --version=1.17 -s build_type=Debug --build missing -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
 
   build-libmount:
@@ -1444,11 +1444,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: |
-        conan create ./libmount/all --name=libmount --version=2.40.2
+        conan create ./libmount/all --name=libmount --version=2.40.2 -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: | 
-        conan create ./libmount/all --name=libmount --version=2.40.2 -s build_type=Debug --build missing
+        conan create ./libmount/all --name=libmount --version=2.40.2 -s build_type=Debug --build missing -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
 
 
@@ -1471,11 +1471,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: |
-        conan create ./md4c/all --name=md4c --version=0.5.2
+        conan create ./md4c/all --name=md4c --version=0.5.2 -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./md4c/all --name=md4c --version=0.5.2 -s build_type=Debug
+        conan create ./md4c/all --name=md4c --version=0.5.2 -s build_type=Debug -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
 
   build-md4c-windows:
@@ -1496,11 +1496,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: |
-        conan create ./md4c/all --name=md4c --version=0.5.2
+        conan create ./md4c/all --name=md4c --version=0.5.2 -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./md4c/all --name=md4c --version=0.5.2 -s build_type=Debug
+        conan create ./md4c/all --name=md4c --version=0.5.2 -s build_type=Debug -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
 
   build-nlohmann_json:
@@ -1522,11 +1522,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: |
-        conan create ./nlohmann_json/all --name=nlohmann_json --version=3.11.3
+        conan create ./nlohmann_json/all --name=nlohmann_json --version=3.11.3 -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./nlohmann_json/all --name=nlohmann_json --version=3.11.3 -s build_type=Debug --build missing
+        conan create ./nlohmann_json/all --name=nlohmann_json --version=3.11.3 -s build_type=Debug --build missing -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
 
   build-nlohmann_json-windows:
@@ -1547,11 +1547,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: |
-        conan create ./nlohmann_json/all --name=nlohmann_json --version=3.11.3
+        conan create ./nlohmann_json/all --name=nlohmann_json --version=3.11.3 -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./nlohmann_json/all --name=nlohmann_json --version=3.11.3 -s build_type=Debug --build missing
+        conan create ./nlohmann_json/all --name=nlohmann_json --version=3.11.3 -s build_type=Debug --build missing -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
 
 
@@ -1574,11 +1574,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: |
-        conan create ./sqlite3/all --name=sqlite3 --version=3.51.3
+        conan create ./sqlite3/all --name=sqlite3 --version=3.51.3 -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./sqlite3/all --name=sqlite3 --version=3.51.3 -s build_type=Debug --build missing
+        conan create ./sqlite3/all --name=sqlite3 --version=3.51.3 -s build_type=Debug --build missing -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
 
   build-sqlite3-windows:
@@ -1599,11 +1599,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: |
-        conan create ./sqlite3/all --name=sqlite3 --version=3.51.3
+        conan create ./sqlite3/all --name=sqlite3 --version=3.51.3 -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./sqlite3/all --name=sqlite3 --version=3.51.3 -s build_type=Debug --build missing
+        conan create ./sqlite3/all --name=sqlite3 --version=3.51.3 -s build_type=Debug --build missing -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
 
   build-libtool:
@@ -1625,11 +1625,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: |
-        conan create ./libtool/all --name=libtool --version=2.4.7 --build missing
+        conan create ./libtool/all --name=libtool --version=2.4.7 --build missing -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: | 
-        conan create ./libtool/all --name=libtool --version=2.4.7 -s build_type=Debug --build missing
+        conan create ./libtool/all --name=libtool --version=2.4.7 -s build_type=Debug --build missing -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
 
 
@@ -1651,9 +1651,9 @@ jobs:
         conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build release
-      run: conan create ./nspr/all --name=nspr --version=4.35
+      run: conan create ./nspr/all --name=nspr --version=4.35 -o '*:shared=True'
     - name: build debug
-      run: conan create ./nspr/all --name=nspr --version=4.35 -s build_type=Debug
+      run: conan create ./nspr/all --name=nspr --version=4.35 -s build_type=Debug -o '*:shared=True'
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
@@ -1676,9 +1676,9 @@ jobs:
         conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build release
-      run: conan create ./util-linux-libuuid/all --name=util-linux-libuuid --version=2.39.2
+      run: conan create ./util-linux-libuuid/all --name=util-linux-libuuid --version=2.39.2 -o '*:shared=True'
     - name: build debug
-      run: conan create ./util-linux-libuuid/all --name=util-linux-libuuid --version=2.39.2 -s build_type=Debug
+      run: conan create ./util-linux-libuuid/all --name=util-linux-libuuid --version=2.39.2 -s build_type=Debug -o '*:shared=True'
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
@@ -1703,11 +1703,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: | 
-        conan create ./pcre2/all --name=pcre2 --version=10.44 --build missing
+        conan create ./pcre2/all --name=pcre2 --version=10.44 --build missing -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./pcre2/all --name=pcre2 --version=10.44 -s build_type=Debug --build missing
+        conan create ./pcre2/all --name=pcre2 --version=10.44 -s build_type=Debug --build missing -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
 
 
@@ -1730,11 +1730,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: |
-       conan create ./xz_utils/all --name=xz_utils --version=5.4.5
+       conan create ./xz_utils/all --name=xz_utils --version=5.4.5 -o '*:shared=True'
        conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./xz_utils/all --name=xz_utils --version=5.4.5 -s build_type=Debug --build missing
+        conan create ./xz_utils/all --name=xz_utils --version=5.4.5 -s build_type=Debug --build missing -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
 
 
@@ -1757,11 +1757,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: |
-       conan create ./gettext/all --name=gettext --version=0.22.5 --build missing
+       conan create ./gettext/all --name=gettext --version=0.22.5 --build missing -o '*:shared=True'
        conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./gettext/all --name=gettext --version=0.22.5 -s build_type=Debug --build missing
+        conan create ./gettext/all --name=gettext --version=0.22.5 -s build_type=Debug --build missing -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
 
 
@@ -1784,11 +1784,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: |
-       conan create ./zstd/all --name=zstd --version=1.5.7
+       conan create ./zstd/all --name=zstd --version=1.5.7 -o '*:shared=True'
        conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./zstd/all --name=zstd --version=1.5.7 -s build_type=Debug --build missing
+        conan create ./zstd/all --name=zstd --version=1.5.7 -s build_type=Debug --build missing -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
   
   build-zstd-windows:
@@ -1809,12 +1809,12 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: |
-       conan create ./zstd/all --name=zstd --version=1.5.7
+       conan create ./zstd/all --name=zstd --version=1.5.7 -o '*:shared=True'
        conan create ./zstd/all --name=zstd --version=1.5.7 --build-require
        conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./zstd/all --name=zstd --version=1.5.7 -s build_type=Debug --build missing
+        conan create ./zstd/all --name=zstd --version=1.5.7 -s build_type=Debug --build missing -o '*:shared=True'
         conan create ./zstd/all --name=zstd --version=1.5.7 -s build_type=Debug --build missing --build-require
         conan upload "*" -r protestator-conan -c
 
@@ -1839,11 +1839,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: | 
-        conan create ./elfutils/all --name=elfutils --version=0.190 --build missing
+        conan create ./elfutils/all --name=elfutils --version=0.190 --build missing -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./elfutils/all --name=elfutils --version=0.190 -s build_type=Debug --build missing
+        conan create ./elfutils/all --name=elfutils --version=0.190 -s build_type=Debug --build missing -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
 
 
@@ -1867,11 +1867,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: |
-       conan create ./openssl/3.x.x --name=openssl --version=3.6.3 --build missing
+       conan create ./openssl/3.x.x --name=openssl --version=3.6.3 --build missing -o '*:shared=True'
        conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./openssl/3.x.x --name=openssl --version=3.6.3 -s build_type=Debug --build missing
+        conan create ./openssl/3.x.x --name=openssl --version=3.6.3 -s build_type=Debug --build missing -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
 
   build-openssl-windows:
@@ -1893,12 +1893,12 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: |
-       conan create ./openssl/3.x.x --name=openssl --version=3.6.3 --build missing
+       conan create ./openssl/3.x.x --name=openssl --version=3.6.3 --build missing -o '*:shared=True'
        conan create ./openssl/3.x.x --name=openssl --version=3.6.3 --build missing --build-require
        conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./openssl/3.x.x --name=openssl --version=3.6.3 -s build_type=Debug --build missing
+        conan create ./openssl/3.x.x --name=openssl --version=3.6.3 -s build_type=Debug --build missing -o '*:shared=True'
         conan create ./openssl/3.x.x --name=openssl --version=3.6.3 -s build_type=Debug --build missing --build-require
         conan upload "*" -r protestator-conan -c
 
@@ -1921,9 +1921,9 @@ jobs:
         conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build release
-      run: conan create ./glpk/all --name=glpk --version=5.0 --build missing
+      run: conan create ./glpk/all --name=glpk --version=5.0 --build missing -o '*:shared=True'
     - name: build debug
-      run: conan create ./glpk/all --name=glpk --version=5.0 -s build_type=Debug --build missing
+      run: conan create ./glpk/all --name=glpk --version=5.0 -s build_type=Debug --build missing -o '*:shared=True'
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
@@ -1946,9 +1946,9 @@ jobs:
         conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build release
-      run: conan create ./odbc/all --name=odbc --version=2.3.11 --build missing
+      run: conan create ./odbc/all --name=odbc --version=2.3.11 --build missing -o '*:shared=True'
     - name: build debug
-      run: conan create ./odbc/all --name=odbc --version=2.3.11 -s build_type=Debug --build missing
+      run: conan create ./odbc/all --name=odbc --version=2.3.11 -s build_type=Debug --build missing -o '*:shared=True'
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
@@ -1973,11 +1973,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: | 
-        conan create ./libxml2/cmake --name=libxml2 --version=2.15.3 --build missing
+        conan create ./libxml2/cmake --name=libxml2 --version=2.15.3 --build missing -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: | 
-        conan create ./libxml2/cmake --name=libxml2 --version=2.15.3 -s build_type=Debug --build missing
+        conan create ./libxml2/cmake --name=libxml2 --version=2.15.3 -s build_type=Debug --build missing -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
 
   build-libxml2-windows:
@@ -1999,11 +1999,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: | 
-        conan create ./libxml2/cmake --name=libxml2 --version=2.15.3 --build missing
+        conan create ./libxml2/cmake --name=libxml2 --version=2.15.3 --build missing -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: | 
-        conan create ./libxml2/cmake --name=libxml2 --version=2.15.3 -s build_type=Debug --build missing
+        conan create ./libxml2/cmake --name=libxml2 --version=2.15.3 -s build_type=Debug --build missing -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
 
   
@@ -2027,11 +2027,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: |
-        conan create ./freetype/meson --name=freetype --version=2.14.1 --build missing
+        conan create ./freetype/meson --name=freetype --version=2.14.1 --build missing -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./freetype/meson --name=freetype --version=2.14.1 -s build_type=Debug --build missing
+        conan create ./freetype/meson --name=freetype --version=2.14.1 -s build_type=Debug --build missing -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
 
 
@@ -2055,9 +2055,9 @@ jobs:
         conan remote login -p $ARTIFACTORY_TOKEN protestator-conan $ARTIFACTORY_USER
         conan remote remove conancenter
     - name: build release
-      run: conan create ./fontconfig/all --name=fontconfig --version=2.15.0 --build missing
+      run: conan create ./fontconfig/all --name=fontconfig --version=2.15.0 --build missing -o '*:shared=True'
     - name: build debug
-      run: conan create ./fontconfig/all --name=fontconfig --version=2.15.0 -s build_type=Debug --build missing
+      run: conan create ./fontconfig/all --name=fontconfig --version=2.15.0 -s build_type=Debug --build missing -o '*:shared=True'
     - name: deploy
       run: conan upload "*" -r protestator-conan -c
 
@@ -2082,11 +2082,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: |
-        conan create ./wayland/all --name=wayland --version=1.22.0 --build missing
+        conan create ./wayland/all --name=wayland --version=1.22.0 --build missing -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: | 
-        conan create ./wayland/all --name=wayland --version=1.22.0 -s build_type=Debug --build missing
+        conan create ./wayland/all --name=wayland --version=1.22.0 -s build_type=Debug --build missing -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
 
 
@@ -2110,11 +2110,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: |
-        conan create ./wayland-protocols/all --name=wayland-protocols --version=1.45 --build-require --build missing
+        conan create ./wayland-protocols/all --name=wayland-protocols --version=1.45 --build-require --build missing -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./wayland-protocols/all --name=wayland-protocols --version=1.45 --build-require -s build_type=Debug --build missing
+        conan create ./wayland-protocols/all --name=wayland-protocols --version=1.45 --build-require -s build_type=Debug --build missing -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
 
   build-boost:
@@ -2137,11 +2137,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: |
-        conan create ./boost/all --name=boost --version=1.89.0 --build missing
+        conan create ./boost/all --name=boost --version=1.91.0 --build missing -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./boost/all --name=boost --version=1.89.0 -s build_type=Debug --build missing
+        conan create ./boost/all --name=boost --version=1.91.0 -s build_type=Debug --build missing -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
 
   build-boost-windows:
@@ -2162,11 +2162,11 @@ jobs:
         conan remote remove conancenter
     - name: build release
       run: |
-        conan create ./boost/all --name=boost --version=1.89.0 --build missing
+        conan create ./boost/all --name=boost --version=1.91.0 --build missing -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
     - name: build debug
       run: |
-        conan create ./boost/all --name=boost --version=1.89.0 -s build_type=Debug
+        conan create ./boost/all --name=boost --version=1.91.0 -s build_type=Debug -o '*:shared=True'
         conan upload "*" -r protestator-conan -c
 
 
@@ -2339,7 +2339,7 @@ jobs:
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
       ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-    needs: [build-openssl,build-libxml2,build-lz4]
+    needs: [build-openssl,build-libxml2,build-lz4, build-libpq]
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
@@ -2366,7 +2366,7 @@ jobs:
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
       ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-    needs: [build-openssl-windows,build-libxml2-windows,build-lz4-windows]
+    needs: [build-openssl-windows,build-libxml2-windows,build-lz4-windows,build-libpq-windows]
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
