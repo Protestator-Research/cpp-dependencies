@@ -75,6 +75,10 @@ class LibelfConan(ConanFile):
                 # it's required, libelf doesnt seem to understand DESTDIR
                 f"--prefix={unix_path(self, self.package_folder)}",
             ])
+            if self.settings.os in ["Linux", "FreeBSD"]:
+                # configure's ELF test calls exit() without including stdlib.h, which GCC 14+ rejects.
+                # It then reports a non-ELF system and silently builds only the static library.
+                tc.configure_args.append("mr_cv_target_elf=yes")
             tc.generate()
 
     def build(self):

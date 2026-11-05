@@ -4,6 +4,7 @@ from conan.tools.files import copy, get, rmdir, apply_conandata_patches, replace
 from conan.tools.gnu import Autotools, AutotoolsToolchain
 from conan.tools.layout import basic_layout
 from conan.tools.microsoft import unix_path, is_msvc
+from conan.tools.scm import Version
 import os
 
 required_conan_version = ">=1.54.0"
@@ -84,6 +85,11 @@ class AutoconfConan(ConanFile):
         apply_conandata_patches(self)
         replace_in_file(self, os.path.join(self.source_folder, "Makefile.in"),
                         "M4 = /usr/bin/env m4", "#M4 = /usr/bin/env m4")
+        if Version(self.version) >= "2.72":
+            # The no-perl-path-in-shebang patch misses bin/autoconf, which is a perl script since 2.72.
+            # Otherwise the package embeds the perl path of the machine it was built on.
+            replace_in_file(self, os.path.join(self.source_folder, "bin", "autoconf.in"),
+                            "#! @PERL@", "#! /usr/bin/env perl")
         if self._settings_build.os == "Windows":
             # Handle vagaries of Windows line endings
             replace_in_file(self, os.path.join(self.source_folder, "bin", "autom4te.in"),
