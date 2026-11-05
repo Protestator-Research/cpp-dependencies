@@ -106,6 +106,7 @@ class BoostConan(ConanFile):
         "visibility": ["global", "protected", "hidden"],
         "addr2line_location": ["ANY"],
         "with_stacktrace_backtrace": [True, False],
+        "with_openssl": [True, False],  # builds boost_cobalt_io_ssl (Boost >= 1.91.0)
         "buildid": [None, "ANY"],
         "python_buildid": [None, "ANY"],
         "system_use_utf8": [True, False],
@@ -145,6 +146,7 @@ class BoostConan(ConanFile):
         "visibility": "hidden",
         "addr2line_location": "/usr/bin/addr2line",
         "with_stacktrace_backtrace": True,
+        "with_openssl": True,
         "buildid": None,
         "python_buildid": None,
         "system_use_utf8": False,
@@ -414,6 +416,10 @@ class BoostConan(ConanFile):
         if self.settings.os == "Windows":
             del self.options.with_stacktrace_backtrace
 
+        # boost_cobalt_io_ssl, the only library using OpenSSL here, exists since 1.91.0
+        if Version(self.version) < "1.91.0":
+            del self.options.with_openssl
+
         # nowide requires a c++11-able compiler + movable std::fstream: change default to not build on compiler with too old default c++ standard or too low compiler.cppstd
         # json requires a c++11-able compiler: change default to not build on compiler with too old default c++ standard or too low compiler.cppstd
         if self.settings.compiler.get_safe("cppstd"):
@@ -680,6 +686,9 @@ class BoostConan(ConanFile):
         if self.options.get_safe("without_stacktrace", True):
             self.options.rm_safe("with_stacktrace_backtrace")
 
+        if self.options.header_only or self.options.get_safe("without_cobalt", True):
+            self.options.rm_safe("with_openssl")
+
         if self.options.without_fiber:
             self.options.rm_safe("numa")
 
@@ -829,6 +838,10 @@ class BoostConan(ConanFile):
     def _with_stacktrace_backtrace(self):
         return not self.options.header_only and self.options.get_safe("with_stacktrace_backtrace", False)
 
+    @property
+    def _with_openssl(self):
+        return not self.options.header_only and self.options.get_safe("with_openssl", False)
+
     def requirements(self):
         if self._with_zlib:
             self.requires("zlib/[>=1.2.11 <2]")
@@ -840,6 +853,8 @@ class BoostConan(ConanFile):
             self.requires("zstd/[>=1.5 <1.6]")
         if self._with_stacktrace_backtrace:
             self.requires("libbacktrace/cci.20210118", transitive_headers=True, transitive_libs=True)
+        if self._with_openssl:
+            self.requires("openssl/[>=1.1 <4]", transitive_headers=True, transitive_libs=True)
 
         if self._with_icu:
             self.requires("icu/74.2")
@@ -1442,6 +1457,24 @@ class BoostConan(ConanFile):
                 else:
                     icu_ldflags = " ".join(f"-l{l}" for l in icu_system_libs)
                 link_flags.append(icu_ldflags)
+        if self._with_openssl:
+            # b2 uses the <search> path of `using openssl` only for its detection, not for linking the library
+            openssl = self.dependencies["openssl"]
+            openssl_libdirs = list(openssl.cpp_info.aggregated_components().libdirs)
+            if not openssl.options.shared:
+                # The Jamfile of cobalt only links libssl and libcrypto, a shared boost_cobalt_io_ssl
+                # also needs everything a static OpenSSL depends on.
+                openssl_libs = list(openssl.cpp_info.aggregated_components().system_libs)
+                for _, dep in openssl.dependencies.host.items():
+                    dep_cpp_info = dep.cpp_info.aggregated_components()
+                    openssl_libdirs.extend(dep_cpp_info.libdirs)
+                    openssl_libs.extend(dep_cpp_info.libs + dep_cpp_info.system_libs)
+                if is_msvc(self):
+                    link_flags.append(" ".join(f"{l}.lib" for l in openssl_libs))
+                else:
+                    link_flags.append(" ".join(f"-l{l}" for l in openssl_libs))
+            for libdir in openssl_libdirs:
+                flags.append(f'library-path="{libdir}"'.replace("\\", "/"))
 
         link_flags = f'linkflags="{" ".join(link_flags)}"'
         flags.append(link_flags)
@@ -1565,6 +1598,20 @@ class BoostConan(ConanFile):
             contents += create_library_config("xz_utils", "lzma")
         if self._with_zstd:
             contents += create_library_config("zstd", "zstd")
+        if self._with_openssl:
+            openssl_cpp_info = self.dependencies["openssl"].cpp_info
+            openssl_aggregated = openssl_cpp_info.aggregated_components()
+            openssl_includedir = openssl_aggregated.includedirs[0].replace("\\", "/")
+            openssl_libdir = openssl_aggregated.libdirs[0].replace("\\", "/")
+            contents += f"\nusing openssl : {self.dependencies['openssl'].ref.version} : " \
+                        f"<include>\"{openssl_includedir}\" " \
+                        f"<search>\"{openssl_libdir}\" " \
+                        f"<ssl-name>{openssl_cpp_info.components['ssl'].libs[0]} " \
+                        f"<crypto-name>{openssl_cpp_info.components['crypto'].libs[0]} ;"
+        elif Version(self.version) >= "1.91.0":
+            # Let b2's OpenSSL detection fail, so boost_cobalt_io_ssl is never built against a system OpenSSL.
+            # The sources can't be patched for this: they are shared between configurations (no_copy_source).
+            contents += "\nusing openssl : : <ssl-name>conan_disabled_openssl <crypto-name>conan_disabled_openssl ;"
 
         if not self.options.without_python:
             # https://www.boost.org/doc/libs/1_70_0/libs/python/doc/html/building/configuring_boost_build.html
@@ -1970,6 +2017,8 @@ class BoostConan(ConanFile):
                         continue
                     if not self.options.get_safe("numa") and "_numa" in name:
                         continue
+                    if name == "boost_cobalt_io_ssl" and not self._with_openssl:
+                        continue
                     new_name = add_libprefix(name.format(**libformatdata)) + libsuffix
                     if self.options.namespace != 'boost':
                         new_name = new_name.replace("boost_", str(self.options.namespace) + "_")
@@ -2010,6 +2059,8 @@ class BoostConan(ConanFile):
                 self.cpp_info.components[module].libs = module_libraries
 
                 self.cpp_info.components[module].requires = self._dependencies["dependencies"][module] + ["_libboost"]
+                if module == "cobalt_io_ssl":
+                    self.cpp_info.components[module].requires.extend(["openssl::ssl", "openssl::crypto"])
                 self.cpp_info.components[module].set_property("cmake_target_name", "Boost::" + module)
                 self.cpp_info.components[module].names["cmake_find_package"] = module
                 self.cpp_info.components[module].names["cmake_find_package_multi"] = module
