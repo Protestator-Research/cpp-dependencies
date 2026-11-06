@@ -55,7 +55,7 @@ class LibSELinuxConan(ConanFile):
 
     def requirements(self):
         # Keep the pcre2 version in sync with glib, otherwise consumers get a version conflict
-        self.requires("pcre2/10.42")
+        self.requires("pcre2/[>=10.42 <11]")
 
     def validate(self):
         if self.settings.os not in ["Linux", "FreeBSD"]:
