@@ -1,0 +1,1 @@
+. "/home/herzog/Dokumente/Projekte/cpp-dependencies/cmake/binary/test_package/conanbuildenv-release-x86_64.sh"

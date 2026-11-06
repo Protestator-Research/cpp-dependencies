@@ -5,11 +5,35 @@ on:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
+  # A manual run has no base commit and therefore builds everything.
+  workflow_dispatch:
     
 
 jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      jobs: ${{ steps.select.outputs.jobs }}
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        filter: blob:none
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+    - name: select jobs for the changed recipes
+      id: select
+      env:
+        BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+      run: |
+        pip install pyyaml
+        python .github/scripts/select_jobs.py
+
   build-m4:
     runs-on: ubuntu-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-m4') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -38,7 +62,8 @@ jobs:
 
   build-m4-windows:
     runs-on: windows-latest
-    needs: [build-msys2-windows]
+    needs: [detect-changes, build-msys2-windows]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-m4-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -70,6 +95,8 @@ jobs:
 
   build-cmake:
     runs-on: ubuntu-latest
+    needs: [detect-changes, build-openssl]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-cmake') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -98,6 +125,8 @@ jobs:
 
   build-cmake-windows:
     runs-on: windows-latest
+    needs: [detect-changes, build-openssl-windows]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-cmake-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -128,7 +157,8 @@ jobs:
 
   build-autoconf:
     runs-on: ubuntu-latest
-    needs: [build-m4]
+    needs: [detect-changes, build-m4]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-autoconf') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -157,7 +187,8 @@ jobs:
 
   build-autoconf-windows:
     runs-on: windows-latest
-    needs: [build-m4-windows, build-msys2-windows]
+    needs: [detect-changes, build-m4-windows, build-msys2-windows]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-autoconf-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -188,7 +219,8 @@ jobs:
   
   build-automake:
     runs-on: ubuntu-latest
-    needs: [build-autoconf]
+    needs: [detect-changes, build-autoconf]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-automake') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -217,7 +249,8 @@ jobs:
 
   build-automake-windows:
     runs-on: windows-latest
-    needs: [build-autoconf-windows, build-msys2-windows]
+    needs: [detect-changes, build-autoconf-windows, build-msys2-windows]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-automake-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -248,6 +281,8 @@ jobs:
 
   build-ninja:
     runs-on: ubuntu-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-ninja') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -274,6 +309,8 @@ jobs:
 
   build-ninja-windows:
     runs-on: windows-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-ninja-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -303,7 +340,8 @@ jobs:
 
   build-meson:
     runs-on: ubuntu-latest
-    needs: [build-ninja]
+    needs: [detect-changes, build-ninja]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-meson') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -329,7 +367,8 @@ jobs:
 
   build-meson-windows:
     runs-on: windows-latest
-    needs: [build-ninja-windows]
+    needs: [detect-changes, build-ninja-windows]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-meson-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -355,7 +394,8 @@ jobs:
 
   build-pkgconf:
     runs-on: ubuntu-latest
-    needs: [build-meson]
+    needs: [detect-changes, build-meson]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-pkgconf') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -388,7 +428,8 @@ jobs:
 
   build-pkgconf-windows:
     runs-on: windows-latest
-    needs: [build-meson-windows]
+    needs: [detect-changes, build-meson-windows]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-pkgconf-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -424,6 +465,8 @@ jobs:
 
   build-xorg:
     runs-on: ubuntu-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-xorg') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -449,6 +492,8 @@ jobs:
   
   build-xkeyboard-config:
     runs-on: ubuntu-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-xkeyboard-config') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -474,6 +519,8 @@ jobs:
 
   build-gnu-config:
     runs-on: ubuntu-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-gnu-config') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -500,6 +547,8 @@ jobs:
 
   build-opengl:
     runs-on: ubuntu-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-opengl') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -526,6 +575,8 @@ jobs:
 
   build-b2:
     runs-on: ubuntu-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-b2') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -553,6 +604,8 @@ jobs:
 
   build-b2-windows:
     runs-on: windows-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-b2-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -581,6 +634,8 @@ jobs:
 
   build-pugixml:
     runs-on: ubuntu-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-pugixml') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -608,6 +663,8 @@ jobs:
 
   build-pugixml-windows:
     runs-on: windows-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-pugixml-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -637,6 +694,8 @@ jobs:
 
   build-lz4:
     runs-on: ubuntu-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-lz4') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -667,6 +726,8 @@ jobs:
 
   build-lz4-windows:
     runs-on: windows-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-lz4-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -697,6 +758,8 @@ jobs:
 
   build-nasm:
     runs-on: ubuntu-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-nasm') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -727,7 +790,8 @@ jobs:
 
   build-nasm-windows:
     runs-on: windows-latest
-    needs: [build-strawberry-perl-windows]
+    needs: [detect-changes, build-strawberry-perl-windows, build-msys2-windows]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-nasm-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -759,6 +823,8 @@ jobs:
 
   build-linux-headers-generic:
     runs-on: ubuntu-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-linux-headers-generic') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -785,6 +851,8 @@ jobs:
 
   build-antlr-runtime:
     runs-on: ubuntu-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-antlr-runtime') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -810,6 +878,8 @@ jobs:
 
   build-antlr-runtime-windows:
     runs-on: windows-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-antlr-runtime-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -838,6 +908,8 @@ jobs:
 
   build-zlib:
     runs-on: ubuntu-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-zlib') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -863,6 +935,8 @@ jobs:
   
   build-zlib-windows:
     runs-on: windows-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-zlib-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -887,6 +961,8 @@ jobs:
 
   build-systemc:
     runs-on: ubuntu-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-systemc') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -912,6 +988,8 @@ jobs:
 
   build-bzip2:
     runs-on: ubuntu-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-bzip2') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -937,6 +1015,8 @@ jobs:
 
   build-bzip2-windows:
     runs-on: windows-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-bzip2-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -967,6 +1047,8 @@ jobs:
 
   build-brotli:
     runs-on: ubuntu-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-brotli') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -996,6 +1078,8 @@ jobs:
 
   build-brotli-windows:
     runs-on: windows-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-brotli-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1026,7 +1110,8 @@ jobs:
 
   build-double-conversion:
     runs-on: ubuntu-latest
-    needs: [build-cmake]
+    needs: [detect-changes, build-cmake]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-double-conversion') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1056,7 +1141,8 @@ jobs:
 
   build-double-conversion-windows:
     runs-on: windows-latest
-    needs: [build-cmake-windows]
+    needs: [detect-changes, build-cmake-windows]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-double-conversion-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1091,6 +1177,8 @@ jobs:
   
   build-yaml-cpp:
     runs-on: ubuntu-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-yaml-cpp') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1116,6 +1204,8 @@ jobs:
 
   build-yaml-cpp-windows:
     runs-on: windows-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-yaml-cpp-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1140,7 +1230,8 @@ jobs:
 
   build-expat:
     runs-on: ubuntu-latest
-    needs: [build-cmake]
+    needs: [detect-changes, build-cmake]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-expat') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1169,7 +1260,8 @@ jobs:
 
   build-expat-windows:
     runs-on: windows-latest
-    needs: [build-cmake-windows]
+    needs: [detect-changes, build-cmake-windows]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-expat-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1199,7 +1291,8 @@ jobs:
 
   build-flex:
     runs-on: ubuntu-latest
-    needs: [build-gnu-config, build-m4]
+    needs: [detect-changes, build-gnu-config, build-m4]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-flex') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1229,7 +1322,8 @@ jobs:
   
   build-bison:
     runs-on: ubuntu-latest
-    needs: build-flex
+    needs: [detect-changes, build-flex, build-automake]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-bison') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1255,6 +1349,8 @@ jobs:
 
   build-gperf:
     runs-on: ubuntu-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-gperf') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1280,6 +1376,8 @@ jobs:
 
   build-icu:
     runs-on: ubuntu-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-icu') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1308,7 +1406,8 @@ jobs:
 
   build-icu-windows:
     runs-on: windows-latest
-    needs: [build-msys2-windows]
+    needs: [detect-changes, build-msys2-windows]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-icu-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1340,6 +1439,8 @@ jobs:
 
   build-libbacktrace:
     runs-on: ubuntu-latest
+    needs: [detect-changes, build-automake]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-libbacktrace') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1368,6 +1469,8 @@ jobs:
 
   build-snappy:
     runs-on: ubuntu-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-snappy') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1396,6 +1499,8 @@ jobs:
 
   build-snappy-windows:
     runs-on: windows-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-snappy-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1427,7 +1532,8 @@ jobs:
 
   build-libelf:
     runs-on: ubuntu-latest
-    needs: [build-autoconf, build-gnu-config]
+    needs: [detect-changes, build-autoconf, build-gnu-config]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-libelf') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1452,7 +1558,8 @@ jobs:
 
   build-libpng:
     runs-on: ubuntu-latest
-    needs: [build-zlib]
+    needs: [detect-changes, build-zlib]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-libpng') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1479,6 +1586,8 @@ jobs:
 
   build-eigen:
     runs-on: ubuntu-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-eigen') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1505,6 +1614,8 @@ jobs:
 
   build-eigen-windows:
     runs-on: windows-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-eigen-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1534,7 +1645,8 @@ jobs:
 
   build-libpng-windows:
     runs-on: windows-latest
-    needs: [build-zlib-windows]
+    needs: [detect-changes, build-zlib-windows]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-libpng-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1563,6 +1675,8 @@ jobs:
 
   build-rapidjson:
     runs-on: ubuntu-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-rapidjson') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1591,6 +1705,8 @@ jobs:
 
   build-rapidjson-windows:
     runs-on: windows-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-rapidjson-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1622,6 +1738,8 @@ jobs:
 
   build-libffi:
     runs-on: ubuntu-latest
+    needs: [detect-changes, build-automake]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-libffi') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1648,7 +1766,8 @@ jobs:
 
   build-libffi-windows:
     runs-on: windows-latest
-    needs: [build-msys2-windows, build-automake-windows]
+    needs: [detect-changes, build-msys2-windows, build-automake-windows]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-libffi-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1677,6 +1796,8 @@ jobs:
 
   build-libiconv:
     runs-on: ubuntu-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-libiconv') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1705,7 +1826,8 @@ jobs:
 
   build-libiconv-windows:
     runs-on: windows-latest
-    needs: [build-msys2-windows]
+    needs: [detect-changes, build-msys2-windows]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-libiconv-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1736,6 +1858,8 @@ jobs:
 
   build-libmount:
     runs-on: ubuntu-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-libmount') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1765,6 +1889,8 @@ jobs:
 
   build-md4c:
     runs-on: ubuntu-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-md4c') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1791,6 +1917,8 @@ jobs:
 
   build-md4c-windows:
     runs-on: windows-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-md4c-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1819,6 +1947,8 @@ jobs:
 
   build-nlohmann_json:
     runs-on: ubuntu-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-nlohmann_json') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1845,6 +1975,8 @@ jobs:
 
   build-nlohmann_json-windows:
     runs-on: windows-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-nlohmann_json-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1874,6 +2006,8 @@ jobs:
 
   build-sqlite3:
     runs-on: ubuntu-latest
+    needs: [detect-changes, build-icu]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-sqlite3') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1900,6 +2034,8 @@ jobs:
 
   build-sqlite3-windows:
     runs-on: windows-latest
+    needs: [detect-changes, build-icu-windows]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-sqlite3-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1928,7 +2064,8 @@ jobs:
 
   build-libtool:
     runs-on: ubuntu-latest
-    needs: [build-automake, build-gnu-config]
+    needs: [detect-changes, build-automake, build-gnu-config]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-libtool') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1958,6 +2095,8 @@ jobs:
 
   build-nspr:
     runs-on: ubuntu-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-nspr') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -1983,6 +2122,8 @@ jobs:
 
   build-util-linux-libuuid:
     runs-on: ubuntu-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-util-linux-libuuid') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -2016,7 +2157,8 @@ jobs:
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
       ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-    needs: [build-zlib, build-bzip2]
+    needs: [detect-changes, build-zlib, build-bzip2]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-pcre2') }}
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
@@ -2042,7 +2184,8 @@ jobs:
 
   build-pcre2-windows:
     runs-on: windows-latest
-    needs: [build-zlib-windows, build-bzip2-windows]
+    needs: [detect-changes, build-zlib-windows, build-bzip2-windows]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-pcre2-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -2074,6 +2217,8 @@ jobs:
 
   build-xz_utils:
     runs-on: ubuntu-latest
+    needs: [detect-changes, build-cmake]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-xz_utils') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -2101,7 +2246,8 @@ jobs:
 
   build-xz_utils-windows:
     runs-on: windows-latest
-    needs: [build-msys2-windows, build-cmake-windows]
+    needs: [detect-changes, build-msys2-windows, build-cmake-windows]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-xz_utils-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -2131,7 +2277,8 @@ jobs:
 
   build-gettext:
     runs-on: ubuntu-latest
-    needs: [build-automake, build-libiconv]
+    needs: [detect-changes, build-automake, build-libiconv]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-gettext') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -2161,6 +2308,8 @@ jobs:
 
   build-zstd:
     runs-on: ubuntu-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-zstd') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -2189,6 +2338,8 @@ jobs:
   
   build-zstd-windows:
     runs-on: windows-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-zstd-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -2224,7 +2375,8 @@ jobs:
 
   build-elfutils:
     runs-on: ubuntu-latest
-    needs: [build-zstd, build-gettext, build-xz_utils, build-bison, build-bzip2, build-pkgconf, build-zlib]
+    needs: [detect-changes, build-zstd, build-gettext, build-xz_utils, build-bison, build-bzip2, build-pkgconf, build-zlib, build-libcurl, build-sqlite3]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-elfutils') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -2258,7 +2410,8 @@ jobs:
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
       ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-    needs: [build-zlib]
+    needs: [detect-changes, build-zlib, build-nasm]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-openssl') }}
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
@@ -2281,7 +2434,8 @@ jobs:
 
   build-openssl-windows:
     runs-on: windows-latest
-    needs: [build-zlib-windows, build-nasm-windows, build-strawberry-perl-windows]
+    needs: [detect-changes, build-zlib-windows, build-nasm-windows, build-strawberry-perl-windows]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-openssl-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -2316,7 +2470,8 @@ jobs:
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
       ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-    needs: [build-libtool]
+    needs: [detect-changes, build-libtool]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-glpk') }}
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
@@ -2341,7 +2496,8 @@ jobs:
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
       ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-    needs: [build-libtool, build-libiconv]
+    needs: [detect-changes, build-libtool, build-libiconv]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-odbc') }}
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
@@ -2363,7 +2519,8 @@ jobs:
 
   build-libxml2:
     runs-on: ubuntu-latest
-    needs: [build-zlib, build-libiconv, build-icu, build-pkgconf, build-cmake]
+    needs: [detect-changes, build-zlib, build-libiconv, build-icu, build-pkgconf, build-cmake, build-xz_utils]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-libxml2') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -2390,7 +2547,8 @@ jobs:
 
   build-libxml2-windows:
     runs-on: windows-latest
-    needs: [build-zlib-windows, build-libiconv-windows, build-icu-windows, build-pkgconf-windows, build-cmake-windows]
+    needs: [detect-changes, build-zlib-windows, build-libiconv-windows, build-icu-windows, build-pkgconf-windows, build-cmake-windows, build-xz_utils-windows]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-libxml2-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -2420,7 +2578,8 @@ jobs:
   
   build-freetype:
     runs-on: ubuntu-latest
-    needs: [build-zlib, build-libiconv, build-bzip2, build-brotli, build-libpng, build-pkgconf]
+    needs: [detect-changes, build-zlib, build-libiconv, build-bzip2, build-brotli, build-libpng, build-pkgconf]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-freetype') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -2449,7 +2608,8 @@ jobs:
 
   build-freetype-windows:
     runs-on: windows-latest
-    needs: [build-zlib-windows, build-bzip2-windows, build-brotli-windows, build-libpng-windows, build-meson-windows, build-pkgconf-windows]
+    needs: [detect-changes, build-zlib-windows, build-bzip2-windows, build-brotli-windows, build-libpng-windows, build-meson-windows, build-pkgconf-windows]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-freetype-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -2479,7 +2639,8 @@ jobs:
 
   build-fontconfig:
     runs-on: ubuntu-latest
-    needs: [build-freetype, build-expat, build-util-linux-libuuid, build-gperf]
+    needs: [detect-changes, build-freetype, build-expat, build-util-linux-libuuid, build-gperf]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-fontconfig') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -2509,7 +2670,8 @@ jobs:
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
       ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-    needs: [build-libffi, build-libxml2, build-expat]
+    needs: [detect-changes, build-libffi, build-libxml2, build-expat]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-wayland') }}
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
@@ -2539,7 +2701,8 @@ jobs:
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
       ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-    needs: [build-meson, build-libxml2]
+    needs: [detect-changes, build-meson, build-libxml2]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-wayland-protocols') }}
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
@@ -2566,7 +2729,8 @@ jobs:
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
       ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-    needs: [build-zlib, build-bzip2, build-libbacktrace, build-icu, build-libiconv, build-b2]
+    needs: [detect-changes, build-zlib, build-bzip2, build-libbacktrace, build-icu, build-libiconv, build-b2, build-xz_utils, build-zstd]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-boost') }}
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
@@ -2593,7 +2757,8 @@ jobs:
 
   build-boost-windows:
     runs-on: windows-latest
-    needs: [build-zlib-windows, build-bzip2-windows, build-libiconv-windows, build-b2-windows]
+    needs: [detect-changes, build-zlib-windows, build-bzip2-windows, build-libiconv-windows, build-b2-windows, build-xz_utils-windows, build-icu-windows, build-zstd-windows]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-boost-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -2631,7 +2796,8 @@ jobs:
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
       ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-    needs: build-boost
+    needs: [detect-changes, build-boost]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-redboltz-mqtt_cpp') }}
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
@@ -2657,7 +2823,8 @@ jobs:
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
       ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-    needs: build-boost
+    needs: [detect-changes, build-boost]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-async_mqtt') }}
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
@@ -2683,7 +2850,8 @@ jobs:
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
       ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-    needs: [build-libxml2]
+    needs: [detect-changes, build-libxml2]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-libxslt') }}
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
@@ -2707,7 +2875,8 @@ jobs:
 
   build-libxslt-windows:
     runs-on: windows-latest
-    needs: [build-libxml2-windows]
+    needs: [detect-changes, build-libxml2-windows]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-libxslt-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -2737,7 +2906,8 @@ jobs:
 
   build-readline:
     runs-on: ubuntu-latest
-    needs: [build-openssl, build-libxml2, build-lz4, build-termcap]
+    needs: [detect-changes, build-openssl, build-libxml2, build-lz4, build-termcap, build-ncurses]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-readline') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -2765,7 +2935,8 @@ jobs:
 
   build-libpq:
     runs-on: ubuntu-latest
-    needs: [build-openssl, build-libxml2, build-lz4, build-bison]
+    needs: [detect-changes, build-openssl, build-libxml2, build-lz4, build-bison, build-readline, build-libxslt, build-zstd]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-libpq') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -2792,7 +2963,8 @@ jobs:
 
   build-libpq-windows:
     runs-on: windows-latest
-    needs: [build-openssl-windows, build-libxml2-windows, build-lz4-windows, build-zlib-windows, build-meson-windows, build-pkgconf-windows, build-strawberry-perl-windows, build-winflexbison-windows]
+    needs: [detect-changes, build-openssl-windows, build-libxml2-windows, build-lz4-windows, build-zlib-windows, build-meson-windows, build-pkgconf-windows, build-strawberry-perl-windows, build-winflexbison-windows, build-libxslt-windows, build-zstd-windows]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-libpq-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -2827,7 +2999,8 @@ jobs:
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
       ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-    needs: [build-openssl,build-libxml2,build-lz4, build-libpq]
+    needs: [detect-changes, build-openssl, build-libxml2, build-lz4, build-libpq]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-libpqxx') }}
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
@@ -2850,7 +3023,8 @@ jobs:
 
   build-libpqxx-windows:
     runs-on: windows-latest
-    needs: [build-libpq-windows]
+    needs: [detect-changes, build-libpq-windows]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-libpqxx-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -2886,7 +3060,8 @@ jobs:
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
       ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-    needs: [build-openssl,build-date,build-rapidjson,build-libevent]
+    needs: [detect-changes, build-openssl, build-date, build-rapidjson, build-libevent]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-pistache') }}
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
@@ -2913,7 +3088,8 @@ jobs:
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
       ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-    needs: [build-openssl]
+    needs: [detect-changes, build-openssl]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-libevent') }}
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
@@ -2936,7 +3112,8 @@ jobs:
   
   build-libevent-windows:
     runs-on: windows-latest
-    needs: [build-openssl-windows]
+    needs: [detect-changes, build-openssl-windows]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-libevent-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -2965,7 +3142,8 @@ jobs:
 
   build-libcurl:
     runs-on: ubuntu-latest
-    needs: [build-openssl, build-zlib, build-brotli, build-libtool, build-pkgconf]
+    needs: [detect-changes, build-openssl, build-zlib, build-brotli, build-libtool, build-pkgconf, build-libpq, build-libevent, build-sqlite3, build-c-ares]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-libcurl') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -2992,7 +3170,8 @@ jobs:
 
   build-libcurl-windows:
     runs-on: windows-latest
-    needs: [build-openssl-windows, build-zlib-windows, build-brotli-windows, build-cmake-windows, build-ninja-windows]
+    needs: [detect-changes, build-openssl-windows, build-zlib-windows, build-brotli-windows, build-cmake-windows, build-ninja-windows, build-libpq-windows, build-libevent-windows, build-automake-windows, build-sqlite3-windows, build-c-ares-windows]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-libcurl-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -3027,7 +3206,8 @@ jobs:
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
       ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-    needs: build-libcurl
+    needs: [detect-changes, build-libcurl]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-date') }}
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
@@ -3050,7 +3230,8 @@ jobs:
 
   build-date-windows:
     runs-on: windows-latest
-    needs: [build-libcurl-windows]
+    needs: [detect-changes, build-libcurl-windows]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-date-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -3079,7 +3260,8 @@ jobs:
 
   build-libselinux:
     runs-on: ubuntu-latest
-    needs: [build-pcre2, build-flex, build-pkgconf]
+    needs: [detect-changes, build-pcre2, build-flex, build-pkgconf]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-libselinux') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -3108,7 +3290,8 @@ jobs:
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
       ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-    needs: [build-libtool]
+    needs: [detect-changes, build-libtool]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-libsodium') }}
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
@@ -3135,7 +3318,8 @@ jobs:
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
       ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-    needs: [build-zlib, build-libffi, build-pcre2, build-elfutils, build-libmount, build-libselinux, build-libiconv]
+    needs: [detect-changes, build-zlib, build-libffi, build-pcre2, build-elfutils, build-libmount, build-libselinux, build-libiconv]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-glib') }}
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
@@ -3162,7 +3346,8 @@ jobs:
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
       ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-    needs: [build-openssl]
+    needs: [detect-changes, build-openssl]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-paho-c') }}
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
@@ -3189,7 +3374,8 @@ jobs:
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
       ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-    needs: [build-paho-c]
+    needs: [detect-changes, build-paho-c]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-paho-cxx') }}
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
@@ -3212,7 +3398,8 @@ jobs:
 
   build-mongoc:
     runs-on: ubuntu-latest
-    needs: [build-snappy, build-openssl, build-zlib, build-icu, build-pkgconf, build-zstd]
+    needs: [detect-changes, build-snappy, build-openssl, build-zlib, build-icu, build-pkgconf, build-zstd, build-glib]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-mongoc') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -3240,7 +3427,8 @@ jobs:
 
   build-mongocxx:
     runs-on: ubuntu-latest
-    needs: [build-mongoc, build-boost]
+    needs: [detect-changes, build-mongoc, build-boost]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-mongocxx') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -3268,7 +3456,8 @@ jobs:
 
   build-xkbcommon:
     runs-on: ubuntu-latest
-    needs: [build-xkeyboard-config, build-xorg, build-libxml2, build-wayland, build-bison, build-wayland-protocols]
+    needs: [detect-changes, build-xkeyboard-config, build-xorg, build-libxml2, build-wayland, build-bison, build-wayland-protocols]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-xkbcommon') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -3298,7 +3487,8 @@ jobs:
 
   build-gtest:
     runs-on: ubuntu-latest
-    needs: [build-glib, build-cmake]
+    needs: [detect-changes, build-glib, build-cmake]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-gtest') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -3326,7 +3516,8 @@ jobs:
 
   build-gtest-windows:
     runs-on: windows-latest
-    needs: [build-cmake-windows]
+    needs: [detect-changes, build-cmake-windows]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-gtest-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -3360,7 +3551,8 @@ jobs:
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
       ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-    needs: [build-freetype, build-icu, build-glib]
+    needs: [detect-changes, build-freetype, build-icu, build-glib]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-harfbuzz') }}
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
@@ -3384,7 +3576,8 @@ jobs:
 
   build-qt:
     runs-on: ubuntu-latest
-    needs: [build-zlib, build-openssl, build-pcre2, build-glib, build-double-conversion, build-freetype, build-fontconfig, build-icu, build-harfbuzz, build-libpng, build-libpq, build-odbc, build-wayland, build-md4c, build-opengl, build-sqlite3, build-xkbcommon]
+    needs: [detect-changes, build-zlib, build-openssl, build-pcre2, build-glib, build-double-conversion, build-freetype, build-fontconfig, build-icu, build-harfbuzz, build-libpng, build-libpq, build-odbc, build-wayland, build-md4c, build-opengl, build-sqlite3, build-xkbcommon, build-linux-headers-generic, build-nspr, build-cereal]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-qt') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -3407,7 +3600,8 @@ jobs:
 
   build-qt-nettools:
     runs-on: ubuntu-latest
-    needs: [build-zlib, build-openssl, build-pcre2, build-glib, build-double-conversion, build-freetype, build-fontconfig, build-icu, build-harfbuzz, build-libpng, build-libpq, build-odbc, build-wayland, build-md4c, build-opengl, build-sqlite3, build-xkbcommon]
+    needs: [detect-changes, build-zlib, build-openssl, build-pcre2, build-glib, build-double-conversion, build-freetype, build-fontconfig, build-icu, build-harfbuzz, build-libpng, build-libpq, build-odbc, build-wayland, build-md4c, build-opengl, build-sqlite3, build-xkbcommon, build-linux-headers-generic, build-nspr, build-cereal]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-qt-nettools') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -3430,7 +3624,8 @@ jobs:
 
   build-qt-debug:
     runs-on: LargerRunner
-    needs: [build-zlib, build-openssl, build-pcre2, build-glib, build-double-conversion, build-freetype, build-fontconfig, build-icu, build-harfbuzz, build-libpng, build-libpq, build-odbc, build-wayland, build-md4c, build-opengl, build-sqlite3, build-xkbcommon]
+    needs: [detect-changes, build-zlib, build-openssl, build-pcre2, build-glib, build-double-conversion, build-freetype, build-fontconfig, build-icu, build-harfbuzz, build-libpng, build-libpq, build-odbc, build-wayland, build-md4c, build-opengl, build-sqlite3, build-xkbcommon, build-linux-headers-generic, build-nspr, build-cereal]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-qt-debug') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -3453,7 +3648,8 @@ jobs:
   
   build-qt-debug-with-nettools:
     runs-on: LargerRunner
-    needs: [build-zlib, build-openssl, build-pcre2, build-glib, build-double-conversion, build-freetype, build-fontconfig, build-icu, build-harfbuzz, build-libpng, build-libpq, build-odbc, build-wayland, build-md4c, build-opengl, build-sqlite3, build-xkbcommon]
+    needs: [detect-changes, build-zlib, build-openssl, build-pcre2, build-glib, build-double-conversion, build-freetype, build-fontconfig, build-icu, build-harfbuzz, build-libpng, build-libpq, build-odbc, build-wayland, build-md4c, build-opengl, build-sqlite3, build-xkbcommon, build-linux-headers-generic, build-nspr, build-cereal]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-qt-debug-with-nettools') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -3476,6 +3672,8 @@ jobs:
 
   build-strawberry-perl-windows:
     runs-on: windows-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-strawberry-perl-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -3506,6 +3704,8 @@ jobs:
 
   build-msys2-windows:
     runs-on: windows-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-msys2-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -3534,7 +3734,8 @@ jobs:
 
   build-libgettext-windows:
     runs-on: windows-latest
-    needs: [build-libiconv-windows, build-msys2-windows, build-automake-windows]
+    needs: [detect-changes, build-libiconv-windows, build-msys2-windows, build-automake-windows]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-libgettext-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -3565,6 +3766,8 @@ jobs:
 
   build-winflexbison-windows:
     runs-on: windows-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-winflexbison-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -3593,7 +3796,8 @@ jobs:
   
   build-z3:
     runs-on: ubuntu-latest
-    needs: [build-cmake]
+    needs: [detect-changes, build-cmake, build-automake]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-z3') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -3622,7 +3826,8 @@ jobs:
 
   build-llvm-core:
     runs-on: ubuntu-latest
-    needs: [build-libffi, build-zlib, build-libxml2, build-z3, build-editline, build-termcap, build-zstd]
+    needs: [detect-changes, build-libffi, build-zlib, build-libxml2, build-z3, build-editline, build-termcap, build-zstd]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-llvm-core') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -3651,7 +3856,8 @@ jobs:
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
       ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-    needs: [build-llvm-core]
+    needs: [detect-changes, build-llvm-core]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-llvm-openmp') }}
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
@@ -3672,6 +3878,8 @@ jobs:
 
   build-stb:
     runs-on: ubuntu-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-stb') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -3700,6 +3908,8 @@ jobs:
 
   build-stb-windows:
     runs-on: windows-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-stb-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -3735,7 +3945,8 @@ jobs:
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
       ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-    needs: [build-armadillo]
+    needs: [detect-changes, build-armadillo]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-ensmallen') }}
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
@@ -3759,7 +3970,8 @@ jobs:
       run: conan upload "*" -r protestator-conan -c
 
   build-armadillo:
-    needs: [build-openblas, build-hdf5]
+    needs: [detect-changes, build-openblas, build-hdf5]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-armadillo') }}
     runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
@@ -3789,6 +4001,8 @@ jobs:
 
   build-cereal:
     runs-on: ubuntu-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-cereal') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -3813,6 +4027,8 @@ jobs:
   
   build-cereal-windows:
     runs-on: windows-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-cereal-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -3842,7 +4058,8 @@ jobs:
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
       ARTIFACTORY_USER: ${{secrets.ARTIFACTORY_USERNAME}}
-    needs: [build-cereal, build-armadillo, build-ensmallen, build-stb, build-llvm-openmp]
+    needs: [detect-changes, build-cereal, build-armadillo, build-ensmallen, build-stb, build-llvm-openmp]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-mlpack') }}
     steps:
     - uses: actions/checkout@v4
     - uses: jfrog/setup-jfrog-cli@v4
@@ -3863,7 +4080,8 @@ jobs:
   
   build-openblas:
     runs-on: ubuntu-latest
-    needs: [build-cmake]
+    needs: [detect-changes, build-cmake]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-openblas') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -3888,7 +4106,8 @@ jobs:
 
   build-hdf5:
     runs-on: ubuntu-latest
-    needs: [build-cmake, build-zlib]
+    needs: [detect-changes, build-cmake, build-zlib, build-libxml2, build-bison]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-hdf5') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -3913,7 +4132,8 @@ jobs:
 
   build-ncurses:
     runs-on: ubuntu-latest
-    needs: [build-pcre2, build-pkgconf]
+    needs: [detect-changes, build-pcre2, build-pkgconf]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-ncurses') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -3940,6 +4160,8 @@ jobs:
 
   build-termcap:
     runs-on: ubuntu-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-termcap') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -3964,7 +4186,8 @@ jobs:
 
 
   build-editline:
-    needs: [build-termcap, build-ncurses]
+    needs: [detect-changes, build-termcap, build-ncurses]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-editline') }}
     runs-on: ubuntu-latest
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
@@ -3990,6 +4213,8 @@ jobs:
 
   build-c-ares:
     runs-on: ubuntu-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-c-ares') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -4014,6 +4239,8 @@ jobs:
 
   build-c-ares-windows:
     runs-on: windows-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-c-ares-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -4039,7 +4266,8 @@ jobs:
 
   build-trantor:
     runs-on: ubuntu-latest
-    needs: [build-openssl,build-c-ares]
+    needs: [detect-changes, build-openssl, build-c-ares]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-trantor') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -4064,6 +4292,8 @@ jobs:
 
   build-jsoncpp:
     runs-on: ubuntu-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-jsoncpp') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -4092,6 +4322,8 @@ jobs:
 
   build-jsoncpp-windows:
     runs-on: windows-latest
+    needs: [detect-changes]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-jsoncpp-windows') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -4123,7 +4355,8 @@ jobs:
 
   build-drogon:
     runs-on: ubuntu-latest
-    needs: [build-boost, build-jsoncpp, build-trantor, build-util-linux-libuuid]
+    needs: [detect-changes, build-boost, build-jsoncpp, build-trantor, build-util-linux-libuuid, build-libcurl, build-yaml-cpp]
+    if: ${{ !cancelled() && !failure() && contains(fromJSON(needs.detect-changes.outputs.jobs), 'build-drogon') }}
     env: # Or as an environment variable
       ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
