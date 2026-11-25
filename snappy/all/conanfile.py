@@ -2,6 +2,7 @@ from conan import ConanFile
 from conan.tools.build import check_min_cppstd, stdcpp_library
 from conan.tools.cmake import CMake, CMakeToolchain, cmake_layout
 from conan.tools.files import apply_conandata_patches, copy, export_conandata_patches, get, rmdir
+from conan.tools.microsoft import is_msvc
 from conan.tools.scm import Version
 import os
 
@@ -70,6 +71,10 @@ class SnappyConan(ConanFile):
         if self.settings.arch in ["x86", "x86_64"]:
             if self.options.with_bmi2 != "auto":
                 tc.variables["SNAPPY_HAVE_BMI2"] = self.options.with_bmi2
+            elif is_msvc(self):
+                # MSVC compiles _bzhi_u32 even without /arch:AVX2, so upstream's auto-detection
+                # would enable BMI2 (x86-64-v3) code without a runtime cpuid check.
+                tc.variables["SNAPPY_HAVE_BMI2"] = False
             if self.options.with_ssse3 != "auto":
                 tc.variables["SNAPPY_HAVE_SSSE3"] = self.options.with_ssse3
         if Version(self.version) < "1.2.2": # pylint: disable=conan-condition-evals-to-constant
