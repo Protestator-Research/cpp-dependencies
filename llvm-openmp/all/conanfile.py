@@ -124,6 +124,9 @@ class LLVMOpenMpConan(ConanFile):
         tc.variables["OPENMP_ENABLE_LIBOMPTARGET"] = self.options.build_libomptarget
         # Do not buidl OpenMP Tools Interface (OMPT)
         tc.variables["LIBOMP_OMPT_SUPPORT"] = False
+        # libstdc++ (GCC >= 15) enables its assertions in unoptimized builds, which makes
+        # libomp depend on std::__glibcxx_assert_fail and breaks linking from pure C consumers
+        tc.preprocessor_definitions["_GLIBCXX_NO_ASSERTIONS"] = 1
         tc.generate()
 
     def _patch_sources(self):
