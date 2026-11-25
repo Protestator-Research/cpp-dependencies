@@ -72,6 +72,12 @@ class MlpackConan(ConanFile):
         config_hpp = os.path.join(self.package_folder, "include", "mlpack", "config.hpp")
         replace_in_file(self, config_hpp, "// #define MLPACK_HAS_STB", "#define MLPACK_HAS_STB")
         replace_in_file(self, config_hpp, "// #define MLPACK_HAS_NO_STB_DIR", "// #define MLPACK_HAS_NO_STB_DIR")
+        # Octree's assignment operators use members that do not exist, which GCC >= 15 rejects
+        # even in uninstantiated templates (-Wtemplate-body). Fixed upstream in 4.6.
+        octree_impl = os.path.join(self.package_folder, "include", "mlpack", "core", "tree", "octree", "octree_impl.hpp")
+        replace_in_file(self, octree_impl, "other.Begin()", "other.begin", strict=False)
+        replace_in_file(self, octree_impl, "other.Count()", "other.count", strict=False)
+        replace_in_file(self, octree_impl, "other.numDescendants = 0;", "", strict=False)
 
     def package(self):
         copy(self, "LICENSE.txt", self.source_folder, os.path.join(self.package_folder, "licenses"))
